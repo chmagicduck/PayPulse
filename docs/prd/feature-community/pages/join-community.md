@@ -41,6 +41,7 @@ storage_keys: []
 | communityStats | array | 固定值 | schema | 活跃数、心得数、覆盖地区等。 |
 | benefitCards | array | 固定值 | schema | 权益说明。 |
 | joinEntryStatus | enum | available | schema | 控制 CTA 是否可用。 |
+| joinEntryUrl | string | 企业微信群链接 | schema | 当前使用 `https://work.weixin.qq.com/gm/fd6f1bdd86a54ac96a1254f542d23a8e`。 |
 | shareStatus | enum | idle | page local | 分享操作反馈，占位即可。 |
 
 # 组件结构
@@ -55,14 +56,17 @@ storage_keys: []
 
 | action | condition | state change | UI feedback | persistence |
 | --- | --- | --- | --- | --- |
-| 点击立即加入 | 入口可用 | 进入官方加群引导流程 | 跳转、弹窗或复制提示 | 否 |
-| 点击分享 | 平台支持 | 更新 `shareStatus` | 触发分享面板或提示 | 否 |
+| 点击立即加入 | 入口可用 | 进入官方加群引导流程 | 通过企业微信插件打开官方群入口 | 否 |
+| 点击分享 | 平台支持 | 更新 `shareStatus` | 调起 `onShareAppMessage` 或 `onShareTimeline` | 否 |
 
 # 边界情况
 
 - 若当前加群入口不可用，主 CTA 应降级为“查看加入说明”而非不可解释的失效按钮。
 - 分享能力不可用时，保留按钮但给出明确提示。
 - 页面统计数据缺失时，仍应保留基础文案与主 CTA。
+- `app.json` 需提前注册企业微信插件：
+  `plugins.materialPlugin.version = "1.0.13"`
+  `plugins.materialPlugin.provider = "wx4d2deeab3aed6e5a"`
 
 # 样式约束
 

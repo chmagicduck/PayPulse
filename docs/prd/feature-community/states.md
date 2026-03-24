@@ -13,8 +13,11 @@
 | communityStats | array | 固定展示数据 | schema | 展示活跃用户、心得数量等。 |
 | benefitCards | array | 固定权益清单 | schema | 展示加入社群的价值。 |
 | joinEntryStatus | enum | available | schema | 控制加入入口是否可点击。 |
+| joinEntryUrl | string | 企业微信群链接 | schema | 使用 `groupUrl` 作为官方加群入口。 |
+| pluginStatus | enum | enabled | schema | 企业微信插件接入状态。 |
 
 ## 不变量
 
 - 社区页必须指向官方入口，不得跳转到未审核的第三方地址。
+- 官方加群入口通过企业微信插件 `materialPlugin` 承接，并使用提供的 `groupUrl`。
 - 统计数据属于展示内容，可由运营维护，但不参与业务计算。

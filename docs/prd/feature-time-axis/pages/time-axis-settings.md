@@ -47,7 +47,6 @@ storage_keys:
 | editingId | string \| null | null | page local | 当前编辑条目 ID。 |
 | formData.title | string | 空 | page local | 必填。 |
 | formData.date | string | 空 | page local | 必填。 |
-| formData.type | enum | solar | page local | `solar/lunar`。 |
 | formData.group | string | 职场生涯 | page local | 分类。 |
 | formData.isAnniversary | boolean | true | page local | 周年提醒模式。 |
 | formData.iconId | string | star | page local | 预设图标。 |
@@ -78,7 +77,7 @@ storage_keys:
 - 当前筛选分组下无数据时，展示空状态和新增入口。
 - 标题或日期为空时禁止保存。
 - `isAnniversary=false` 且日期已过时，列表需明确显示“已过 N 天”而非负数。
-- 农历条目先按原始输入保存；换算能力不足时需在实现中标记为假设。
+- V1 移除农历选项，所有日期都按公历保存与展示。
 
 # 样式约束
 

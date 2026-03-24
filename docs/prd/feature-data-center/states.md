@@ -12,6 +12,7 @@
 | --- | --- | --- | --- | --- |
 | storageUsage | object | 0 MB | derived | 由微信存储 API 获取。 |
 | exportStatus | enum | idle | page local | `idle/exporting/success/failure`。 |
+| exportPayload | string | 空字符串 | derived | 导出的备份 JSON 文本。 |
 | showResetModal | boolean | false | page local | 控制危险操作确认。 |
 | syncCapabilityStatus | enum | planned | schema | 云端同步能力占位。 |
 
@@ -19,4 +20,5 @@
 
 - 重置操作必须经过二次确认。
 - 导出成功或失败都不能影响原始业务数据。
+- 导出成功后应确保 JSON 已复制到用户剪切板。
 - 本轮仅支持本地数据治理，不引入真实云端同步流程。

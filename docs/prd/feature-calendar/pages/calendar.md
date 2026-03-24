@@ -42,7 +42,7 @@ storage_keys: []
 | --- | --- | --- | --- | --- |
 | monthCursor | string | 当前月 | page local | 格式建议 `YYYY-MM`。 |
 | selectedDate | string | 今天 | page local | 当前详情区对应日期。 |
-| calendarMeta | array | 空数组 | derived | 日历网格显示源。 |
+| calendarMeta | array | 空数组 | derived | 日历网格显示源，叠加 2026 年法定节假日预置。 |
 | dayStatus | enum | workday | derived | `workday/holiday/weekend/makeup/payday`。 |
 | selectedDayDetail | object | 空摘要 | derived | 由 `selectedDate` 映射。 |
 | nextReminder | object | 空摘要 | derived | 底部提示文案。 |
@@ -70,6 +70,7 @@ storage_keys: []
 - 当前月没有节假日或补班配置时，仅展示普通工作日和发薪日逻辑。
 - 当 `payDay` 大于当月天数时，发薪日取当月最后一天。
 - 若用户尚未完成档案设置，则使用默认工作制与发薪日生成基础日历。
+- 2026 年官方节假日与补班数据需在本地常量中预置，禁止散落到页面模板。
 
 # 样式约束
 

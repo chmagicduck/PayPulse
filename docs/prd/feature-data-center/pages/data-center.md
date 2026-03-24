@@ -58,7 +58,7 @@ storage_keys: []
 | action | condition | state change | UI feedback | persistence |
 | --- | --- | --- | --- | --- |
 | 点击导出备份 | 当前未导出中 | `exportStatus=exporting` | 显示处理中态 | 否 |
-| 导出完成 | 导出成功 | `exportStatus=success` | 成功反馈 | 否 |
+| 导出完成 | 导出成功 | `exportStatus=success` | 成功提示“备份 JSON 已复制到剪切板” | 否 |
 | 导出失败 | 异常 | `exportStatus=failure` | 错误提示 | 否 |
 | 点击重置所有数据 | 无 | `showResetModal=true` | 打开确认弹层 | 否 |
 | 取消重置 | 弹层已开 | `showResetModal=false` | 关闭弹层 | 否 |
@@ -67,6 +67,7 @@ storage_keys: []
 # 边界情况
 
 - 无可导出数据时仍允许导出，但备份内容应为空对象或空集合。
+- 本轮导出形式固定为复制 JSON 文本，不生成下载文件。
 - 重置过程中若部分 key 删除失败，必须返回失败提示，不得误报成功。
 - 云端同步入口在本轮仅展示占位文案，不触发真实网络流程。
 
