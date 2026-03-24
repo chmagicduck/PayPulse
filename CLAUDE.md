@@ -106,3 +106,12 @@ pages/             # 页面入口文件（仅负责绑定与装配）
 2. 在 `docs/prd/<feature-id>/` 中创建 PRD
 3. 按 feature 契约在 `miniprogram/features/<feature-id>/` 中搭建脚手架
 4. 在 `config/routes.ts` 中注册路由并在 `app.json` 中添加页面
+
+## 高保真原型还原
+
+当提到高保真原型还原，只需查阅详细指南见 `docs/conventions/prototype-to-miniprogram.md`。核心要点：
+- Skyline `defaultDisplayBlock: true` 导致所有元素默认 block，图标容器必须显式 width/height/min-width
+- 图标用 `lib/icons.ts` Base64 data URI 方案，不用外部 SVG 文件
+- 布局用 flex 不用 grid，主滚动用 view 不用 scroll-view
+- 导航栏右侧留 190rpx 避开微信胶囊按钮
+- 底部标签栏用纯白背景 #ffffff
