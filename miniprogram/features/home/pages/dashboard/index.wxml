@@ -1,15 +1,377 @@
-<page-shell title="{{meta.title}}" subtitle="{{meta.description}}">
-  <view class="dashboard">
-    <section-title
-      title="仓库骨架已就位"
-      subtitle="当前页面只用于验证新的 feature、theme、component 与 docs 结构。"
-    />
-
-    <pp-card wx:for="{{sections}}" wx:key="id">
-      <view class="dashboard__card">
-        <text class="dashboard__card-title">{{item.title}}</text>
-        <text class="dashboard__card-description">{{item.description}}</text>
+<view class="page-view home-page">
+  <!-- 顶部导航栏（跟随滚动） -->
+  <view class="nav-bar" style="padding-top: {{statusBarHeight}}px;">
+    <view class="nav-bar__content">
+      <view class="nav-bar__main">
+        <view class="nav-bar__left">
+          <view class="nav-bar__logo">
+            <image class="nav-bar__logo-icon" src="{{iconWavesWhite}}" mode="aspectFit" />
+          </view>
+          <text class="nav-bar__title">{{vm.header.title}}</text>
+        </view>
+        <view class="nav-bar__badge">
+          <view class="nav-bar__badge-dot"></view>
+          <text class="nav-bar__badge-text">{{vm.header.badge}}</text>
+        </view>
       </view>
-    </pp-card>
+      <text class="nav-bar__subtitle">{{vm.header.subtitle}}</text>
+    </view>
   </view>
-</page-shell>
+
+  <!-- 主内容区 -->
+  <view class="home-main">
+
+    <!-- ====== Section 1: 收益总览 ====== -->
+    <view class="income-card">
+      <view class="income-card__glow"></view>
+      <view class="income-card__body">
+        <view class="income-card__header">
+          <view class="income-card__label-row">
+            <text class="income-card__label">{{vm.income.label}}</text>
+            <view class="income-card__eye" bind:tap="toggleAmount">
+              <image class="icon-sm" src="{{showAmount ? iconEye : iconEyeOff}}" mode="aspectFit" />
+            </view>
+          </view>
+          <view class="income-card__rank">
+            <image class="icon-xs" src="{{iconCompassBlue}}" mode="aspectFit" />
+            <view class="income-card__rank-badge">
+              <text class="income-card__rank-lv">LV.{{vm.income.rank.level}}</text>
+            </view>
+            <text class="income-card__rank-name">{{vm.income.rank.name}}</text>
+          </view>
+        </view>
+
+        <view class="income-card__amount">
+          <text class="income-card__value">{{showAmount ? vm.income.value : '***'}}</text>
+        </view>
+        <view class="income-card__meta">
+          <text class="income-card__badge-tag">{{vm.income.rateBadge}}</text>
+          <text class="income-card__rate">{{vm.income.rate}}</text>
+        </view>
+
+        <view class="income-card__progress">
+          <view class="income-card__progress-labels">
+            <view class="income-card__progress-label">
+              <view class="income-card__dot income-card__dot--work"></view>
+              <text class="income-card__dot-text income-card__dot-text--work">专注 {{vm.income.workPercent}}%</text>
+            </view>
+            <view class="income-card__progress-label">
+              <view class="income-card__dot income-card__dot--idle"></view>
+              <text class="income-card__dot-text income-card__dot-text--idle">避风 {{vm.income.idlePercent}}%</text>
+            </view>
+          </view>
+          <view class="income-card__bar">
+            <view class="income-card__bar-work" style="width: {{vm.income.workPercent}}%"></view>
+            <view class="income-card__bar-idle" style="width: {{vm.income.idlePercent}}%"></view>
+          </view>
+        </view>
+
+        <view class="income-card__footer">
+          <view class="income-card__stat income-card__stat--left">
+            <view class="income-card__stat-label">
+              <image class="icon-xs" src="{{iconCoffeeBlue}}" mode="aspectFit" />
+              <text>{{vm.income.moyuLabel}}</text>
+            </view>
+            <text class="income-card__stat-value">{{showAmount ? vm.income.moyuIncome : '***'}}</text>
+          </view>
+          <view class="income-card__stat">
+            <view class="income-card__stat-label">
+              <image class="icon-xs" src="{{iconBriefcaseBlue}}" mode="aspectFit" />
+              <text>{{vm.income.monthlyLabel}}</text>
+            </view>
+            <text class="income-card__stat-value">{{showAmount ? vm.income.monthlyIncome : '***'}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- ====== Section 2: 计时控制 ====== -->
+    <view class="timer-grid">
+      <view class="timer-card">
+        <view class="timer-card__icon-wrap timer-card__icon-wrap--slate">
+          <image class="icon-lg" src="{{iconLogOut}}" mode="aspectFit" />
+        </view>
+        <view class="timer-card__info">
+          <text class="timer-card__label">{{vm.timer.leftTitle}}</text>
+          <text class="timer-card__value">{{vm.timer.leftValue}}</text>
+        </view>
+        <view class="timer-card__progress-bar">
+          <view class="timer-card__progress-fill" style="width: {{vm.timer.leftProgress}}%"></view>
+        </view>
+      </view>
+
+      <view
+        class="timer-card timer-card--moyu {{isMoYu ? 'timer-card--moyu-active' : ''}}"
+        bind:tap="toggleMoYu"
+      >
+        <view class="timer-card__ping" wx:if="{{!isMoYu}}">
+          <view class="timer-card__ping-ring"></view>
+          <view class="timer-card__ping-dot"></view>
+        </view>
+        <view class="timer-card__moyu-body">
+          <view class="timer-card__icon-wrap {{isMoYu ? 'timer-card__icon-wrap--active' : 'timer-card__icon-wrap--blue'}}">
+            <image class="icon-lg" src="{{iconCoffeeWhite}}" mode="aspectFit" />
+          </view>
+          <view class="timer-card__info">
+            <text class="timer-card__label {{isMoYu ? 'timer-card__label--light' : 'timer-card__label--blue'}}">{{isMoYu ? vm.timer.rightActiveTitle : vm.timer.rightTitle}}</text>
+            <text class="timer-card__value">{{vm.timer.rightValue}}</text>
+          </view>
+        </view>
+        <view class="timer-card__settings" catch:tap="openEditModal">
+          <image class="icon-md" src="{{iconSettingsSlate}}" mode="aspectFit" />
+        </view>
+      </view>
+    </view>
+
+    <!-- ====== Section 3: 潮汐任务 ====== -->
+    <view class="section">
+      <view class="section__header">
+        <view class="section__title-group">
+          <view class="section__bar section__bar--blue"></view>
+          <text class="section__title">{{vm.taskPreview.sectionTitle}}</text>
+        </view>
+        <text class="section__tag section__tag--blue">{{vm.taskPreview.sectionTag}}</text>
+      </view>
+      <view class="task-card">
+        <view class="task-card__row">
+          <view class="task-card__left">
+            <view class="task-card__icon">
+              <image class="icon-md" src="{{iconListTodo}}" mode="aspectFit" />
+            </view>
+            <view class="task-card__text">
+              <text class="task-card__title">{{vm.taskPreview.title}}</text>
+              <text class="task-card__desc">{{vm.taskPreview.description}}</text>
+            </view>
+          </view>
+          <view class="task-card__count">
+            <text class="task-card__completed">{{vm.taskPreview.completed}}</text>
+            <text class="task-card__total">/ {{vm.taskPreview.total}}</text>
+          </view>
+        </view>
+        <view class="task-card__bar">
+          <view class="task-card__bar-fill" style="width: {{(vm.taskPreview.completed / vm.taskPreview.total) * 100}}%"></view>
+        </view>
+      </view>
+    </view>
+
+    <!-- ====== Section 4: 常规波动 ====== -->
+    <view class="section">
+      <view class="section__header">
+        <view class="section__title-group">
+          <view class="section__bar section__bar--indigo"></view>
+          <text class="section__title">{{vm.regularTides.sectionTitle}}</text>
+        </view>
+        <text class="section__tag">{{vm.regularTides.sectionTag}}</text>
+      </view>
+      <view class="tide-grid">
+        <view class="tide-card">
+          <view class="tide-card__body">
+            <view class="tide-card__head">
+              <view class="tide-card__icon tide-card__icon--blue">
+                <image class="icon-md" src="{{iconWallet}}" mode="aspectFit" />
+              </view>
+              <text class="tide-card__name">{{vm.regularTides.items[0].title}}</text>
+            </view>
+            <view class="tide-card__number">
+              <text class="tide-card__days">{{vm.regularTides.items[0].days}}</text>
+              <text class="tide-card__unit">{{vm.regularTides.items[0].unit}}</text>
+            </view>
+            <view class="tide-card__bar">
+              <view class="tide-card__bar-fill tide-card__bar-fill--blue" style="width: {{vm.regularTides.items[0].progress}}%"></view>
+            </view>
+          </view>
+        </view>
+        <view class="tide-card">
+          <view class="tide-card__body">
+            <view class="tide-card__head">
+              <view class="tide-card__icon tide-card__icon--emerald">
+                <image class="icon-md" src="{{iconCompassEmerald}}" mode="aspectFit" />
+              </view>
+              <text class="tide-card__name">{{vm.regularTides.items[1].title}}</text>
+            </view>
+            <view class="tide-card__number">
+              <text class="tide-card__days">{{vm.regularTides.items[1].days}}</text>
+              <text class="tide-card__unit">{{vm.regularTides.items[1].unit}}</text>
+            </view>
+            <view class="tide-card__bar">
+              <view class="tide-card__bar-fill tide-card__bar-fill--emerald" style="width: {{vm.regularTides.items[1].progress}}%"></view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- ====== Section 5: 岁月坐标 ====== -->
+    <view class="section">
+      <view class="section__header">
+        <view class="section__title-group">
+          <view class="section__bar section__bar--blue"></view>
+          <text class="section__title">{{vm.importantDates.sectionTitle}}</text>
+        </view>
+        <view class="section__manage">
+          <text class="section__manage-text">{{vm.importantDates.manageText}}</text>
+          <image class="icon-xs" src="{{iconChevronRight}}" mode="aspectFit" />
+        </view>
+      </view>
+
+      <view class="dates-list">
+        <view class="date-item">
+          <view class="date-item__row">
+            <view class="date-item__icon date-item__icon--rose">
+              <image class="icon-md" src="{{iconHeartRose}}" mode="aspectFit" />
+            </view>
+            <view class="date-item__info">
+              <view class="date-item__title-row">
+                <text class="date-item__title">{{vm.importantDates.items[0].title}}</text>
+                <text class="date-item__tag">{{vm.importantDates.items[0].tag}}</text>
+              </view>
+              <text class="date-item__date">{{vm.importantDates.items[0].date}}</text>
+            </view>
+            <view class="date-item__remaining">
+              <text class="date-item__days date-item__days--rose">{{vm.importantDates.items[0].remaining}}</text>
+              <text class="date-item__suffix">天后</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="date-item">
+          <view class="date-item__row">
+            <view class="date-item__icon date-item__icon--amber">
+              <image class="icon-md" src="{{iconGiftAmber}}" mode="aspectFit" />
+            </view>
+            <view class="date-item__info">
+              <view class="date-item__title-row">
+                <text class="date-item__title">{{vm.importantDates.items[1].title}}</text>
+                <text class="date-item__tag">{{vm.importantDates.items[1].tag}}</text>
+              </view>
+              <text class="date-item__date">{{vm.importantDates.items[1].date}}</text>
+            </view>
+            <view class="date-item__remaining">
+              <text class="date-item__days date-item__days--amber">{{vm.importantDates.items[1].remaining}}</text>
+              <text class="date-item__suffix">天后</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="date-item">
+          <view class="date-item__row">
+            <view class="date-item__icon date-item__icon--blue">
+              <image class="icon-md" src="{{iconStarBlue}}" mode="aspectFit" />
+            </view>
+            <view class="date-item__info">
+              <view class="date-item__title-row">
+                <text class="date-item__title">{{vm.importantDates.items[2].title}}</text>
+                <text class="date-item__tag">{{vm.importantDates.items[2].tag}}</text>
+              </view>
+              <text class="date-item__date">{{vm.importantDates.items[2].date}}</text>
+            </view>
+            <view class="date-item__remaining">
+              <text class="date-item__days date-item__days--blue">{{vm.importantDates.items[2].remaining}}</text>
+              <text class="date-item__suffix">天后</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- ====== Section 6: 人生航程看板 ====== -->
+    <view class="section section--last">
+      <view class="section__header">
+        <view class="section__title-group">
+          <view class="section__bar section__bar--amber"></view>
+          <text class="section__title">{{vm.lifeJourney.sectionTitle}}</text>
+        </view>
+      </view>
+      <view class="journey-grid">
+        <view class="journey-card">
+          <view class="journey-card__head journey-card__head--slate">
+            <image class="icon-sm" src="{{iconHistorySlate}}" mode="aspectFit" />
+            <text class="journey-card__label">{{vm.lifeJourney.items[0].title}}</text>
+          </view>
+          <view class="journey-card__number">
+            <text class="journey-card__value journey-card__value--slate">{{vm.lifeJourney.items[0].value}}</text>
+            <text class="journey-card__unit journey-card__unit--slate">{{vm.lifeJourney.items[0].unit}}</text>
+          </view>
+          <text class="journey-card__desc">{{vm.lifeJourney.items[0].description}}</text>
+        </view>
+        <view class="journey-card">
+          <view class="journey-card__head journey-card__head--amber">
+            <image class="icon-sm" src="{{iconAnchorAmber}}" mode="aspectFit" />
+            <text class="journey-card__label">{{vm.lifeJourney.items[1].title}}</text>
+          </view>
+          <view class="journey-card__number">
+            <text class="journey-card__value journey-card__value--amber">{{vm.lifeJourney.items[1].value}}</text>
+            <text class="journey-card__unit journey-card__unit--amber">{{vm.lifeJourney.items[1].unit}}</text>
+          </view>
+          <text class="journey-card__desc">{{vm.lifeJourney.items[1].description}}</text>
+        </view>
+        <view class="journey-card">
+          <view class="journey-card__head journey-card__head--blue">
+            <image class="icon-sm" src="{{iconShipBlue}}" mode="aspectFit" />
+            <text class="journey-card__label">{{vm.lifeJourney.items[2].title}}</text>
+          </view>
+          <view class="journey-card__number">
+            <text class="journey-card__value journey-card__value--blue">{{vm.lifeJourney.items[2].value}}</text>
+            <text class="journey-card__unit journey-card__unit--blue">{{vm.lifeJourney.items[2].unit}}</text>
+          </view>
+          <text class="journey-card__desc">{{vm.lifeJourney.items[2].description}}</text>
+        </view>
+        <view class="journey-card">
+          <view class="journey-card__head journey-card__head--rose">
+            <image class="icon-sm" src="{{iconSunsetRose}}" mode="aspectFit" />
+            <text class="journey-card__label">{{vm.lifeJourney.items[3].title}}</text>
+          </view>
+          <view class="journey-card__number">
+            <text class="journey-card__value journey-card__value--rose">{{vm.lifeJourney.items[3].value}}</text>
+            <text class="journey-card__unit journey-card__unit--rose">{{vm.lifeJourney.items[3].unit}}</text>
+          </view>
+          <text class="journey-card__desc">{{vm.lifeJourney.items[3].description}}</text>
+        </view>
+      </view>
+    </view>
+
+  </view>
+
+  <!-- ====== 修正时长弹窗 ====== -->
+  <view class="modal-overlay {{isEditModalOpen ? 'modal-overlay--visible' : ''}}" bind:tap="closeEditModal">
+    <view class="modal-sheet {{isEditModalOpen ? 'modal-sheet--visible' : ''}}" catch:tap="">
+      <view class="modal-sheet__handle"></view>
+      <view class="modal-sheet__header">
+        <view class="modal-sheet__titles">
+          <text class="modal-sheet__title">{{vm.editModal.title}}</text>
+          <text class="modal-sheet__subtitle">{{vm.editModal.subtitle}}</text>
+        </view>
+        <view class="modal-sheet__close" bind:tap="closeEditModal">
+          <image class="icon-lg" src="{{iconX}}" mode="aspectFit" />
+        </view>
+      </view>
+      <view class="modal-sheet__inputs">
+        <view class="time-input">
+          <input class="time-input__field" type="number" value="{{editH}}" bindinput="onEditHInput" maxlength="2" />
+          <text class="time-input__label">时</text>
+        </view>
+        <text class="time-input__sep">:</text>
+        <view class="time-input">
+          <input class="time-input__field" type="number" value="{{editM}}" bindinput="onEditMInput" maxlength="2" />
+          <text class="time-input__label">分</text>
+        </view>
+        <text class="time-input__sep">:</text>
+        <view class="time-input">
+          <input class="time-input__field" type="number" value="{{editS}}" bindinput="onEditSInput" maxlength="2" />
+          <text class="time-input__label">秒</text>
+        </view>
+      </view>
+      <view class="modal-sheet__actions">
+        <view class="modal-sheet__btn modal-sheet__btn--cancel" bind:tap="closeEditModal">
+          <text>{{vm.editModal.cancelText}}</text>
+        </view>
+        <view class="modal-sheet__btn modal-sheet__btn--confirm" bind:tap="saveEditTime">
+          <text>{{vm.editModal.confirmText}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部标签栏 -->
+  <pp-tab-bar activeTab="home" />
+</view>

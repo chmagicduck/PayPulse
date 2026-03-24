@@ -1,23 +1,1040 @@
-.dashboard {
-  display: flex;
-  flex-direction: column;
-  gap: 24rpx;
+@import '../../../../styles/static-page.less';
+
+// ============================================================
+// 首页 Dashboard 样式 — 1:1 对齐高保真原型
+// ============================================================
+
+.home-page {
+  background-color: @slate50;
+  min-height: 100vh;
 }
 
-.dashboard__card {
+.home-main {
+  padding: 24rpx 32rpx 200rpx;
+  width: 100%;
+}
+
+// ============================================================
+// 内联导航栏（不固定，跟随滚动）
+// ============================================================
+.nav-bar {
+  background-color: @white;
+  border-bottom: 1rpx solid @slate100;
+
+  &__content {
+    padding: 16rpx 32rpx 20rpx;
+  }
+
+  &__main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4rpx;
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+  }
+
+  &__logo {
+    width: 56rpx;
+    height: 56rpx;
+    min-width: 56rpx;
+    border-radius: 14rpx;
+    background-color: @blue600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8rpx 24rpx rgba(37, 99, 235, 0.3);
+  }
+
+  &__logo-icon {
+    width: 32rpx;
+    height: 32rpx;
+  }
+
+  &__title {
+    font-size: 36rpx;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: @slate900;
+  }
+
+  &__badge {
+    display: flex;
+    align-items: center;
+    gap: 8rpx;
+    background-color: @blue50;
+    padding: 6rpx 16rpx;
+    border-radius: @radius-pill;
+    border: 1rpx solid @blue100;
+    margin-right: 190rpx; // 避开微信原生胶囊按钮
+  }
+
+  &__badge-dot {
+    width: 10rpx;
+    height: 10rpx;
+    min-width: 10rpx;
+    border-radius: 50%;
+    background-color: @blue600;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  &__badge-text {
+    font-size: 18rpx;
+    font-weight: 700;
+    color: @blue700;
+    letter-spacing: -0.05em;
+    white-space: nowrap;
+  }
+
+  &__subtitle {
+    font-size: 26rpx;
+    color: @slate500;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    opacity: 0.8;
+  }
+}
+
+// ============================================================
+// Section 1: 收益总览卡片
+// ============================================================
+.income-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 40rpx;
+  background-color: @blue600;
+  padding: 40rpx;
+  box-shadow: 0 20rpx 50rpx rgba(37, 99, 235, 0.15);
+  margin-bottom: 24rpx;
+
+  &__glow {
+    position: absolute;
+    top: -64rpx;
+    right: -64rpx;
+    width: 256rpx;
+    height: 256rpx;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    filter: blur(40rpx);
+  }
+
+  &__body {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 16rpx;
+  }
+
+  &__label-row {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+  }
+
+  &__label {
+    font-size: 26rpx;
+    font-weight: 500;
+    color: rgba(191, 219, 254, 0.9);
+  }
+
+  &__eye {
+    width: 40rpx;
+    height: 40rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // 等级胶囊 — 关键：显式控制高度，防止拉伸
+  &__rank {
+    display: flex;
+    align-items: center;
+    gap: 8rpx;
+    height: 48rpx;
+    padding: 0 16rpx 0 10rpx;
+    border-radius: @radius-pill;
+    background-color: @blue50;
+    border: 1rpx solid @blue100;
+    box-shadow: @shadow-sm;
+    flex-shrink: 0;
+  }
+
+  &__rank-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 28rpx;
+    padding: 0 8rpx;
+    border-radius: @radius-pill;
+    background-color: rgba(37, 99, 235, 0.1);
+  }
+
+  &__rank-lv {
+    font-size: 16rpx;
+    font-weight: 900;
+    font-style: italic;
+    letter-spacing: -0.05em;
+    color: @blue600;
+    line-height: 1;
+  }
+
+  &__rank-name {
+    font-size: 18rpx;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    color: @blue600;
+    line-height: 1;
+  }
+
+  // 金额
+  &__value {
+    font-size: 64rpx;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    color: @white;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+    margin-top: 12rpx;
+  }
+
+  &__badge-tag {
+    display: flex;
+    align-items: center;
+    height: 36rpx;
+    padding: 0 14rpx;
+    border-radius: 10rpx;
+    background-color: rgba(255, 255, 255, 0.2);
+    font-size: 18rpx;
+    font-weight: 700;
+    color: @white;
+    letter-spacing: 0.05em;
+  }
+
+  &__rate {
+    font-size: 22rpx;
+    color: rgba(191, 219, 254, 0.8);
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+  }
+
+  // 进度条
+  &__progress {
+    margin-top: 48rpx;
+  }
+
+  &__progress-labels {
+    display: flex;
+    gap: 20rpx;
+    margin-bottom: 10rpx;
+  }
+
+  &__progress-label {
+    display: flex;
+    align-items: center;
+    gap: 6rpx;
+  }
+
+  &__dot {
+    width: 10rpx;
+    height: 10rpx;
+    min-width: 10rpx;
+    border-radius: 50%;
+
+    &--work { background-color: @white; }
+    &--idle { background-color: @blue300; }
+  }
+
+  &__dot-text {
+    font-size: 18rpx;
+    font-weight: 900;
+    letter-spacing: -0.025em;
+    white-space: nowrap;
+
+    &--work { color: @white; }
+    &--idle { color: @blue200; }
+  }
+
+  &__bar {
+    height: 10rpx;
+    display: flex;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: @radius-pill;
+    overflow: hidden;
+  }
+
+  &__bar-work {
+    height: 100%;
+    background-color: @white;
+  }
+
+  &__bar-idle {
+    height: 100%;
+    background-color: rgba(96, 165, 250, 0.4);
+  }
+
+  // 底部两栏
+  &__footer {
+    display: flex;
+    margin-top: 40rpx;
+    border-top: 1rpx solid rgba(255, 255, 255, 0.1);
+    padding-top: 32rpx;
+  }
+
+  &__stat {
+    flex: 1;
+
+    &--left {
+      border-right: 1rpx solid rgba(255, 255, 255, 0.1);
+      padding-right: 24rpx;
+    }
+  }
+
+  &__stat-label {
+    display: flex;
+    align-items: center;
+    gap: 6rpx;
+    margin-bottom: 6rpx;
+
+    text {
+      font-size: 18rpx;
+      font-weight: 700;
+      color: @blue200;
+      letter-spacing: 0.1em;
+    }
+  }
+
+  &__stat-value {
+    font-size: 36rpx;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: @white;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    margin-top: 6rpx;
+  }
+}
+
+// ============================================================
+// Section 2: 计时控制
+// ============================================================
+.timer-grid {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 48rpx;
+}
+
+.timer-card {
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+  background-color: @white;
+  border: 1rpx solid @slate100;
+  padding: 28rpx;
+  border-radius: 40rpx;
+  box-shadow: @shadow-sm;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+
+  &__icon-wrap {
+    width: 72rpx;
+    height: 72rpx;
+    min-width: 72rpx;
+    border-radius: 24rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &--slate { background-color: @slate50; }
+    &--blue {
+      background-color: @blue600;
+      box-shadow: 0 8rpx 24rpx rgba(37, 99, 235, 0.2);
+    }
+    &--active { background-color: rgba(255, 255, 255, 0.2); }
+  }
+
+  &__info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__label {
+    display: block;
+    font-size: 18rpx;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    color: @slate400;
+    line-height: 1;
+    margin-bottom: 10rpx;
+
+    &--blue { color: @blue600; }
+    &--light { color: @blue200; }
+  }
+
+  &__value {
+    display: block;
+    font-size: 32rpx;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    font-variant-numeric: tabular-nums;
+    color: @slate800;
+    line-height: 1;
+  }
+
+  &__progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4rpx;
+    background-color: @slate50;
+    overflow: hidden;
+  }
+
+  &__progress-fill {
+    height: 100%;
+    background-color: rgba(59, 130, 246, 0.3);
+    box-shadow: 0 0 16rpx rgba(59, 130, 246, 0.3);
+  }
+
+  &--moyu {
+    border-color: rgba(37, 99, 235, 0.2);
+    box-shadow: 0 16rpx 32rpx -8rpx rgba(59, 130, 246, 0.1);
+    justify-content: space-between;
+  }
+
+  &--moyu-active {
+    background-color: @blue600;
+    border-color: @blue600;
+    box-shadow: 0 20rpx 50rpx rgba(37, 99, 235, 0.3);
+
+    .timer-card__value { color: @white; }
+  }
+
+  &__moyu-body {
+    display: flex;
+    align-items: center;
+    gap: 16rpx;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__settings {
+    width: 56rpx;
+    height: 56rpx;
+    min-width: 56rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16rpx;
+  }
+
+  &__ping {
+    position: absolute;
+    top: -4rpx;
+    right: -4rpx;
+    width: 20rpx;
+    height: 20rpx;
+  }
+
+  &__ping-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: @blue400;
+    opacity: 0.75;
+    animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  &__ping-dot {
+    position: relative;
+    width: 20rpx;
+    height: 20rpx;
+    min-width: 20rpx;
+    border-radius: 50%;
+    background-color: @blue500;
+  }
+}
+
+// ============================================================
+// 通用 Section 标题
+// ============================================================
+.section {
+  margin-bottom: 48rpx;
+
+  &--last { margin-bottom: 24rpx; }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 4rpx;
+    margin-bottom: 24rpx;
+  }
+
+  &__title-group {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+  }
+
+  &__bar {
+    width: 6rpx;
+    height: 20rpx;
+    min-width: 6rpx;
+    border-radius: @radius-pill;
+
+    &--blue { background-color: @blue500; }
+    &--indigo { background-color: @indigo500; }
+    &--amber { background-color: @amber500; }
+  }
+
+  &__title {
+    font-size: 26rpx;
+    font-weight: 900;
+    color: @slate800;
+    letter-spacing: -0.025em;
+  }
+
+  &__tag {
+    font-size: 18rpx;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: @slate400;
+
+    &--blue { color: @blue500; }
+  }
+
+  &__manage {
+    display: flex;
+    align-items: center;
+    gap: 4rpx;
+  }
+
+  &__manage-text {
+    font-size: 18rpx;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    color: @slate400;
+  }
+}
+
+// ============================================================
+// Section 3: 潮汐任务
+// ============================================================
+.task-card {
+  background-color: @white;
+  border: 1rpx solid @slate100;
+  border-radius: 32rpx;
+  padding: 32rpx;
+  box-shadow: @shadow-sm;
+
+  &__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 20rpx;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__icon {
+    width: 64rpx;
+    height: 64rpx;
+    min-width: 64rpx;
+    background-color: @blue50;
+    border-radius: 16rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__text { min-width: 0; }
+
+  &__title {
+    display: block;
+    font-size: 24rpx;
+    font-weight: 700;
+    color: @slate800;
+  }
+
+  &__desc {
+    display: block;
+    font-size: 18rpx;
+    color: @slate400;
+    margin-top: 4rpx;
+  }
+
+  &__count {
+    display: flex;
+    align-items: baseline;
+    gap: 4rpx;
+    flex-shrink: 0;
+    padding-left: 12rpx;
+  }
+
+  &__completed {
+    font-size: 32rpx;
+    font-weight: 900;
+    color: @slate900;
+  }
+
+  &__total {
+    font-size: 18rpx;
+    font-weight: 700;
+    color: @slate300;
+  }
+
+  &__bar {
+    height: 12rpx;
+    background-color: @slate100;
+    border-radius: @radius-pill;
+    overflow: hidden;
+    margin-top: 24rpx;
+  }
+
+  &__bar-fill {
+    height: 100%;
+    background: linear-gradient(to right, @blue500, @indigo500);
+    border-radius: @radius-pill;
+  }
+}
+
+// ============================================================
+// Section 4: 常规波动
+// ============================================================
+.tide-grid {
+  display: flex;
+  gap: 16rpx;
+}
+
+.tide-card {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background-color: @white;
+  border: 1rpx solid @slate100;
+  border-radius: 32rpx;
+  padding: 32rpx;
+  box-shadow: @shadow-sm;
+
+  &__body { position: relative; z-index: 1; }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+    margin-bottom: 24rpx;
+  }
+
+  &__icon {
+    width: 56rpx;
+    height: 56rpx;
+    min-width: 56rpx;
+    border-radius: 16rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &--blue { background-color: @blue50; }
+    &--emerald { background-color: @emerald50; }
+  }
+
+  &__name {
+    font-size: 18rpx;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    color: @slate700;
+  }
+
+  &__number {
+    display: flex;
+    align-items: baseline;
+    gap: 6rpx;
+  }
+
+  &__days {
+    font-size: 52rpx;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    color: @slate900;
+    line-height: 1;
+  }
+
+  &__unit {
+    font-size: 22rpx;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: @slate400;
+  }
+
+  &__bar {
+    height: 6rpx;
+    background-color: @slate100;
+    border-radius: @radius-pill;
+    overflow: hidden;
+    margin-top: 24rpx;
+  }
+
+  &__bar-fill {
+    height: 100%;
+    border-radius: @radius-pill;
+
+    &--blue { background-color: @blue500; }
+    &--emerald { background-color: @emerald500; }
+  }
+}
+
+// ============================================================
+// Section 5: 岁月坐标
+// ============================================================
+.dates-list {
   display: flex;
   flex-direction: column;
+  gap: 16rpx;
+}
+
+.date-item {
+  background-color: @white;
+  border: 1rpx solid @slate100;
+  border-radius: 40rpx;
+  padding: 28rpx;
+  box-shadow: @shadow-sm;
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: 24rpx;
+  }
+
+  &__icon {
+    width: 80rpx;
+    height: 80rpx;
+    min-width: 80rpx;
+    border-radius: 24rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    &--rose { background-color: @rose50; }
+    &--amber { background-color: @amber50; }
+    &--blue { background-color: @blue50; }
+  }
+
+  &__info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__title-row {
+    display: flex;
+    align-items: center;
+    gap: 10rpx;
+    margin-bottom: 6rpx;
+  }
+
+  &__title {
+    font-size: 26rpx;
+    font-weight: 700;
+    color: @slate800;
+  }
+
+  &__tag {
+    display: flex;
+    align-items: center;
+    height: 28rpx;
+    padding: 0 10rpx;
+    border-radius: 8rpx;
+    background-color: @slate50;
+    font-size: 14rpx;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    color: @slate400;
+  }
+
+  &__date {
+    font-size: 18rpx;
+    color: @slate400;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__remaining {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    flex-shrink: 0;
+  }
+
+  &__days {
+    font-size: 44rpx;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+
+    &--rose { color: @rose500; }
+    &--amber { color: @amber500; }
+    &--blue { color: @blue500; }
+  }
+
+  &__suffix {
+    font-size: 18rpx;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    color: @slate400;
+  }
+}
+
+.date-add {
+  height: 96rpx;
+  border: 3rpx dashed @slate200;
+  border-radius: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  color: @slate300;
+
+  &__text {
+    font-size: 22rpx;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+}
+
+// ============================================================
+// Section 6: 人生航程看板
+// ============================================================
+.journey-grid {
+  display: flex;
+  flex-wrap: wrap;
   gap: 12rpx;
 }
 
-.dashboard__card-title {
-  font-size: 32rpx;
-  font-weight: 600;
-  color: #122033;
+.journey-card {
+  width: calc(50% - 6rpx);
+  background-color: @white;
+  border: 1rpx solid @slate100;
+  border-radius: 40rpx;
+  padding: 28rpx;
+  box-shadow: @shadow-sm;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: 8rpx;
+    margin-bottom: 12rpx;
+
+    &--slate { color: @slate400; }
+    &--amber { color: @amber500; }
+    &--blue { color: @blue500; }
+    &--rose { color: @rose500; }
+  }
+
+  &__label {
+    font-size: 18rpx;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+
+  &__number { margin-bottom: 8rpx; }
+
+  &__value {
+    font-size: 42rpx;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+
+    &--slate { color: @slate900; }
+    &--amber { color: @amber600; }
+    &--blue { color: @blue600; }
+    &--rose { color: @rose600; }
+  }
+
+  &__unit {
+    font-size: 18rpx;
+    font-weight: 700;
+    margin-left: 4rpx;
+
+    &--slate { color: @slate400; }
+    &--amber { color: @amber400; }
+    &--blue { color: @blue400; }
+    &--rose { color: @rose400; }
+  }
+
+  &__desc {
+    font-size: 16rpx;
+    color: @slate400;
+    line-height: 1.3;
+  }
 }
 
-.dashboard__card-description {
-  font-size: 26rpx;
-  line-height: 1.6;
-  color: #5a6881;
+// ============================================================
+// 修正时长弹窗
+// ============================================================
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 200;
+  background-color: rgba(15, 23, 42, 0.4);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity @duration-slow ease;
+
+  &--visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.modal-sheet {
+  width: 100%;
+  background-color: @white;
+  border-radius: 40rpx 40rpx 0 0;
+  padding: 40rpx 40rpx 80rpx;
+  box-shadow: 0 -20rpx 60rpx rgba(0, 0, 0, 0.15);
+  transform: translateY(100%);
+  transition: transform @duration-slow cubic-bezier(0.4, 0, 0.2, 1);
+
+  &--visible { transform: translateY(0); }
+
+  &__handle {
+    width: 80rpx;
+    height: 6rpx;
+    background-color: @slate200;
+    border-radius: @radius-pill;
+    margin: 0 auto 40rpx;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 48rpx;
+  }
+
+  &__titles { display: flex; flex-direction: column; }
+
+  &__title {
+    font-size: 32rpx;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: @slate900;
+  }
+
+  &__subtitle {
+    font-size: 22rpx;
+    color: @slate500;
+    margin-top: 6rpx;
+  }
+
+  &__close {
+    width: 56rpx;
+    height: 56rpx;
+    min-width: 56rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+
+  &__inputs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12rpx;
+    margin-bottom: 48rpx;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 20rpx;
+  }
+
+  &__btn {
+    border-radius: 16rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24rpx 0;
+    font-weight: 700;
+    font-size: 24rpx;
+
+    &--cancel {
+      flex: 1;
+      background-color: @slate100;
+      color: @slate600;
+    }
+
+    &--confirm {
+      flex: 2;
+      background-color: @blue600;
+      color: @white;
+      box-shadow: 0 16rpx 32rpx rgba(37, 99, 235, 0.25);
+    }
+  }
+}
+
+.time-input {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+
+  &__field {
+    width: 112rpx;
+    height: 112rpx;
+    font-size: 52rpx;
+    font-weight: 900;
+    text-align: center;
+    background-color: @slate50;
+    border: 1rpx solid @slate200;
+    border-radius: 24rpx;
+    font-variant-numeric: tabular-nums;
+    color: @slate900;
+  }
+
+  &__label {
+    font-size: 18rpx;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: @slate400;
+  }
+
+  &__sep {
+    font-size: 40rpx;
+    font-weight: 900;
+    color: @slate300;
+    margin-bottom: 40rpx;
+  }
 }

@@ -1,8 +1,6 @@
 {
-  "navigationBarTitleText": "PayPulse",
+  "navigationStyle": "custom",
   "usingComponents": {
-    "page-shell": "../../../../components/patterns/page-shell/index",
-    "section-title": "../../../../components/patterns/section-title/index",
-    "pp-card": "../../../../components/ui/pp-card/index"
+    "pp-tab-bar": "/components/navigation/pp-tab-bar/index"
   }
 }

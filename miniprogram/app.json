@@ -1,10 +1,25 @@
 {
   "pages": [
-    "features/home/pages/dashboard/index"
+    "features/home/pages/dashboard/index",
+    "features/report/pages/ocean-report/index",
+    "features/lab/pages/lab/index",
+    "features/profile/pages/home/index",
+    "features/profile/pages/settings/index",
+    "features/time-axis/pages/time-axis-settings/index",
+    "features/calendar/pages/calendar/index",
+    "features/community/pages/join/index",
+    "features/about/pages/about/index",
+    "features/data-center/pages/data-center/index"
   ],
   "window": {
     "navigationBarTextStyle": "black",
     "navigationStyle": "custom"
+  },
+  "plugins": {
+    "materialPlugin": {
+      "version": "1.0.13",
+      "provider": "wx4d2deeab3aed6e5a"
+    }
   },
   "style": "v2",
   "rendererOptions": {
@@ -17,5 +32,8 @@
   },
   "componentFramework": "glass-easel",
   "sitemapLocation": "sitemap.json",
-  "lazyCodeLoading": "requiredComponents"
+  "lazyCodeLoading": "requiredComponents",
+  "experimentalFeatures": {
+    "svg": true
+  }
 }

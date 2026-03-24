@@ -1,0 +1,141 @@
+// 首页静态视图模型只服务于阶段 1 的原型还原。
+// 正式业务逻辑会在后续阶段改由 feature model 统一推导。
+// SVG 图标已改为内联 <svg> 标签，颜色直接写在 WXML 中。
+
+export const dashboardStaticViewModel = {
+  header: {
+    title: '薪潮涌动',
+    subtitle: '此刻，金钱正如潮水般涌来',
+    badge: '实时监测中',
+  },
+  income: {
+    label: '今日累计摸鱼收益',
+    value: '¥128.632',
+    rate: '当前航速 0.024/s',
+    rateBadge: '自动结算',
+    rank: {
+      level: 5,
+      name: '资深舵手',
+    },
+    workPercent: 68,
+    idlePercent: 32,
+    moyuIncome: '¥46.125',
+    moyuLabel: '今日入账',
+    monthlyIncome: '¥6,340.632',
+    monthlyLabel: '本月已赚',
+  },
+  timer: {
+    leftTitle: '离岗倒计时',
+    leftValue: '02:18:42',
+    leftProgress: 78,
+    rightTitle: '点击避风',
+    rightActiveTitle: '避风中',
+    rightValue: '01:24:16',
+  },
+  taskPreview: {
+    sectionTitle: '潮汐任务',
+    sectionTag: '今日航行目标',
+    title: '航道任务清理',
+    description: '奖励: 效率加成 & 心理慰藉 & 100成长值',
+    completed: 2,
+    total: 6,
+  },
+  regularTides: {
+    sectionTitle: '常规波动',
+    sectionTag: '周期性观测',
+    items: [
+      {
+        title: '发薪大潮',
+        days: '12',
+        unit: 'Days',
+        progress: 60,
+        tone: 'blue',
+        iconType: 'wallet',
+      },
+      {
+        title: '双休倒计时',
+        days: '4',
+        unit: 'Days',
+        progress: 20,
+        tone: 'emerald',
+        iconType: 'compass',
+      },
+    ],
+  },
+  importantDates: {
+    sectionTitle: '岁月坐标',
+    manageText: '管理全部',
+    items: [
+      {
+        id: 'anniversary',
+        title: '结婚纪念日',
+        date: '10月20日',
+        tag: 'Romantic',
+        remaining: '28',
+        tone: 'rose',
+        iconType: 'heart',
+      },
+      {
+        id: 'birthday',
+        title: '我的生日',
+        date: '12月05日',
+        tag: 'Birthday',
+        remaining: '74',
+        tone: 'amber',
+        iconType: 'gift',
+      },
+      {
+        id: 'bonus',
+        title: 'Q3 季度奖金',
+        date: '09月30日',
+        tag: 'Bonus',
+        remaining: '8',
+        tone: 'blue',
+        iconType: 'star',
+      },
+    ],
+  },
+  lifeJourney: {
+    sectionTitle: '人生航程看板',
+    items: [
+      {
+        title: '已航行',
+        value: '1,240',
+        unit: '天',
+        description: '自第一份合同签署以来，你已在波涛中坚守多年。',
+        tone: 'slate',
+        iconType: 'history',
+      },
+      {
+        title: '距离靠岸',
+        value: '8,760',
+        unit: '天',
+        description: '距离法定退休日，那是属于你的永久避风港。',
+        tone: 'amber',
+        iconType: 'anchor',
+      },
+      {
+        title: '总航程',
+        value: '10,000',
+        unit: '天',
+        description: '这是你预计的职业总跨度，每一天都值得记录。',
+        tone: 'blue',
+        iconType: 'ship',
+      },
+      {
+        title: '余辉',
+        value: '18,250',
+        unit: '天',
+        description: '人生剩余的可能。在金钱之外，别忘了阳光与爱。',
+        tone: 'rose',
+        iconType: 'sunset',
+      },
+    ],
+  },
+  editModal: {
+    title: '修正避风时长',
+    subtitle: '手动校准今日避风港停留的时间',
+    cancelText: '取消',
+    confirmText: '确认保存',
+  },
+} as const

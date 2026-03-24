@@ -548,14 +548,6 @@ const App = () => {
                   <div className={`absolute inset-0 ${item.bgColor} opacity-0 group-hover:opacity-[0.15] rounded-3xl transition-opacity pointer-events-none`}></div>
                 </div>
               ))}
-              
-              <button className="w-full h-14 border-2 border-dashed border-slate-200 rounded-3xl flex items-center justify-center gap-2 text-slate-300 hover:text-blue-500 hover:border-blue-200 hover:bg-blue-50/50 transition-all group overflow-hidden">
-                 <div className="relative">
-                   <Plus size={16} className="group-hover:rotate-90 transition-transform duration-300 z-10" />
-                   <Sparkles size={8} className="absolute -top-1 -right-1 text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity" />
-                 </div>
-                 <span className="text-xs font-bold uppercase tracking-widest">录入新航标</span>
-              </button>
            </div>
         </section>
 

@@ -1,16 +1,82 @@
+@import '../../../styles/variables.less';
+@import '../../../styles/animation.less';
+
 .pp-nav-bar {
-  display: flex;
-  flex-direction: column;
-  gap: 8rpx;
-}
+  background-color: @white;
+  border-bottom: 1rpx solid @slate100;
 
-.pp-nav-bar__title {
-  font-size: 40rpx;
-  font-weight: 700;
-  color: #122033;
-}
+  &__content {
+    padding: 24rpx 48rpx 24rpx;
+  }
 
-.pp-nav-bar__subtitle {
-  font-size: 24rpx;
-  color: #5a6881;
+  &__main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4rpx;
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 16rpx;
+  }
+
+  &__logo {
+    width: 60rpx;
+    height: 60rpx;
+    border-radius: @radius-sm;
+    background-color: @blue600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8rpx 24rpx rgba(37, 99, 235, 0.3);
+  }
+
+  &__logo-icon {
+    width: 36rpx;
+    height: 36rpx;
+  }
+
+  &__title {
+    font-size: 40rpx;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: @slate900;
+  }
+
+  &__badge {
+    display: flex;
+    align-items: center;
+    gap: 8rpx;
+    background-color: @blue50;
+    padding: 8rpx 20rpx;
+    border-radius: @radius-pill;
+    border: 1rpx solid @blue100;
+  }
+
+  &__badge-dot {
+    width: 12rpx;
+    height: 12rpx;
+    border-radius: 50%;
+    background-color: @blue600;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  &__badge-text {
+    font-size: @fs-micro;
+    font-weight: 700;
+    color: @blue700;
+    text-transform: uppercase;
+    letter-spacing: -0.05em;
+    white-space: nowrap;
+  }
+
+  &__subtitle {
+    font-size: @fs-body;
+    color: @slate500;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    opacity: 0.8;
+  }
 }

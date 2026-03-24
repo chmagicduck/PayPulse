@@ -1,7 +1,2 @@
 {
-  "component": true,
-  "styleIsolation": "apply-shared",
-  "options": {
-    "multipleSlots": true
-  }
 }

@@ -1,0 +1,34 @@
+// ============================================================
+// 静态页面基础样式
+// ============================================================
+@import './variables.less';
+@import './mixins.less';
+@import './animation.less';
+@import './typography.less';
+
+page {
+  background-color: @slate50;
+  color: @slate900;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  letter-spacing: -0.01em;
+  line-height: 1.625;
+  -webkit-font-smoothing: antialiased;
+}
+
+view, text, image, scroll-view, input {
+  box-sizing: border-box;
+}
+
+.page-view {
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  background-color: @slate50;
+}
+
+// 通用图标尺寸
+.icon-xs { width: 24rpx; height: 24rpx; }
+.icon-sm { width: 28rpx; height: 28rpx; }
+.icon-md { width: 32rpx; height: 32rpx; }
+.icon-lg { width: 36rpx; height: 36rpx; }
+.icon-xl { width: 44rpx; height: 44rpx; }
