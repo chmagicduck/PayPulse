@@ -74,9 +74,9 @@
   {
     "feature_id": "profile",
     "page_id": "profile-settings",
-    "title_zh": "个人信息设置",
+    "title_zh": "航行档案设置",
     "prototype_file": "docs/prototype/feature-profile/page-profile-settings.ts",
-    "legacy_name": "薪潮涌动(个人信息设置).ts",
+    "legacy_name": "薪潮涌动(航行档案设置).ts",
     "target_route": "features/profile/pages/settings/index"
   }
 ]
