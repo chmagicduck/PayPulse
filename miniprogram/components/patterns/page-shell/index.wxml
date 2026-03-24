@@ -1,0 +1,9 @@
+<view class="page-shell">
+  <view class="page-shell__header">
+    <text class="page-shell__title">{{title}}</text>
+    <text wx:if="{{subtitle}}" class="page-shell__subtitle">{{subtitle}}</text>
+  </view>
+  <view class="page-shell__content">
+    <slot />
+  </view>
+</view>

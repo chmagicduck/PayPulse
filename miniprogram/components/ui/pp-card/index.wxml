@@ -1,0 +1,3 @@
+<view class="pp-card">
+  <slot />
+</view>

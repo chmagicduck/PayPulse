@@ -1,0 +1,4 @@
+<view class="pp-nav-bar">
+  <text class="pp-nav-bar__title">{{title}}</text>
+  <text wx:if="{{subtitle}}" class="pp-nav-bar__subtitle">{{subtitle}}</text>
+</view>

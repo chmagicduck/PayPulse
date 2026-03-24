@@ -1,0 +1,6 @@
+<button
+  class="pp-button pp-button--{{variant}} {{block ? 'pp-button--block' : ''}}"
+  bindtap="onTap"
+>
+  <slot>{{label}}</slot>
+</button>

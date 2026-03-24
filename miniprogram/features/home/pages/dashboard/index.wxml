@@ -1,0 +1,15 @@
+<page-shell title="{{meta.title}}" subtitle="{{meta.description}}">
+  <view class="dashboard">
+    <section-title
+      title="仓库骨架已就位"
+      subtitle="当前页面只用于验证新的 feature、theme、component 与 docs 结构。"
+    />
+
+    <pp-card wx:for="{{sections}}" wx:key="id">
+      <view class="dashboard__card">
+        <text class="dashboard__card-title">{{item.title}}</text>
+        <text class="dashboard__card-description">{{item.description}}</text>
+      </view>
+    </pp-card>
+  </view>
+</page-shell>
