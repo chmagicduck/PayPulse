@@ -1,0 +1,41 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.tabbarItems = void 0;
+exports.tabbarItems = [
+    {
+        key: 'home',
+        pagePath: 'features/home/pages/dashboard/index',
+        text: '领潮中心',
+        iconSvg: '/assets/images/tabbar/svg/tab-home.svg',
+        activeIconSvg: '/assets/images/tabbar/svg/tab-home-active.svg',
+        iconPng: '/assets/images/tabbar/tab-home.png',
+        activeIconPng: '/assets/images/tabbar/tab-home-active.png',
+    },
+    {
+        key: 'report',
+        pagePath: 'features/report/pages/ocean-report/index',
+        text: '洋流战报',
+        iconSvg: '/assets/images/tabbar/svg/tab-chart.svg',
+        activeIconSvg: '/assets/images/tabbar/svg/tab-chart-active.svg',
+        iconPng: '/assets/images/tabbar/tab-chart.png',
+        activeIconPng: '/assets/images/tabbar/tab-chart-active.png',
+    },
+    {
+        key: 'lab',
+        pagePath: 'features/lab/pages/lab/index',
+        text: '动力室',
+        iconSvg: '/assets/images/tabbar/svg/tab-lab.svg',
+        activeIconSvg: '/assets/images/tabbar/svg/tab-lab-active.svg',
+        iconPng: '/assets/images/tabbar/tab-lab.png',
+        activeIconPng: '/assets/images/tabbar/tab-lab-active.png',
+    },
+    {
+        key: 'profile',
+        pagePath: 'features/profile/pages/home/index',
+        text: '个人基地',
+        iconSvg: '/assets/images/tabbar/svg/tab-profile.svg',
+        activeIconSvg: '/assets/images/tabbar/svg/tab-profile-active.svg',
+        iconPng: '/assets/images/tabbar/tab-profile.png',
+        activeIconPng: '/assets/images/tabbar/tab-profile-active.png',
+    },
+];

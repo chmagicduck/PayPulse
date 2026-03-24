@@ -125,13 +125,12 @@
 
     <!-- ====== Section 3: 潮汐任务 ====== -->
     <view class="section">
-      <view class="section__header">
-        <view class="section__title-group">
-          <view class="section__bar section__bar--blue"></view>
-          <text class="section__title">{{vm.taskPreview.sectionTitle}}</text>
-        </view>
-        <text class="section__tag section__tag--blue">{{vm.taskPreview.sectionTag}}</text>
-      </view>
+      <pp-section-header
+        title="{{vm.taskPreview.sectionTitle}}"
+        barTone="blue"
+        tagText="{{vm.taskPreview.sectionTag}}"
+        tagTone="blue"
+      />
       <view class="task-card">
         <view class="task-card__row">
           <view class="task-card__left">
@@ -156,15 +155,14 @@
 
     <!-- ====== Section 4: 常规波动 ====== -->
     <view class="section">
-      <view class="section__header">
-        <view class="section__title-group">
-          <view class="section__bar section__bar--indigo"></view>
-          <text class="section__title">{{vm.regularTides.sectionTitle}}</text>
-        </view>
-        <text class="section__tag">{{vm.regularTides.sectionTag}}</text>
-      </view>
+      <pp-section-header
+        title="{{vm.regularTides.sectionTitle}}"
+        barTone="indigo"
+        tagText="{{vm.regularTides.sectionTag}}"
+      />
       <view class="tide-grid">
         <view class="tide-card">
+          <image class="tide-card__ghost tide-card__ghost--blue" src="{{iconWalletGhost}}" mode="aspectFit" />
           <view class="tide-card__body">
             <view class="tide-card__head">
               <view class="tide-card__icon tide-card__icon--blue">
@@ -182,6 +180,7 @@
           </view>
         </view>
         <view class="tide-card">
+          <image class="tide-card__ghost tide-card__ghost--emerald" src="{{iconCompassEmeraldGhost}}" mode="aspectFit" />
           <view class="tide-card__body">
             <view class="tide-card__head">
               <view class="tide-card__icon tide-card__icon--emerald">
@@ -203,16 +202,12 @@
 
     <!-- ====== Section 5: 岁月坐标 ====== -->
     <view class="section">
-      <view class="section__header">
-        <view class="section__title-group">
-          <view class="section__bar section__bar--blue"></view>
-          <text class="section__title">{{vm.importantDates.sectionTitle}}</text>
-        </view>
-        <view class="section__manage">
-          <text class="section__manage-text">{{vm.importantDates.manageText}}</text>
-          <image class="icon-xs" src="{{iconChevronRight}}" mode="aspectFit" />
-        </view>
-      </view>
+      <pp-section-header
+        title="{{vm.importantDates.sectionTitle}}"
+        barTone="blue"
+        manageText="{{vm.importantDates.manageText}}"
+        chevronSrc="{{iconChevronRight}}"
+      />
 
       <view class="dates-list">
         <view class="date-item">
@@ -276,12 +271,10 @@
 
     <!-- ====== Section 6: 人生航程看板 ====== -->
     <view class="section section--last">
-      <view class="section__header">
-        <view class="section__title-group">
-          <view class="section__bar section__bar--amber"></view>
-          <text class="section__title">{{vm.lifeJourney.sectionTitle}}</text>
-        </view>
-      </view>
+      <pp-section-header
+        title="{{vm.lifeJourney.sectionTitle}}"
+        barTone="amber"
+      />
       <view class="journey-grid">
         <view class="journey-card">
           <view class="journey-card__head journey-card__head--slate">

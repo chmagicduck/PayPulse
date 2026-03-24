@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+  <defs>
+    <linearGradient id="luna-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#bfdbfe"/>
+      <stop offset="100%" stop-color="#fef3c7"/>
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" rx="32" fill="url(#luna-bg)"/>
+  <circle cx="80" cy="68" r="34" fill="#fde68a"/>
+  <path d="M44 146c10-28 24-44 36-44s26 14 36 44" fill="#475569"/>
+  <path d="M50 64c0-24 16-40 30-40 18 0 30 16 30 38-6-4-14-6-26-6-12 0-23 3-34 8Z" fill="#475569"/>
+  <circle cx="68" cy="68" r="4" fill="#1e293b"/>
+  <circle cx="92" cy="68" r="4" fill="#1e293b"/>
+  <path d="M70 84c4 5 16 5 20 0" stroke="#1d4ed8" stroke-width="4" stroke-linecap="round" fill="none"/>
+</svg>

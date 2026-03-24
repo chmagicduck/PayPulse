@@ -1,0 +1,13 @@
+<view class="pp-section-header">
+  <view class="pp-section-header__title-group">
+    <view class="{{barClassName}}"></view>
+    <text class="pp-section-header__title">{{title}}</text>
+  </view>
+
+  <view class="pp-section-header__manage" wx:if="{{showManage}}">
+    <text class="pp-section-header__manage-text">{{manageText}}</text>
+    <image class="pp-section-header__chevron" wx:if="{{showChevron}}" src="{{chevronSrc}}" mode="aspectFit" />
+  </view>
+
+  <text class="{{tagClassName}}" wx:if="{{showTag}}">{{tagText}}</text>
+</view>
