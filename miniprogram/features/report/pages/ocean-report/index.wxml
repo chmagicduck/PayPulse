@@ -3,15 +3,12 @@
     <view class="report-nav__content">
       <view class="report-nav__brand">
         <view class="report-nav__logo">
-          <image
-            class="report-nav__logo-icon"
-            src="{{iconAnimations.chart ? icons.chartPair.animatedSrc : icons.chartPair.staticSrc}}"
-            mode="aspectFit"
-          />
+          <image class="report-nav__logo-icon" src="{{iconAnimations.chart ? icons.chartPair.animatedSrc : icons.chartPair.staticSrc}}" mode="aspectFit" />
         </view>
         <text class="report-nav__title">{{vm.header.title}}</text>
       </view>
-      <view class="report-nav__filter">
+
+      <view class="report-nav__filter {{pressStates.filter ? 'report-nav__filter--pressed' : ''}}" bind:tap="pressFilter">
         <image class="icon-sm" src="{{icons.filter}}" mode="aspectFit" />
       </view>
     </view>
@@ -19,18 +16,19 @@
 
   <view class="report-main">
     <view class="report-section">
-      <view class="section-head">
-        <view>
+      <view class="section-head section-head--trend">
+        <view class="section-head__copy">
           <view class="section-head__title-row">
             <view class="section-head__bar section-head__bar--indigo"></view>
-            <text class="section-head__title">收益趋势</text>
+            <text class="section-head__title">{{vm.trend.title}}</text>
           </view>
-          <text class="section-head__subtitle">9 月度每日航行概览</text>
+          <text class="section-head__subtitle">{{vm.trend.subtitle}}</text>
         </view>
+
         <view class="tab-switch">
-          <block wx:for="{{vm.tabs}}" wx:key="key">
+          <block wx:for="{{vm.trend.tabs}}" wx:key="key">
             <view
-              class="tab-switch__item tab-switch__item--{{item.accent}} {{activeTab === item.key ? 'tab-switch__item--active' : ''}}"
+              class="tab-switch__item tab-switch__item--{{item.accent}} {{activeTab === item.key ? 'tab-switch__item--active' : ''}} {{pressStates.tabKey === item.key ? 'tab-switch__item--pressed' : ''}}"
               data-key="{{item.key}}"
               bind:tap="switchTab"
             >
@@ -41,34 +39,37 @@
       </view>
 
       <view class="chart-card">
-        <view class="chart-card__bars">
-          <block wx:for="{{vm.chartBars}}" wx:key="day">
-            <view class="chart-bar">
-              <view class="chart-bar__track chart-bar__track--{{activeTab === 'income' ? 'indigo' : 'amber'}}"></view>
-              <view
-                class="chart-bar__fill chart-bar__fill--{{activeTab === 'income' ? 'indigo' : 'amber'}}"
-                style="height: {{activeTab === 'income' ? item.incomeHeight : item.durationHeight}};"
-              ></view>
-              <text class="chart-bar__label">{{item.day}}</text>
-            </view>
-          </block>
-        </view>
+        <scroll-view class="chart-card__scroll" scroll-x enhanced show-scrollbar="false">
+          <view class="chart-card__bars">
+            <block wx:for="{{vm.trend.bars}}" wx:key="day">
+              <view class="chart-bar {{pressStates.chartBarIndex === index ? 'chart-bar--active' : ''}}" data-index="{{index}}" bind:tap="pressChartBar">
+                <view class="chart-bar__tip" wx:if="{{pressStates.chartBarIndex === index}}">
+                  <text>{{activeTab === 'income' ? item.incomeText : item.durationText}}</text>
+                </view>
+                <view class="chart-bar__body">
+                  <view class="chart-bar__track chart-bar__track--{{activeTab === 'income' ? 'indigo' : 'amber'}}"></view>
+                  <view class="chart-bar__fill chart-bar__fill--{{activeTab === 'income' ? 'indigo' : 'amber'}}" style="height: {{activeTab === 'income' ? item.incomeHeight : item.durationHeight}};"></view>
+                </view>
+                <text class="chart-bar__label">{{item.day}}</text>
+              </view>
+            </block>
+          </view>
+        </scroll-view>
 
         <view class="chart-card__summary">
-          <view>
-            <text class="chart-card__eyebrow">本月总计</text>
+          <view class="chart-card__summary-copy">
+            <text class="chart-card__eyebrow">{{vm.trend.summaryLabel}}</text>
             <view class="chart-card__value-row">
               <text class="chart-card__value chart-card__value--{{activeTab === 'income' ? 'indigo' : 'amber'}}">
-                {{activeTab === 'income' ? vm.chartSummary.incomeTotal : vm.chartSummary.durationTotal}}
+                {{activeTab === 'income' ? vm.trend.summary.incomeTotal : vm.trend.summary.durationTotal}}
               </text>
-              <view class="chart-card__rise">
-                <image class="icon-xs" src="{{icons.trendingUp}}" mode="aspectFit" />
-                <text>{{vm.chartSummary.riseText}}</text>
-              </view>
+              <text class="chart-card__unit">{{activeTab === 'income' ? vm.trend.incomeUnit : vm.trend.durationUnit}}</text>
             </view>
           </view>
-          <view class="chart-card__capsule chart-card__capsule--{{activeTab === 'income' ? 'indigo' : 'amber'}}">
-            <image class="icon-sm" src="{{activeTab === 'income' ? icons.wallet : icons.clock}}" mode="aspectFit" />
+
+          <view class="chart-card__rise">
+            <image class="icon-xs" src="{{icons.trendingUp}}" mode="aspectFit" />
+            <text class="chart-card__rise-text">{{vm.trend.riseText}}</text>
           </view>
         </view>
       </view>
@@ -77,69 +78,74 @@
     <view class="report-section">
       <view class="section-head">
         <view class="section-head__title-row">
-          <view class="section-head__bar section-head__bar--blue"></view>
-          <text class="section-head__title">年度总览</text>
+          <view class="section-head__bar section-head__bar--amber"></view>
+          <text class="section-head__title">{{vm.annual.title}}</text>
         </view>
+        <image class="section-head__arrow" src="{{icons.arrowUpRight}}" mode="aspectFit" />
       </view>
 
-      <view class="summary-grid">
-        <block wx:for="{{vm.annualCards}}" wx:key="title">
-          <view class="summary-card summary-card--{{item.tone}}">
-            <view class="summary-card__icon summary-card__icon--{{item.tone}}">
-              <image
-                class="icon-sm"
-                src="{{item.tone === 'amber' ? icons.coins : item.tone === 'rose' ? icons.medal : item.tone === 'blue' ? icons.wallet : icons.calendarDays}}"
-                mode="aspectFit"
-              />
+      <view class="annual-grid">
+        <block wx:for="{{annualCards}}" wx:key="title">
+          <view class="annual-card annual-card--{{item.tone}} {{pressStates.annualIndex === index ? 'annual-card--pressed' : ''}}" data-index="{{index}}" bind:tap="pressAnnualCard">
+            <view class="annual-card__icon annual-card__icon--{{item.tone}}">
+              <image class="icon-sm" src="{{item.iconSrc}}" mode="aspectFit" />
             </view>
-            <text class="summary-card__title">{{item.title}}</text>
-            <text class="summary-card__value">{{item.value}}</text>
+            <text class="annual-card__title">{{item.title}}</text>
+            <text class="annual-card__value {{item.tone === 'rose' ? 'annual-card__value--rose' : ''}}">{{item.value}}</text>
           </view>
         </block>
       </view>
     </view>
 
     <view class="report-section">
-      <view class="section-head">
+      <view class="section-head section-head--ratio">
         <view class="section-head__title-row">
-          <view class="section-head__bar section-head__bar--indigo"></view>
-          <text class="section-head__title">效率配比</text>
+          <view class="section-head__bar section-head__bar--blue"></view>
+          <text class="section-head__title">{{vm.ratio.title}}</text>
+        </view>
+
+        <view class="range-switch">
+          <block wx:for="{{vm.ratio.ranges}}" wx:key="key">
+            <view
+              class="range-switch__item {{timeRange === item.key ? 'range-switch__item--active' : ''}} {{pressStates.rangeKey === item.key ? 'range-switch__item--pressed' : ''}}"
+              data-key="{{item.key}}"
+              bind:tap="switchRange"
+            >
+              <text class="range-switch__text">{{item.text}}</text>
+            </view>
+          </block>
         </view>
       </view>
 
       <view class="ratio-card">
-        <view class="ratio-tabs">
-          <block wx:for="{{vm.rangeTabs}}" wx:key="key">
-            <view
-              class="ratio-tabs__item {{timeRange === item.key ? 'ratio-tabs__item--active' : ''}} {{pressStates.rangeKey === item.key ? 'ratio-tabs__item--pressed' : ''}}"
-              data-key="{{item.key}}"
-              bind:tap="switchRange"
-            >
-              <text class="ratio-tabs__text">{{item.text}}</text>
-            </view>
-          </block>
-        </view>
-
-        <view class="ratio-card__main">
-          <view class="ratio-card__metric">
-            <image class="icon-sm" src="{{icons.pieChart}}" mode="aspectFit" />
-            <view>
-              <text class="ratio-card__label">工作占比</text>
-              <text class="ratio-card__value">{{currentRatio.work}}%</text>
-            </view>
-          </view>
-          <view class="ratio-card__metric ratio-card__metric--idle">
-            <image class="icon-sm" src="{{icons.clock}}" mode="aspectFit" />
-            <view>
-              <text class="ratio-card__label">摸鱼占比</text>
-              <text class="ratio-card__value">{{currentRatio.moyu}}%</text>
-            </view>
+        <view class="ratio-card__ring-shell">
+          <image class="ratio-card__ring-image" src="{{ratioRingSrc}}" mode="aspectFit" />
+          <view class="ratio-card__ring-copy">
+            <text class="ratio-card__ring-value">{{currentRatio.moyu}}%</text>
+            <text class="ratio-card__ring-label">{{vm.ratio.centerLabel}}</text>
           </view>
         </view>
 
-        <view class="ratio-card__bar">
-          <view class="ratio-card__bar-work" style="width: {{currentRatio.work}}%;"></view>
-          <view class="ratio-card__bar-idle" style="width: {{currentRatio.moyu}}%;"></view>
+        <view class="ratio-card__stats">
+          <view class="ratio-stat">
+            <view class="ratio-stat__head">
+              <text class="ratio-stat__label">{{vm.ratio.workLabel}}</text>
+              <text class="ratio-stat__value">{{currentRatio.work}}%</text>
+            </view>
+            <view class="ratio-stat__track">
+              <view class="ratio-stat__fill ratio-stat__fill--work" style="width: {{currentRatio.work}}%;"></view>
+            </view>
+          </view>
+
+          <view class="ratio-stat">
+            <view class="ratio-stat__head">
+              <text class="ratio-stat__label ratio-stat__label--blue">{{vm.ratio.moyuLabel}}</text>
+              <text class="ratio-stat__value ratio-stat__value--blue">{{currentRatio.moyu}}%</text>
+            </view>
+            <view class="ratio-stat__track ratio-stat__track--blue">
+              <view class="ratio-stat__fill ratio-stat__fill--moyu" style="width: {{currentRatio.moyu}}%;"></view>
+            </view>
+          </view>
         </view>
       </view>
     </view>
@@ -148,28 +154,35 @@
       <view class="section-head">
         <view class="section-head__title-row">
           <view class="section-head__bar section-head__bar--slate"></view>
-          <text class="section-head__title">近 7 日明细</text>
+          <text class="section-head__title">{{vm.history.title}}</text>
         </view>
       </view>
 
       <view class="history-list">
-        <block wx:for="{{historyDetails}}" wx:key="date">
-          <view
-            class="history-item {{pressStates.historyIndex === index ? 'history-item--pressed' : ''}}"
-            data-index="{{index}}"
-            bind:tap="openEditModal"
-          >
-            <view class="history-item__main">
-              <view class="history-item__left">
-                <view class="history-item__dot"></view>
-                <view>
-                  <text class="history-item__date">{{item.date}}</text>
-                  <text class="history-item__duration">{{item.duration}}</text>
+        <block wx:for="{{historyItems}}" wx:key="date">
+          <view class="history-card {{pressStates.historyIndex === index ? 'history-card--pressed' : ''}}" data-index="{{index}}" bind:tap="openEditModal">
+              <view class="history-card__main">
+              <view class="history-card__left">
+                <view class="history-card__date-pill">
+                  <text class="history-card__date">{{item.displayDate}}</text>
+                </view>
+                <view class="history-card__divider"></view>
+
+                <view class="history-card__copy">
+                  <view class="history-card__duration-row">
+                    <image class="history-card__clock" src="{{icons.clock}}" mode="aspectFit" />
+                    <text class="history-card__duration">{{item.duration}}</text>
+                  </view>
+                  <text class="history-card__hint">{{vm.history.hint}}</text>
                 </view>
               </view>
-              <view class="history-item__right">
-                <text class="history-item__income">¥{{item.income}}</text>
-                <image class="icon-xs" src="{{icons.arrowUpRight}}" mode="aspectFit" />
+
+              <view class="history-card__right">
+                <view class="history-card__income-copy">
+                  <text class="history-card__income">+¥{{item.income}}</text>
+                  <text class="history-card__income-label">Income</text>
+                </view>
+                <image class="history-card__arrow" src="{{icons.chevronLeft}}" mode="aspectFit" />
               </view>
             </view>
           </view>
@@ -178,45 +191,45 @@
     </view>
   </view>
 
-  <view class="modal-overlay {{isEditModalOpen ? 'modal-overlay--visible' : ''}}" bind:tap="closeEditModal">
-    <view class="modal-sheet {{isEditModalOpen ? 'modal-sheet--visible' : ''}}" catch:tap="">
-      <view class="modal-sheet__header">
-        <view>
-          <text class="modal-sheet__title">修正明细时长</text>
-          <text class="modal-sheet__subtitle">仅用于当前静态演示页的查阅体验</text>
+  <view class="edit-modal {{editModalVisible ? 'edit-modal--visible' : ''}}" wx:if="{{showEditModal}}" bind:tap="closeEditModal">
+    <view class="edit-sheet {{editModalVisible ? 'edit-sheet--visible' : ''}}" catch:tap="">
+      <view class="edit-sheet__handle"></view>
+
+      <view class="edit-sheet__header">
+        <view class="edit-sheet__titles">
+          <text class="edit-sheet__title">{{vm.modal.title}}</text>
+          <text class="edit-sheet__subtitle">{{vm.modal.subtitle}}</text>
         </view>
-        <view class="modal-sheet__close" bind:tap="closeEditModal">
-          <image class="icon-lg" src="{{icons.x}}" mode="aspectFit" />
+        <view class="edit-sheet__close {{pressStates.modalClose ? 'edit-sheet__close--pressed' : ''}}" bind:tap="closeEditModal">
+          <image class="icon-md" src="{{icons.x}}" mode="aspectFit" />
         </view>
       </view>
 
-      <view class="time-inputs">
-        <view class="time-input">
-          <input class="time-input__field" type="number" maxlength="2" value="{{editH}}" data-field="editH" data-max="23" bindinput="updateTimeField" />
-          <text class="time-input__label">时</text>
+      <view class="time-editor">
+        <view class="time-editor__group">
+          <input class="time-editor__field" type="number" maxlength="2" value="{{editH}}" data-field="editH" data-max="23" bindinput="updateTimeField" />
+          <text class="time-editor__label">{{vm.modal.labels.hour}}</text>
         </view>
-        <text class="time-input__sep">:</text>
-        <view class="time-input">
-          <input class="time-input__field" type="number" maxlength="2" value="{{editM}}" data-field="editM" data-max="59" bindinput="updateTimeField" />
-          <text class="time-input__label">分</text>
+        <text class="time-editor__sep">:</text>
+        <view class="time-editor__group">
+          <input class="time-editor__field" type="number" maxlength="2" value="{{editM}}" data-field="editM" data-max="59" bindinput="updateTimeField" />
+          <text class="time-editor__label">{{vm.modal.labels.minute}}</text>
         </view>
-        <text class="time-input__sep">:</text>
-        <view class="time-input">
-          <input class="time-input__field" type="number" maxlength="2" value="{{editS}}" data-field="editS" data-max="59" bindinput="updateTimeField" />
-          <text class="time-input__label">秒</text>
+        <text class="time-editor__sep">:</text>
+        <view class="time-editor__group">
+          <input class="time-editor__field" type="number" maxlength="2" value="{{editS}}" data-field="editS" data-max="59" bindinput="updateTimeField" />
+          <text class="time-editor__label">{{vm.modal.labels.second}}</text>
         </view>
       </view>
 
-      <view class="modal-sheet__actions">
-        <view class="modal-sheet__btn modal-sheet__btn--ghost" bind:tap="closeEditModal">
-          <text>取消</text>
+      <view class="edit-sheet__actions">
+        <view class="edit-sheet__btn edit-sheet__btn--ghost" bind:tap="closeEditModal">
+          <text>{{vm.modal.cancelText}}</text>
         </view>
-        <view class="modal-sheet__btn modal-sheet__btn--primary" bind:tap="saveEditTime">
-          <text>确认保存</text>
+        <view class="edit-sheet__btn edit-sheet__btn--primary {{pressStates.modalConfirm ? 'edit-sheet__btn--primary-pressed' : ''}}" bind:tap="saveEditTime">
+          <text>{{vm.modal.confirmText}}</text>
         </view>
       </view>
     </view>
   </view>
-
-  <pp-tab-bar activeTab="report" />
 </view>

@@ -4,7 +4,6 @@
 export const dashboardStaticViewModel = {
   header: {
     title: '薪潮涌动',
-    subtitle: '此刻，金钱正如潮水般涌来',
   },
   income: {
     label: '今日累计避风收益',
@@ -68,6 +67,7 @@ export const dashboardStaticViewModel = {
   },
   importantDates: {
     sectionTitle: '岁月坐标',
+    actionText: '新增坐标',
     items: [
       {
         id: 'anniversary',
@@ -105,8 +105,8 @@ export const dashboardStaticViewModel = {
       {
         id: 'life',
         eyebrow: '生命航程 (LIFE)',
-        value: '11,240',
-        unit: '天',
+        statusLabel: '已过',
+        valueModes: ['11,240天', '30年9个月15天', '374个月20天', '1605周5天'],
         descriptionPrefix: '这是你从',
         descriptionHighlight: '诞生启航',
         descriptionSuffix: '至今所经历的日夜。',
@@ -114,8 +114,8 @@ export const dashboardStaticViewModel = {
       {
         id: 'career',
         eyebrow: '职场航程 (CAREER)',
-        value: '2,823',
-        unit: '天',
+        statusLabel: '已过',
+        valueModes: ['2,823天', '7年8个月18天', '94个月3天', '403周2天'],
         descriptionPrefix: '自步入',
         descriptionHighlight: '社会熔炉',
         descriptionSuffix: '起，你已交付出的岁月。',
@@ -123,8 +123,8 @@ export const dashboardStaticViewModel = {
       {
         id: 'retire',
         eyebrow: '退役倒计时 (RETIRE)',
-        value: '10,675',
-        unit: '天',
+        statusLabel: '还剩',
+        valueModes: ['10,675天', '29年2个月10天', '355个月25天', '1525周0天'],
         descriptionPrefix: '距离你可以',
         descriptionHighlight: '正式卸甲',
         descriptionSuffix: '，还有这些定额任务。',
@@ -133,8 +133,8 @@ export const dashboardStaticViewModel = {
       {
         id: 'final',
         eyebrow: '终点倒计时 (FINAL)',
-        value: '19,807',
-        unit: '天',
+        statusLabel: '还剩',
+        valueModes: ['19,807天', '54年3个月2天', '660个月7天', '2829周4天'],
         quote: '"警告：航线即将耗尽，此数据不可逆转。"',
         note: '* 基于预计 85 岁自然终点计算。每一秒都是该生命周期中不可再生的奢侈品。',
       },

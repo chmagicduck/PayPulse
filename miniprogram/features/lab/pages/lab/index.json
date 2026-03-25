@@ -1,6 +1,3 @@
 {
-  "navigationStyle": "custom",
-  "usingComponents": {
-    "pp-tab-bar": "/components/navigation/pp-tab-bar/index"
-  }
+  "navigationStyle": "custom"
 }

@@ -1,0 +1,227 @@
+.rank-card {
+  position: relative;
+  overflow: hidden;
+  padding: 32rpx;
+  border-radius: 48rpx;
+  background: @white;
+  border: 1rpx solid @slate100;
+  box-shadow: @shadow-sm;
+
+  &__glow {
+    position: absolute;
+    top: -40rpx;
+    right: -40rpx;
+    width: 192rpx;
+    height: 192rpx;
+    min-width: 192rpx;
+    border-radius: 50%;
+    background: rgba(59, 130, 246, 0.08);
+    filter: blur(32rpx);
+  }
+
+  &__head,
+  &__progress {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24rpx;
+    margin-bottom: 28rpx;
+  }
+
+  &__copy {
+    min-width: 0;
+    flex: 1;
+  }
+
+  &__eyebrow {
+    display: block;
+    margin-bottom: 6rpx;
+    font-size: 18rpx;
+    font-weight: 900;
+    color: @slate400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  &__title {
+    display: block;
+    font-size: 36rpx;
+    line-height: 1.16;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+
+    &--slate { color: @slate400; }
+    &--cyan { color: @cyan600; }
+    &--orange { color: @orange600; }
+    &--emerald { color: @emerald500; }
+    &--blue { color: @blue500; }
+    &--indigo { color: @indigo500; }
+    &--violet { color: @violet600; }
+    &--yellow { color: @yellow700; }
+    &--rose { color: @rose600; }
+    &--amber { color: @amber600; }
+  }
+
+  &__today {
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  &__today-label {
+    display: block;
+    margin-bottom: 6rpx;
+    font-size: 18rpx;
+    font-weight: 900;
+    color: @slate400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  &__today-value-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    gap: 4rpx;
+  }
+
+  &__today-value {
+    font-size: 36rpx;
+    font-weight: 900;
+    color: @blue600;
+    line-height: 1;
+  }
+
+  &__today-unit {
+    font-size: 16rpx;
+    font-weight: 900;
+    color: @blue300;
+    line-height: 1;
+  }
+
+  &__progress {
+    margin-bottom: 28rpx;
+  }
+
+  &__progress-bar {
+    height: 16rpx;
+    border-radius: @radius-pill;
+    overflow: hidden;
+    background: @slate50;
+    border: 1rpx solid @slate100;
+  }
+
+  &__progress-fill {
+    height: 100%;
+    border-radius: @radius-pill;
+    transition: width @duration-slow ease, background-color @duration-slow ease;
+
+    &--slate { background: @slate400; }
+    &--cyan { background: @cyan600; }
+    &--orange { background: @orange600; }
+    &--emerald { background: @emerald500; }
+    &--blue { background: @blue500; }
+    &--indigo { background: @indigo500; }
+    &--violet { background: @violet600; }
+    &--yellow { background: @yellow700; }
+    &--rose { background: @rose600; }
+    &--amber { background: @amber600; }
+  }
+
+  &__progress-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16rpx;
+    margin-top: 14rpx;
+    padding: 0 2rpx;
+  }
+
+  &__meta-text {
+    font-size: 18rpx;
+    font-weight: 700;
+    color: @slate500;
+
+    &--max {
+      color: @amber500;
+      font-weight: 900;
+    }
+  }
+
+  &__meta-strong {
+    color: @blue600;
+    font-weight: 900;
+  }
+}
+
+.rank-axis {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rpx 4rpx;
+
+  &__line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 2rpx;
+    background: @slate100;
+    transform: translateY(-50%);
+  }
+
+  &__item {
+    position: relative;
+    z-index: 1;
+    transition: transform @duration-normal ease, opacity @duration-normal ease;
+
+    &--active {
+      transform: scale(1.1);
+      opacity: 1;
+    }
+
+    &--inactive {
+      transform: scale(0.76);
+      opacity: 0.12;
+    }
+
+    &--pressed {
+      transform: scale(1);
+      opacity: 0.4;
+    }
+  }
+
+  &__badge {
+    width: 44rpx;
+    height: 44rpx;
+    min-width: 44rpx;
+    border-radius: 14rpx;
+    border: 2rpx solid @white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: @shadow-sm;
+
+    &--slate { background: @slate100; }
+    &--cyan { background: @cyan50; }
+    &--orange { background: @orange50; }
+    &--emerald { background: @emerald50; }
+    &--blue { background: @blue50; }
+    &--indigo { background: @violet50; }
+    &--violet { background: @violet50; }
+    &--yellow { background: @yellow50; }
+    &--rose { background: @rose50; }
+    &--amber { background: @amber50; }
+  }
+
+  &__icon {
+    width: 20rpx;
+    height: 20rpx;
+    min-width: 20rpx;
+  }
+}

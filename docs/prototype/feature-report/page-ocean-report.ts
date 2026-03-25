@@ -90,6 +90,12 @@ const App = () => {
     setIsEditModalOpen(false);
   };
 
+  // 格式化日期为中文
+  const formatChineseDate = (dateStr) => {
+    const [month, day] = dateStr.split('-');
+    return `${parseInt(month)}月${parseInt(day)}日`;
+  };
+
   return (
     <div className="flex flex-col h-screen bg-slate-50 text-slate-900 max-w-md mx-auto overflow-hidden border-x border-slate-100 shadow-2xl relative">
       
@@ -111,7 +117,7 @@ const App = () => {
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto px-5 py-6 space-y-6 pb-32">
         
-        {/* Section 1: 趋势图表 - 已修复显示问题 */}
+        {/* Section 1: 趋势图表 */}
         <section className="space-y-4">
           <div className="flex justify-between items-end px-1">
             <div className="space-y-1">
@@ -139,26 +145,21 @@ const App = () => {
           </div>
 
           <div className="bg-white border border-slate-100 rounded-[2rem] p-5 shadow-sm">
-            {/* 柱状图容器：显式设置高度并确保 overflow 处理正确 */}
             <div className="relative h-44 mt-4 overflow-x-auto no-scrollbar">
               <div className="flex items-end gap-2 px-1 min-w-max h-32">
                 {dailyData.map((item, idx) => {
                   const val = activeTab === 'income' ? item.amount : parseFloat(item.hours);
                   const max = activeTab === 'income' ? maxValues.income : maxValues.duration;
-                  // 最小高度 10% 确保可见性
                   const heightPercent = Math.max((val / max) * 100, 10);
                   const isIndigo = activeTab === 'income';
 
                   return (
                     <div key={idx} className="w-4 flex flex-col items-center gap-2 group flex-shrink-0 h-full justify-end">
                       <div className="relative w-full h-full flex flex-col justify-end">
-                        {/* 悬浮提示 */}
                         <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[8px] py-1 px-1.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20 font-bold pointer-events-none">
                           {isIndigo ? `¥${item.amount}` : `${item.hours}h`}
                         </div>
-                        {/* 柱状图背景 */}
                         <div className={`absolute inset-0 ${isIndigo ? 'bg-indigo-50' : 'bg-amber-50'} rounded-full w-full opacity-40 group-hover:opacity-80 transition-opacity`}></div>
-                        {/* 柱状图主体 */}
                         <div 
                           className={`relative w-full ${isIndigo ? 'bg-indigo-500 shadow-[0_4px_12px_rgba(99,102,241,0.3)]' : 'bg-amber-500 shadow-[0_4px_12px_rgba(245,158,11,0.3)]'} rounded-full transition-all duration-700 ease-out`}
                           style={{ height: `${heightPercent}%` }}
@@ -307,7 +308,7 @@ const App = () => {
           </div>
         </section>
 
-        {/* Section 4: 近7日避风明细 */}
+        {/* Section 4: 近7日避风明细 - 已按要求调整 */}
         <section className="space-y-4 pb-12">
           <div className="flex justify-between items-center px-1">
             <div className="flex items-center gap-2">
@@ -324,10 +325,11 @@ const App = () => {
                 className="bg-white border border-slate-100 rounded-2xl p-4 flex items-center justify-between group hover:border-indigo-100 transition-all active:scale-[0.98] cursor-pointer"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-slate-50 flex flex-col items-center justify-center border border-slate-100 group-hover:bg-indigo-50 transition-colors">
-                    <span className="text-[8px] font-black text-slate-300 uppercase leading-none mb-1">SEP</span>
-                    <span className="text-xs font-black text-slate-700 leading-none">{item.date.split('-')[1]}</span>
+                  {/* 改为中文日期标识 */}
+                  <div className="min-w-[70px]">
+                    <span className="text-sm font-black text-slate-800">{formatChineseDate(item.date)}</span>
                   </div>
+                  <div className="h-8 w-px bg-slate-100"></div>
                   <div>
                     <div className="flex items-center gap-1.5">
                       <Clock size={10} className="text-slate-400" />
@@ -336,10 +338,10 @@ const App = () => {
                     <p className="text-[9px] text-slate-400 mt-0.5 font-medium">点击修正时长</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 text-right">
+                <div className="flex items-center gap-3 text-right">
                   <div>
                     <span className="text-sm font-black text-emerald-600 tabular-nums">+¥{item.income.toFixed(1)}</span>
-                    <p className="text-[9px] text-slate-300 mt-0.5 font-bold uppercase leading-none">Income</p>
+                    <p className="text-[9px] text-slate-300 mt-0.5 font-bold uppercase leading-none text-right">Income</p>
                   </div>
                   <ChevronLeft size={14} className="text-slate-200 rotate-180" />
                 </div>

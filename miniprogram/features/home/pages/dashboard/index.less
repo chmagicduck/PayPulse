@@ -1,13 +1,14 @@
 @import '../../../../theme/entries/static-page.less';
 
 .home-page {
-  background-color: @slate50;
+  background-color: @white;
   min-height: 100vh;
 }
 
 .home-main {
   width: 100%;
-  padding: 28rpx 32rpx 200rpx;
+  padding: 28rpx 32rpx 64rpx;
+  background-color: @slate50;
 }
 
 .nav-bar {
@@ -21,7 +22,6 @@
   &__main {
     display: flex;
     align-items: center;
-    margin-bottom: 4rpx;
   }
 
   &__left {
@@ -547,9 +547,8 @@
 
   &__head {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 18rpx;
+    align-items: center;
+    gap: 16rpx;
     margin-bottom: 32rpx;
   }
 
@@ -574,6 +573,8 @@
   }
 
   &__name {
+    min-width: 0;
+    flex: 1;
     font-size: 28rpx;
     font-weight: 800;
     letter-spacing: -0.04em;
@@ -622,8 +623,8 @@
 .date-item {
   background-color: @white;
   border: 1rpx solid @slate100;
-  border-radius: 48rpx;
-  padding: 32rpx;
+  border-radius: 40rpx;
+  padding: 32rpx 40rpx;
   box-shadow: @shadow-sm;
   transition: transform @duration-fast ease, border-color @duration-normal ease, box-shadow @duration-normal ease;
 
@@ -636,7 +637,16 @@
   &__row {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 24rpx;
+  }
+
+  &__main {
+    display: flex;
+    align-items: center;
+    gap: 28rpx;
+    min-width: 0;
+    flex: 1;
   }
 
   &__icon {
@@ -648,45 +658,59 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    border: 4rpx solid transparent;
+    transition: transform @duration-fast ease;
 
-    &--rose { background-color: @rose50; }
-    &--amber { background-color: @amber50; }
-    &--blue { background-color: @blue50; }
+    &--rose {
+      background-color: @rose50;
+      border-color: @rose100;
+    }
+
+    &--amber {
+      background-color: @amber50;
+      border-color: @amber100;
+    }
+
+    &--blue {
+      background-color: @blue50;
+      border-color: @blue100;
+    }
   }
 
   &__info {
-    flex: 1;
     min-width: 0;
   }
 
   &__title {
     display: block;
-    font-size: 26rpx;
+    font-size: 30rpx;
     font-weight: 700;
     color: @slate800;
     line-height: 1.14;
-    margin-bottom: 4rpx;
+    letter-spacing: -0.03em;
+    margin-bottom: 6rpx;
   }
 
   &__date {
     display: block;
-    font-size: 18rpx;
+    font-size: 20rpx;
     color: @slate400;
-    font-weight: 500;
+    font-weight: 700;
     line-height: 1.1;
     font-variant-numeric: tabular-nums;
+    opacity: 0.56;
   }
 
   &__remaining {
     display: flex;
-    align-items: baseline;
-    gap: 4rpx;
+    align-items: center;
+    gap: 10rpx;
     flex-shrink: 0;
     white-space: nowrap;
   }
 
   &__days {
-    font-size: 44rpx;
+    font-size: 48rpx;
     font-weight: 900;
     letter-spacing: -0.05em;
     font-variant-numeric: tabular-nums;
@@ -698,9 +722,9 @@
   }
 
   &__suffix {
-    font-size: 18rpx;
+    font-size: 20rpx;
     font-weight: 700;
-    letter-spacing: -0.05em;
+    letter-spacing: 0.04em;
     color: @slate400;
     white-space: nowrap;
     line-height: 1;
@@ -724,27 +748,27 @@
 
 .journey-board__bar {
   width: 8rpx;
-  height: 24rpx;
+  height: 20rpx;
   min-width: 8rpx;
   border-radius: @radius-pill;
   background: @slate900;
 }
 
 .journey-board__title {
-  font-size: 30rpx;
+  font-size: 32rpx;
   font-weight: 900;
   color: @slate800;
   letter-spacing: -0.03em;
 }
 
 .journey-board__badge {
-  padding: 8rpx 16rpx;
-  border-radius: 10rpx;
+  padding: 4rpx 16rpx;
+  border-radius: 8rpx;
   background: @slate100;
 }
 
 .journey-board__badge-text {
-  font-size: 14rpx;
+  font-size: 12rpx;
   font-weight: 900;
   color: @slate400;
   letter-spacing: 0.08em;
@@ -760,9 +784,9 @@
 .journey-card {
   position: relative;
   overflow: hidden;
-  border-radius: 64rpx;
+  border-radius: 48rpx;
   border: 1rpx solid @slate100;
-  padding: 48rpx;
+  padding: 32rpx;
   box-shadow: @shadow-sm;
   transition: transform @duration-fast ease, border-color @duration-normal ease, box-shadow @duration-normal ease;
 
@@ -787,16 +811,20 @@
 
   &__ghost {
     position: absolute;
-    top: 20rpx;
-    right: 20rpx;
-    width: 160rpx;
-    height: 160rpx;
-    min-width: 160rpx;
+    top: 24rpx;
+    right: 24rpx;
+    width: 120rpx;
+    height: 120rpx;
+    min-width: 120rpx;
 
     &--indigo { opacity: 0.03; }
     &--blue { opacity: 0.03; }
     &--emerald { opacity: 0.1; }
-    &--rose { opacity: 0.1; }
+    &--rose {
+      opacity: 0.1;
+      animation: journey-ghost-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      transform-origin: center;
+    }
   }
 
   &__head {
@@ -805,41 +833,41 @@
     display: flex;
     align-items: center;
     gap: 20rpx;
-    margin-bottom: 36rpx;
+    margin-bottom: 24rpx;
   }
 
   &__icon {
-    width: 64rpx;
-    height: 64rpx;
-    min-width: 64rpx;
-    border-radius: 20rpx;
+    width: 52rpx;
+    height: 52rpx;
+    min-width: 52rpx;
+    border-radius: 16rpx;
     display: flex;
     align-items: center;
     justify-content: center;
 
     &--indigo {
       background: @indigo500;
-      box-shadow: 0 14rpx 26rpx rgba(99, 102, 241, 0.18);
+      box-shadow: 0 12rpx 24rpx rgba(99, 102, 241, 0.18);
     }
 
     &--blue {
       background: @blue600;
-      box-shadow: 0 14rpx 26rpx rgba(37, 99, 235, 0.18);
+      box-shadow: 0 12rpx 24rpx rgba(37, 99, 235, 0.18);
     }
 
     &--emerald {
       background: @emerald600;
-      box-shadow: 0 14rpx 26rpx rgba(5, 150, 105, 0.18);
+      box-shadow: 0 12rpx 24rpx rgba(5, 150, 105, 0.18);
     }
 
     &--rose {
       background: @rose600;
-      box-shadow: 0 14rpx 26rpx rgba(225, 29, 72, 0.18);
+      box-shadow: 0 12rpx 24rpx rgba(225, 29, 72, 0.18);
     }
   }
 
   &__eyebrow {
-    font-size: 18rpx;
+    font-size: 20rpx;
     font-weight: 900;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -857,11 +885,27 @@
     display: flex;
     align-items: baseline;
     gap: 10rpx;
-    margin-bottom: 16rpx;
+    margin-bottom: 10rpx;
+    flex-wrap: wrap;
+  }
+
+  &__status {
+    font-size: 26rpx;
+    font-weight: 900;
+    color: @slate400;
+    line-height: 1.2;
+
+    &--emerald {
+      color: rgba(5, 150, 105, 0.4);
+    }
+
+    &--rose {
+      color: @rose400;
+    }
   }
 
   &__value {
-    font-size: 56rpx;
+    font-size: 48rpx;
     font-weight: 900;
     letter-spacing: -0.05em;
     line-height: 1;
@@ -872,25 +916,15 @@
     &--rose { color: @rose600; }
   }
 
-  &__unit {
-    font-size: 24rpx;
-    font-weight: 700;
-    line-height: 1;
-
-    &--slate { color: @slate400; }
-    &--emerald { color: @emerald500; }
-    &--rose { color: @rose400; }
-  }
-
   &__desc {
     display: block;
     position: relative;
     z-index: 1;
-    max-width: 520rpx;
     font-size: 22rpx;
-    line-height: 1.55;
+    line-height: 1.45;
     color: @slate500;
     font-weight: 500;
+    white-space: nowrap;
 
     &--emerald {
       color: rgba(6, 95, 70, 0.65);
@@ -908,8 +942,8 @@
   &__progress {
     position: relative;
     z-index: 1;
-    height: 12rpx;
-    margin-top: 28rpx;
+    height: 8rpx;
+    margin-top: 24rpx;
     border-radius: @radius-pill;
     background: rgba(110, 231, 183, 0.45);
     overflow: hidden;
@@ -925,28 +959,43 @@
     display: block;
     position: relative;
     z-index: 1;
-    font-size: 22rpx;
+    font-size: 20rpx;
     font-weight: 900;
-    line-height: 1.55;
+    line-height: 1.35;
     color: rgba(136, 19, 55, 0.72);
     font-style: italic;
+    letter-spacing: -0.02em;
   }
 
   &__note {
     position: relative;
     z-index: 1;
-    margin-top: 28rpx;
-    padding: 20rpx 24rpx;
+    margin-top: 20rpx;
+    padding: 18rpx 20rpx;
     border-radius: 20rpx;
-    background: rgba(255, 255, 255, 0.4);
-    border: 1rpx solid rgba(244, 63, 94, 0.14);
+    background: rgba(255, 255, 255, 0.6);
+    border: 1rpx solid rgba(254, 205, 211, 0.5);
   }
 
   &__note-text {
     display: block;
-    font-size: 16rpx;
+    font-size: 18rpx;
     line-height: 1.4;
     color: rgba(136, 19, 55, 0.62);
+  }
+}
+
+.date-item--active .date-item__icon {
+  transform: scale(1.06);
+}
+
+@keyframes journey-ghost-pulse {
+  0%, 100% {
+    opacity: 0.1;
+  }
+
+  50% {
+    opacity: 0.04;
   }
 }
 

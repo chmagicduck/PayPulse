@@ -2,19 +2,33 @@
   <view class="time-axis-nav" style="padding-top: {{statusBarHeight}}px;">
     <view class="time-axis-nav__content">
       <view class="time-axis-nav__back" bind:tap="handleBack">
-        <image class="icon-lg" src="{{icons.chevronLeft}}" mode="aspectFit" />
+        <image class="time-axis-nav__back-icon" src="{{icons.chevronLeft}}" mode="aspectFit" />
       </view>
       <text class="time-axis-nav__title">{{vm.title}}</text>
-      <view class="time-axis-nav__action" bind:tap="openCreateModal">
-        <image class="icon-lg" src="{{icons.plus}}" mode="aspectFit" />
-      </view>
+      <view class="time-axis-nav__spacer"></view>
     </view>
   </view>
 
-  <view class="time-axis-groups">
-    <block wx:for="{{vm.groups}}" wx:key="*this">
-      <view class="time-axis-groups__item {{selectedGroup === item ? 'time-axis-groups__item--active' : ''}}" data-value="{{item}}" bind:tap="selectGroup">
-        <text class="time-axis-groups__text">{{item}}</text>
+  <view class="notebook-strip">
+    <block wx:for="{{notebooks}}" wx:key="id">
+      <view
+        class="notebook-card {{selectedNotebookId === item.id ? 'notebook-card--active' : ''}} {{pressStates.notebookId === item.id ? 'notebook-card--pressed' : ''}}"
+        data-id="{{item.id}}"
+        bind:tap="selectNotebook"
+      >
+        <view class="notebook-card__stack"></view>
+        <view class="notebook-card__body notebook-card__body--{{item.tone}}">
+          <view class="notebook-card__bookmark notebook-card__bookmark--{{item.tone}}"></view>
+          <view class="notebook-card__stitch"></view>
+          <view class="notebook-card__icon-shell">
+            <image
+              class="notebook-card__icon"
+              src="{{selectedNotebookId === item.id ? item.iconPair.animatedSrc : item.iconPair.staticSrc}}"
+              mode="aspectFit"
+            />
+          </view>
+          <text class="notebook-card__name">{{item.name}}</text>
+        </view>
       </view>
     </block>
   </view>
@@ -22,107 +36,126 @@
   <view class="time-axis-main">
     <view class="entry-list" wx:if="{{visibleEntries.length}}">
       <block wx:for="{{visibleEntries}}" wx:key="id">
-        <view class="entry-card" data-id="{{item.id}}" bind:tap="openEditModal">
+        <view
+          class="entry-card {{pressStates.entryId === item.id ? 'entry-card--pressed' : ''}}"
+          data-id="{{item.id}}"
+          bind:tap="openEditDrawer"
+        >
           <view class="entry-card__main">
             <view class="entry-card__icon entry-card__icon--{{item.tone}}">
-              <image class="icon-md" src="{{item.iconSrc}}" mode="aspectFit" />
+              <image class="entry-card__icon-image" src="{{item.iconSrc}}" mode="aspectFit" />
             </view>
+
             <view class="entry-card__copy">
               <text class="entry-card__title">{{item.title}}</text>
               <view class="entry-card__meta">
-                <text class="entry-card__date">{{item.date}}</text>
-                <view class="entry-card__tag">
-                  <text class="entry-card__tag-text">{{item.tag}}</text>
+                <text class="entry-card__date">{{item.dateText}}</text>
+                <view class="entry-card__badge entry-card__badge--{{item.notebookTone}}">
+                  <text class="entry-card__badge-text">{{item.notebookName}}</text>
                 </view>
               </view>
             </view>
           </view>
 
-          <view class="entry-card__side">
-            <text class="entry-card__countdown {{item.isPast ? 'entry-card__countdown--past' : ''}}">{{item.countdown}}</text>
-            <view class="entry-card__group">
-              <text class="entry-card__group-text">{{item.group}}</text>
-              <image class="icon-xs" src="{{icons.chevronRight}}" mode="aspectFit" />
-            </view>
+          <view class="entry-card__countdown">
+            <text class="entry-card__value entry-card__value--{{item.tone}} {{item.isPast ? 'entry-card__value--past' : ''}}">{{item.valueText}}</text>
+            <text class="entry-card__unit">{{item.unitText}}</text>
           </view>
         </view>
       </block>
     </view>
 
     <view class="entry-empty" wx:else>
-      <image class="entry-empty__icon" src="{{iconChoices[2].iconPair.staticSrc}}" mode="aspectFit" />
-      <text class="entry-empty__title">档案库为空</text>
-      <text class="entry-empty__desc">先创建一个坐标，后续就能从个人基地快速查阅。</text>
+      <image class="entry-empty__icon" src="{{icons.emptyPair.staticSrc}}" mode="aspectFit" />
+      <text class="entry-empty__title">{{vm.texts.emptyTitle}}</text>
+    </view>
+
+    <view class="archive-cta {{pressStates.addCard ? 'archive-cta--pressed' : ''}}" bind:tap="openCreateDrawer">
+      <view class="archive-cta__icon">
+        <image
+          class="archive-cta__icon-image"
+          src="{{pressStates.addCard ? icons.addPair.animatedSrc : icons.addPair.staticSrc}}"
+          mode="aspectFit"
+        />
+      </view>
+      <text class="archive-cta__text">{{vm.texts.addCta}}</text>
     </view>
   </view>
 
-  <view class="drawer-overlay {{isModalOpen ? 'drawer-overlay--visible' : ''}}" bind:tap="closeModal">
-    <view class="drawer-sheet {{isModalOpen ? 'drawer-sheet--visible' : ''}}" catch:tap="">
+    <view wx:if="{{showDrawer}}" class="drawer-overlay {{drawerVisible ? 'drawer-overlay--visible' : ''}}" bind:tap="closeDrawer">
+    <view class="drawer-sheet {{drawerVisible ? 'drawer-sheet--visible' : ''}}" catch:tap="noop">
       <view class="drawer-sheet__header">
-        <text class="drawer-sheet__title">{{editingId ? '编辑档案' : '新增档案'}}</text>
-        <view class="drawer-sheet__close" bind:tap="closeModal">
-          <image class="icon-lg" src="{{icons.x}}" mode="aspectFit" />
+        <text class="drawer-sheet__title">{{editingId ? vm.texts.editTitle : vm.texts.createTitle}}</text>
+        <view class="drawer-sheet__close {{pressStates.closeButton ? 'drawer-sheet__close--pressed' : ''}}" bind:tap="pressCloseDrawer">
+          <image class="drawer-sheet__close-icon" src="{{icons.close}}" mode="aspectFit" />
         </view>
       </view>
 
       <view class="drawer-field">
-        <text class="drawer-field__label">标识图标</text>
-        <view class="icon-grid">
-          <block wx:for="{{iconChoices}}" wx:key="id">
-            <view class="icon-grid__item icon-grid__item--{{item.tone}} {{form.iconId === item.id ? 'icon-grid__item--active' : ''}}" data-value="{{item.id}}" bind:tap="selectIcon">
-              <image class="icon-md" src="{{item.iconPair.staticSrc}}" mode="aspectFit" />
+        <text class="drawer-field__label">{{vm.texts.titleField}}</text>
+        <input
+          class="drawer-field__input"
+          value="{{form.title}}"
+          maxlength="20"
+          placeholder="{{vm.texts.titlePlaceholder}}"
+          bindinput="updateTitle"
+        />
+      </view>
+
+      <view class="drawer-field">
+        <text class="drawer-field__label">{{vm.texts.dateField}}</text>
+        <picker mode="date" value="{{form.date}}" bindchange="updateDate">
+          <view class="drawer-field__picker {{form.date ? '' : 'drawer-field__picker--placeholder'}}">
+            <view class="drawer-field__picker-main">
+              <image class="drawer-field__picker-icon" src="{{icons.calendar}}" mode="aspectFit" />
+              <text class="drawer-field__picker-text">{{form.date || '请选择日期'}}</text>
+            </view>
+          </view>
+        </picker>
+      </view>
+
+      <view class="drawer-switch {{pressStates.anniversary ? 'drawer-switch--pressed' : ''}}" bind:tap="toggleAnniversary">
+        <view class="drawer-switch__copy">
+          <text class="drawer-switch__title">{{vm.texts.anniversaryTitle}}</text>
+          <text class="drawer-switch__subtitle">{{vm.texts.anniversarySubtitle}}</text>
+        </view>
+        <view class="drawer-switch__track {{form.isAnniversary ? 'drawer-switch__track--active' : ''}}">
+          <view class="drawer-switch__thumb"></view>
+        </view>
+      </view>
+
+      <view class="drawer-field drawer-field--last">
+        <text class="drawer-field__label">{{vm.texts.notebookField}}</text>
+        <view class="drawer-notebooks">
+          <block wx:for="{{drawerNotebooks}}" wx:key="id">
+            <view
+              class="drawer-notebook drawer-notebook--{{item.tone}} {{form.notebookId === item.id ? 'drawer-notebook--active' : ''}} {{pressStates.drawerNotebookId === item.id ? 'drawer-notebook--pressed' : ''}}"
+              data-id="{{item.id}}"
+              bind:tap="selectDrawerNotebook"
+            >
+              <view class="drawer-notebook__bookmark drawer-notebook__bookmark--{{item.tone}}"></view>
+              <image
+                class="drawer-notebook__icon"
+                src="{{form.notebookId === item.id ? item.iconPair.animatedSrc : item.iconPair.staticSrc}}"
+                mode="aspectFit"
+              />
+              <text class="drawer-notebook__name">{{item.name}}</text>
             </view>
           </block>
         </view>
       </view>
 
-      <view class="drawer-field">
-        <text class="drawer-field__label">档案标题</text>
-        <input class="drawer-field__input" value="{{form.title}}" data-field="title" bindinput="updateField" placeholder="输入标题" />
-      </view>
-
-      <view class="drawer-row">
-        <view class="drawer-field drawer-field--half">
-          <text class="drawer-field__label">日期</text>
-          <picker mode="date" value="{{form.date}}" data-field="date" bindchange="updateField">
-            <view class="drawer-field__picker">{{form.date || '选择日期'}}</view>
-          </picker>
-        </view>
-
-        <view class="drawer-field drawer-field--half">
-          <text class="drawer-field__label">分组</text>
-          <input class="drawer-field__input" value="{{form.group}}" data-field="group" bindinput="updateField" />
-        </view>
-      </view>
-
-      <view class="drawer-field">
-        <text class="drawer-field__label">日历体系</text>
-        <view class="segmented">
-          <view class="segmented__item {{form.type === 'solar' ? 'segmented__item--active' : ''}}" data-value="solar" bind:tap="toggleType">
-            <text class="segmented__text">公历</text>
-          </view>
-          <view class="segmented__item {{form.type === 'lunar' ? 'segmented__item--active' : ''}}" data-value="lunar" bind:tap="toggleType">
-            <text class="segmented__text">农历</text>
-          </view>
-        </view>
-      </view>
-
-      <view class="drawer-switch">
-        <view class="drawer-switch__left">
-          <image class="icon-sm" src="{{icons.calendar}}" mode="aspectFit" />
-          <text class="drawer-switch__label">周年提醒</text>
-        </view>
-        <view class="switch {{form.isAnniversary ? 'switch--active' : ''}}" bind:tap="toggleAnniversary">
-          <view class="switch__thumb"></view>
-        </view>
-      </view>
-
       <view class="drawer-actions">
-        <view class="drawer-actions__ghost" wx:if="{{editingId}}" bind:tap="deleteEntry">
-          <text>删除</text>
+        <view
+          wx:if="{{editingId}}"
+          class="drawer-actions__delete {{pressStates.deleteButton ? 'drawer-actions__delete--pressed' : ''}}"
+          bind:tap="deleteEntry"
+        >
+          <image class="drawer-actions__delete-icon" src="{{icons.trash2}}" mode="aspectFit" />
         </view>
-        <view class="drawer-actions__primary" bind:tap="saveEntry">
-          <text>{{editingId ? '保存修改' : '创建档案'}}</text>
+
+        <view class="drawer-actions__primary {{pressStates.saveButton ? 'drawer-actions__primary--pressed' : ''}}" bind:tap="saveEntry">
+          <text class="drawer-actions__primary-text">{{editingId ? vm.texts.confirmSave : vm.texts.confirmCreate}}</text>
         </view>
       </view>
     </view>

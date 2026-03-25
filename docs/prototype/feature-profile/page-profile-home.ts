@@ -30,19 +30,19 @@ import {
 
 // 10大等级定义
 const RANKS = [
-  { level: 1, name: "海滩漫步者", icon: <Shell size={16} />, color: "text-slate-400", bg: "bg-slate-100", border: "border-slate-200" },
-  { level: 2, name: "浅滩摸鱼手", icon: <Waves size={16} />, color: "text-cyan-500", bg: "bg-cyan-50", border: "border-cyan-100" },
-  { level: 3, name: "茶歇守卫官", icon: <Coffee size={16} />, color: "text-orange-500", bg: "bg-orange-50", border: "border-orange-100" },
-  { level: 4, name: "划水见习生", icon: <Wind size={16} />, color: "text-emerald-500", bg: "bg-emerald-50", border: "border-emerald-100" },
-  { level: 5, name: "资深舵手", icon: <Compass size={16} />, color: "text-blue-500", bg: "bg-blue-50", border: "border-blue-100" },
-  { level: 6, name: "隐身巡航员", icon: <Ghost size={16} />, color: "text-indigo-500", bg: "bg-indigo-50", border: "border-indigo-100" },
-  { level: 7, name: "风暴避难者", icon: <Anchor size={16} />, color: "text-violet-500", bg: "bg-violet-50", border: "border-violet-100" },
-  { level: 8, name: "极速快艇王", icon: <Zap size={16} />, color: "text-yellow-600", bg: "bg-yellow-50", border: "border-yellow-100" },
-  { level: 9, name: "深海霸主", icon: <Ship size={16} />, color: "text-rose-600", bg: "bg-rose-50", border: "border-rose-100" },
-  { level: 10, name: "深海大懒兽", icon: <Crown size={16} />, color: "text-amber-600", bg: "bg-amber-50", border: "border-amber-200" },
+  { level: 1, name: "海滩漫步者", icon: <Shell size={16} />, color: "text-slate-400", bg: "bg-slate-100", border: "border-slate-200", nextExp: 20 },
+  { level: 2, name: "浅滩摸鱼手", icon: <Waves size={16} />, color: "text-cyan-500", bg: "bg-cyan-50", border: "border-cyan-100", nextExp: 50 },
+  { level: 3, name: "茶歇守卫官", icon: <Coffee size={16} />, color: "text-orange-500", bg: "bg-orange-50", border: "border-orange-100", nextExp: 100 },
+  { level: 4, name: "划水见习生", icon: <Wind size={16} />, color: "text-emerald-500", bg: "bg-emerald-50", border: "border-emerald-100", nextExp: 200 },
+  { level: 5, name: "资深舵手", icon: <Compass size={16} />, color: "text-blue-500", bg: "bg-blue-50", border: "border-blue-100", nextExp: 400 },
+  { level: 6, name: "隐身巡航员", icon: <Ghost size={16} />, color: "text-indigo-500", bg: "bg-indigo-50", border: "border-indigo-100", nextExp: 700 },
+  { level: 7, name: "风暴避难者", icon: <Anchor size={16} />, color: "text-violet-500", bg: "bg-violet-50", border: "border-violet-100", nextExp: 1100 },
+  { level: 8, name: "极速快艇王", icon: <Zap size={16} />, color: "text-yellow-600", bg: "bg-yellow-50", border: "border-yellow-100", nextExp: 1600 },
+  { level: 9, name: "深海霸主", icon: <Ship size={16} />, color: "text-rose-600", bg: "bg-rose-50", border: "border-rose-100", nextExp: 2200 },
+  { level: 10, name: "深海大懒兽", icon: <Crown size={16} />, color: "text-amber-600", bg: "bg-amber-50", border: "border-amber-200", nextExp: null },
 ];
 
-// 预设 6 个默认头像
+// 预设默认头像
 const PRESET_AVATARS = [
   "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix",
   "https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka",
@@ -58,120 +58,135 @@ const App = () => {
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [currentAvatar, setCurrentAvatar] = useState(PRESET_AVATARS[0]);
 
+  // 模拟数据
+  const todayHappiness = 45;
+  const totalHappiness = 350;
+  const checkInDays = 10;
+  
+  const currentRank = RANKS[rankIndex];
+  const nextRank = RANKS[rankIndex + 1] || null;
+  const pointsToNext = nextRank ? Math.max(0, nextRank.nextExp - totalHappiness) : 0;
+  const progressPercent = nextRank ? Math.min(100, (totalHappiness / nextRank.nextExp) * 100) : 100;
+
   // 自动切换预览逻辑
   useEffect(() => {
     let interval;
     if (isAutoPlay) {
       interval = setInterval(() => {
         setRankIndex((prev) => (prev + 1) % RANKS.length);
-      }, 2000);
+      }, 3000);
     }
     return () => clearInterval(interval);
   }, [isAutoPlay]);
 
-  const currentRank = RANKS[rankIndex];
-
-  const user = {
-    name: "摸鱼小队长",
-    id: "ID: 20240915",
-    exp: 75,
-  };
-
   return (
     <div className="flex flex-col h-screen bg-slate-50 text-slate-900 max-w-md mx-auto overflow-hidden border-x border-slate-100 shadow-2xl relative leading-relaxed">
       
-      {/* 顶部状态栏占位 */}
-      <div className="h-10 bg-white/50 backdrop-blur-sm sticky top-0 z-20"></div>
+      {/* Header */}
+      <header className="pt-10 px-6 pb-4 bg-white border-b border-slate-100 sticky top-0 z-20">
+        <div className="flex justify-between items-center mb-1">
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 rounded-lg bg-blue-600 shadow-lg shadow-blue-200">
+               <User size={18} className="text-white" />
+            </div>
+            <h1 className="text-xl font-extrabold tracking-tight text-slate-900">个人基地</h1>
+          </div>
+        </div>
+      </header>
 
       <main className="flex-1 overflow-y-auto pb-32">
         {/* Section 1: 头像昵称区域 */}
-        <section className="px-6 pb-8 pt-2 bg-gradient-to-b from-white to-slate-50">
-          <div className="flex items-center justify-between mb-6">
-             <div className="flex items-center gap-4">
-                <div 
-                  className="relative group cursor-pointer"
-                  onClick={() => setShowAvatarModal(true)}
-                >
-                  <div className={`w-20 h-20 rounded-[2rem] bg-white border-2 shadow-xl overflow-hidden transition-all duration-500 hover:scale-105 active:scale-95 ${currentRank.border}`}>
-                    <img src={currentAvatar} alt="avatar" className="w-full h-full object-cover" />
-                    {/* 点击提示层 */}
-                    <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                      <span className="text-[8px] font-bold text-white bg-black/40 px-2 py-1 rounded-full backdrop-blur-sm">更换头像</span>
-                    </div>
-                  </div>
-                  <div className={`absolute -bottom-1 -right-1 p-1.5 rounded-xl border-2 border-white shadow-lg transition-all duration-500 ${currentRank.bg} ${currentRank.color}`}>
-                    {currentRank.icon}
-                  </div>
+        <section className="px-6 pb-2 pt-6 bg-gradient-to-b from-white to-slate-50">
+          <div className="flex items-center gap-4">
+            <div 
+              className="relative group cursor-pointer flex-shrink-0"
+              onClick={() => setShowAvatarModal(true)}
+            >
+              <div className={`w-16 h-16 rounded-2xl bg-white border-2 shadow-lg overflow-hidden transition-all duration-500 hover:scale-105 active:scale-95 ${currentRank.border}`}>
+                <img src={currentAvatar} alt="avatar" className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                  <span className="text-[8px] font-bold text-white bg-black/40 px-2 py-1 rounded-full backdrop-blur-sm">更换</span>
                 </div>
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <h2 className="text-xl font-black tracking-tight text-slate-900">{user.name}</h2>
-                    <span className={`px-1.5 py-0.5 rounded-md text-[8px] font-black text-white uppercase tracking-tighter transition-colors duration-500 ${currentRank.color.replace('text', 'bg')}`}>VIP</span>
-                  </div>
-                  <p className="text-xs font-bold text-slate-400 tabular-nums">{user.id}</p>
-                </div>
-             </div>
-             <div className="flex gap-2">
-                <button 
-                  onClick={() => setIsAutoPlay(!isAutoPlay)}
-                  className={`p-2.5 rounded-2xl border transition-all relative ${isAutoPlay ? 'bg-blue-50 border-blue-200 text-blue-600' : 'bg-white border-slate-100 text-slate-400'}`}
-                >
-                   <Sparkles size={20} className={isAutoPlay ? "animate-pulse" : ""} />
-                </button>
-             </div>
+              </div>
+              <div className={`absolute -bottom-1 -right-1 p-1 rounded-lg border-2 border-white shadow-md transition-all duration-500 ${currentRank.bg} ${currentRank.color}`}>
+                {React.cloneElement(currentRank.icon, { size: 12 })}
+              </div>
+            </div>
+            
+            <div className="flex-1 min-w-0">
+              <h2 className="text-lg font-black tracking-tight text-slate-900 truncate">摸鱼小队长</h2>
+              <div className="flex items-center gap-1.5 mt-1">
+                <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 text-[10px] font-bold border border-blue-100">
+                  累计摸鱼打卡：{checkInDays}天
+                </span>
+              </div>
+            </div>
           </div>
 
-          {/* Section 2: 等级路线 (动态切换演示) */}
-          <div className="bg-white border border-slate-100 rounded-[2rem] p-5 shadow-sm overflow-hidden relative">
-             <div className="flex justify-between items-end mb-3">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-1.5">
-                    <Trophy size={14} className="text-amber-500" />
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">等级预览</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <p className={`text-sm font-bold transition-all duration-500 ${currentRank.color}`}>
-                      Lv.{currentRank.level} {currentRank.name}
-                    </p>
+          {/* 等级面板 */}
+          <section className="bg-white border border-slate-100 rounded-[1.5rem] p-4 shadow-sm overflow-hidden relative mt-6">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-full blur-2xl -z-0 opacity-40"></div>
+
+            <div className="relative z-10">
+              <div className="flex justify-between items-end mb-4">
+                <div className="space-y-0.5">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">当前航行等级</span>
+                  <div className={`flex items-center gap-1.5 text-lg font-black ${currentRank.color}`}>
+                    Lv.{currentRank.level} {currentRank.name}
                   </div>
                 </div>
-                <p className="text-[10px] font-bold text-blue-600 tracking-tight">累计快乐值 100</p>
-             </div>
-             
-             {/* 进度条 */}
-             <div className="h-2.5 w-full bg-slate-50 rounded-full overflow-hidden border border-slate-100 p-0.5">
-                <div 
-                  className={`h-full rounded-full transition-all duration-500 shadow-sm ${currentRank.color.replace('text', 'bg')}`}
-                  style={{ width: `${(currentRank.level / 10) * 100}%` }}
-                ></div>
-             </div>
+                <div className="text-right">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">今日进度</span>
+                  <div className="flex items-baseline justify-end gap-0.5">
+                    <span className="text-lg font-black text-blue-600">{todayHappiness}</span>
+                    <span className="text-[9px] font-bold text-blue-400">PTS</span>
+                  </div>
+                </div>
+              </div>
 
-             {/* 等级轴 */}
-             <div className="flex justify-between mt-5 px-1 relative">
+              <div className="space-y-2 mb-4">
+                <div className="h-2 w-full bg-slate-50 rounded-full overflow-hidden border border-slate-100">
+                  <div 
+                    className={`h-full rounded-full transition-all duration-700 shadow-sm ${currentRank.color.replace('text', 'bg')}`}
+                    style={{ width: `${progressPercent}%` }}
+                  ></div>
+                </div>
+                <div className="flex justify-between items-center px-0.5">
+                  <span className="text-[10px] font-bold text-slate-400">累计 {totalHappiness}</span>
+                  {nextRank ? (
+                    <span className="text-[10px] font-bold text-slate-500">
+                      下级需 <span className="text-blue-600 font-black">{pointsToNext}</span>
+                    </span>
+                  ) : (
+                    <span className="text-[10px] font-bold text-amber-500">最高等级</span>
+                  )}
+                </div>
+              </div>
+
+              {/* 等级路线 */}
+              <div className="flex justify-between px-1 relative py-1">
                 <div className="absolute top-1/2 left-0 w-full h-[1px] bg-slate-100 -z-10"></div>
                 {RANKS.map((r, i) => (
                   <div 
                     key={i} 
-                    className={`flex flex-col items-center transition-all duration-300 ${i === rankIndex ? 'scale-125' : 'scale-100 opacity-30'}`}
+                    onClick={() => {
+                      setRankIndex(i);
+                      setIsAutoPlay(false);
+                    }}
+                    className={`transition-all duration-300 cursor-pointer ${i === rankIndex ? 'scale-110 opacity-100' : 'scale-75 opacity-10 hover:opacity-30'}`}
                   >
-                    <div className={`p-1.5 rounded-lg border-2 border-white shadow-sm ${r.bg} ${r.color}`}>
+                    <div className={`p-1 rounded-md border border-white shadow-sm ${r.bg} ${r.color}`}>
                       {React.cloneElement(r.icon, { size: 10 })}
                     </div>
                   </div>
                 ))}
-             </div>
-             
-             {isAutoPlay && (
-               <div className="absolute top-2 right-4 flex items-center gap-1">
-                  <span className="flex h-1.5 w-1.5 rounded-full bg-blue-500 animate-ping"></span>
-                  <span className="text-[8px] font-bold text-blue-500 uppercase">Auto Preview</span>
-               </div>
-             )}
-          </div>
+              </div>
+            </div>
+          </section>
         </section>
 
-        {/* Section 3: 核心功能列表 */}
-        <section className="px-6 space-y-6">
+        {/* 功能列表 */}
+        <section className="px-6 mt-6 space-y-6">
           <div className="space-y-3">
              <div className="flex items-center gap-2 px-1">
                 <div className="w-1 h-3 bg-blue-600 rounded-full"></div>
@@ -182,7 +197,7 @@ const App = () => {
                 <MenuButton 
                    icon={<User size={18} className="text-blue-500" />} 
                    title="基本信息设置" 
-                   desc="修改航行 ID、薪资基数及工时"
+                   desc="修改航行昵称、薪资基数及工时"
                 />
                 <MenuButton 
                    icon={<MapPin size={18} className="text-emerald-500" />} 
@@ -193,12 +208,6 @@ const App = () => {
                    icon={<Calendar size={18} className="text-indigo-600" />} 
                    title="查看日历" 
                    desc="纵览航行周期与重要考勤节点"
-                />
-                <MenuButton 
-                   icon={<Target size={18} className="text-rose-500" />} 
-                   title="任务中心设置" 
-                   desc="配置你的每日航行目标与奖励"
-                   badge="3"
                 />
              </div>
           </div>
@@ -248,14 +257,10 @@ const App = () => {
                    <h4 className="text-lg font-black text-slate-900 tracking-tight">更换基地身份</h4>
                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Select Preset Avatar</p>
                  </div>
-                 <button 
-                  onClick={() => setShowAvatarModal(false)}
-                  className="p-2 bg-slate-100 rounded-xl text-slate-400 hover:text-rose-500 transition-colors"
-                 >
+                 <button onClick={() => setShowAvatarModal(false)} className="p-2 bg-slate-100 rounded-xl text-slate-400 hover:text-rose-500 transition-colors">
                    <X size={20} />
                  </button>
               </div>
-
               <div className="grid grid-cols-3 gap-4 mb-8">
                  {PRESET_AVATARS.map((url, i) => (
                    <div 
@@ -272,11 +277,7 @@ const App = () => {
                    </div>
                  ))}
               </div>
-
-              <button 
-                onClick={() => setShowAvatarModal(false)}
-                className="w-full py-4 bg-slate-900 text-white rounded-2xl font-black text-sm tracking-widest hover:bg-blue-600 transition-colors active:scale-95"
-              >
+              <button onClick={() => setShowAvatarModal(false)} className="w-full py-4 bg-slate-900 text-white rounded-2xl font-black text-sm tracking-widest hover:bg-blue-600 transition-colors active:scale-95">
                 确认修改
               </button>
            </div>
@@ -307,7 +308,7 @@ const App = () => {
   );
 };
 
-// 大卡片按钮组件
+// 子组件定义
 const MenuButton = ({ icon, title, desc, badge }) => (
   <button className="group flex items-center justify-between p-4 bg-white border border-slate-100 rounded-[1.5rem] shadow-sm hover:border-blue-100 hover:shadow-md transition-all active:scale-[0.99]">
     <div className="flex items-center gap-4 text-left">
@@ -330,7 +331,6 @@ const MenuButton = ({ icon, title, desc, badge }) => (
   </button>
 );
 
-// 列表按钮组件
 const ListButton = ({ icon, title, desc }) => (
   <button className="w-full flex items-center justify-between p-4 px-5 hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-0 text-left">
     <div className="flex items-center gap-4">
@@ -344,7 +344,6 @@ const ListButton = ({ icon, title, desc }) => (
   </button>
 );
 
-// 导航项
 const NavItem = ({ icon, label, active = false }) => (
   <button className={`flex flex-col items-center gap-1.5 transition-all flex-1 ${active ? '' : 'opacity-40 hover:opacity-100'}`}>
     <div className={`${active ? 'text-blue-600 scale-110' : 'text-slate-900'}`}>

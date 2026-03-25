@@ -198,15 +198,6 @@ const App = () => {
         </div>
       )}
 
-      {/* 底部导航 */}
-      <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-xl border-t border-slate-100 px-6 py-4 pb-10 z-20 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.1)]">
-        <div className="flex justify-between items-center opacity-30 grayscale pointer-events-none px-2">
-          <div className="flex flex-col items-center gap-1"><Database size={22}/><span className="text-[10px] font-bold">领潮中心</span></div>
-          <div className="flex flex-col items-center gap-1"><Database size={22}/><span className="text-[10px] font-bold">洋流战报</span></div>
-          <div className="flex flex-col items-center gap-1 text-blue-600 opacity-100 grayscale-0"><Database size={22}/><span className="text-[10px] font-bold text-blue-600">个人基地</span></div>
-        </div>
-      </nav>
-
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; letter-spacing: -0.01em; }

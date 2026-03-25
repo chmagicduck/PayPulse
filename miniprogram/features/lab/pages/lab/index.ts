@@ -2,46 +2,103 @@ import { animatedIconPair, icon, type IconImagePair, type IconName } from '../..
 import { labStaticViewModel } from '../../model/static'
 
 const vm = labStaticViewModel
-const DEFAULT_RANK_INDEX = 2
-const AUTO_PLAY_INTERVAL = 3000
-const CARD_FEEDBACK_DURATION = 260
+const PRESS_DURATION = 220
+const ICON_ANIMATION_DURATION = 1800
 
-type RankRuntimeItem = (typeof vm.ranks)[number] & {
-  iconPair: IconImagePair
-  axisIcon: string
+type RankStaticItem = {
+  level: number
+  name: string
+  exp: number
+  iconName: IconName
+  tone: string
+  iconColor: string
 }
 
-type TaskRuntimeItem = {
+type TaskStaticItem = {
   id: string
   title: string
   desc: string
-  reward: string
-  count: string
-  progress: string
-  done: boolean
+  reward: number
+  count: number
+  limit: number
   tone: string
-  current: number
-  total: number
-  rewardValue: number
-  progressPercent: number
-  iconPair: IconImagePair
+  iconName: IconName
+  rotate?: boolean
 }
 
-let labTimer: ReturnType<typeof setInterval> | null = null
+type AchievementStaticItem = {
+  id: string
+  title: string
+  desc: string
+  reward: number
+  progress: number
+  target: number
+}
+
+type RankRuntimeItem = RankStaticItem & {
+  axisIconPair: IconImagePair
+}
+
+type TaskRuntimeItem = TaskStaticItem & {
+  iconPair: IconImagePair
+  countText: string
+  progressPercent: number
+  badgeText: string
+  done: boolean
+  minusActionKey: string
+  plusActionKey: string
+}
+
+type AchievementRuntimeItem = AchievementStaticItem & {
+  progressPercent: number
+}
+
 let labTimeouts: Record<string, ReturnType<typeof setTimeout> | null> = {}
 
-function getLabTaskIconName(id: string): IconName {
-  switch (id) {
-    case 'water':
-      return 'droplets'
-    case 'move':
-      return 'accessibility'
-    case 'eye':
-      return 'eye'
-    case 'leave':
-      return 'log-out'
+function getToneColor(tone: string) {
+  switch (tone) {
+    case 'cyan':
+      return '#0891b2'
+    case 'orange':
+      return '#ea580c'
+    case 'emerald':
+      return '#10b981'
+    case 'blue':
+      return '#3b82f6'
+    case 'indigo':
+      return '#6366f1'
+    case 'violet':
+      return '#7c3aed'
+    case 'yellow':
+      return '#a16207'
+    case 'rose':
+      return '#e11d48'
+    case 'amber':
+      return '#d97706'
+    case 'slate':
     default:
-      return 'sparkles'
+      return '#94a3b8'
+  }
+}
+
+function buildTaskBadgeText(reward: number, done: boolean) {
+  if (done) return vm.sections.tasks.doneText
+  return `+${reward} ${vm.sections.tasks.rewardUnit}`
+}
+
+function buildRankDisplay(ranks: RankRuntimeItem[], rankIndex: number, totalHappiness: number) {
+  const currentRank = ranks[rankIndex]
+  const nextRank = ranks[rankIndex + 1] || null
+  const pointsToNext = nextRank ? Math.max(nextRank.exp - totalHappiness, 0) : 0
+  const progressPercent = nextRank
+    ? Math.min(100, Math.max(0, (totalHappiness / nextRank.exp) * 100))
+    : 100
+
+  return {
+    currentRank,
+    nextRank,
+    pointsToNext,
+    progressPercent,
   }
 }
 
@@ -49,107 +106,92 @@ Page({
   data: {
     vm,
     statusBarHeight: 0,
-    totalHappiness: Number(vm.rank.total),
-    todayHappiness: Number(vm.rank.todayGain),
-    rankIndex: DEFAULT_RANK_INDEX,
-    currentRank: {
-      ...vm.ranks[DEFAULT_RANK_INDEX],
-      iconPair: { staticSrc: '', animatedSrc: '' },
-      axisIcon: '',
-    } as RankRuntimeItem,
-    nextRank: null as RankRuntimeItem | null,
-    rankProgress: 0,
-    nextLabel: '',
-    isAutoPlay: false,
+    totalHappiness: Number(vm.score.total),
+    todayHappiness: Number(vm.score.today),
+    rankIndex: Number(vm.score.selectedRankIndex),
     ranks: [] as RankRuntimeItem[],
+    currentRank: null as RankRuntimeItem | null,
+    nextRank: null as RankRuntimeItem | null,
+    pointsToNext: 0,
+    progressPercent: 0,
     tasks: [] as TaskRuntimeItem[],
+    achievements: [] as AchievementRuntimeItem[],
     icons: {
       labPair: { staticSrc: '', animatedSrc: '' } as IconImagePair,
-      medal: '',
-      arrowUpRight: '',
-      checkCircle2: '',
+      trophyAmber: '',
+      medalGhost: '',
+      plusSlate: '',
+      minusSlate: '',
     },
     iconAnimations: {
-      lab: false,
+      header: false,
+      activeRankIndex: -1,
+      activeTaskId: '',
     },
     pressStates: {
       rankIndex: -1,
-      taskId: '',
+      taskActionKey: '',
     },
   },
 
   onLoad() {
     const { statusBarHeight } = wx.getSystemInfoSync()
-    const ranks = vm.ranks.map(rank => ({
+    const ranks = (vm.ranks as readonly RankStaticItem[]).map(rank => ({
       ...rank,
-      iconPair: animatedIconPair(rank.iconName, {
+      axisIconPair: animatedIconPair(rank.iconName, {
         color: rank.iconColor,
+        size: 12,
         animation: 'float',
-        durationMs: 2600,
+        durationMs: 2200,
       }),
-      axisIcon: icon(rank.iconName, rank.iconColor, 12),
     }))
 
-    const tasks = vm.tasks.map(task => {
-      const [currentText, totalText] = task.count.split('/')
-      const current = Number(currentText)
-      const total = Number(totalText)
-      const rewardValue = Number(task.reward.replace(/[^0-9]/g, ''))
-
+    const tasks = (vm.tasks as readonly TaskStaticItem[]).map(task => {
+      const done = task.count >= task.limit
       return {
         ...task,
-        current,
-        total,
-        rewardValue,
-        progressPercent: Math.round((current / total) * 100),
-        iconPair: animatedIconPair(getLabTaskIconName(task.id), {
-          color:
-            task.tone === 'blue'
-              ? '#2563eb'
-              : task.tone === 'emerald'
-                ? '#10b981'
-                : task.tone === 'amber'
-                  ? '#f59e0b'
-                  : '#f43f5e',
-          animation: 'bounce',
+        done,
+        countText: `${task.count}/${task.limit}`,
+        progressPercent: Math.round((task.count / task.limit) * 100),
+        badgeText: buildTaskBadgeText(task.reward, done),
+        minusActionKey: `${task.id}:minus`,
+        plusActionKey: `${task.id}:plus`,
+        iconPair: animatedIconPair(task.iconName, {
+          color: getToneColor(task.tone),
+          animation: task.rotate ? 'drift' : 'bounce',
           durationMs: 1800,
         }),
       }
     })
 
+    const achievements = (vm.achievements as readonly AchievementStaticItem[]).map(item => ({
+      ...item,
+      progressPercent: Math.round((item.progress / item.target) * 100),
+    }))
+
+    const rankDisplay = buildRankDisplay(ranks, vm.score.selectedRankIndex, vm.score.total)
+
     this.setData({
       statusBarHeight: statusBarHeight || 0,
       ranks,
-      currentRank: ranks[DEFAULT_RANK_INDEX],
-      nextRank: ranks[DEFAULT_RANK_INDEX + 1] || null,
-      rankProgress: this.getRankProgress(ranks, DEFAULT_RANK_INDEX, Number(vm.rank.total)),
-      nextLabel: this.getNextLabel(ranks, DEFAULT_RANK_INDEX, Number(vm.rank.total)),
       tasks,
+      achievements,
+      ...rankDisplay,
       icons: {
         labPair: animatedIconPair('flask-conical', {
           color: '#ffffff',
           animation: 'float',
-          durationMs: 2600,
+          durationMs: 2400,
         }),
-        medal: icon('medal', '#2563eb', 18),
-        arrowUpRight: icon('arrow-up-right', '#cbd5e1', 14),
-        checkCircle2: icon('check-circle-2', '#10b981', 20),
+        trophyAmber: icon('trophy', '#f59e0b', 18),
+        medalGhost: icon('medal', '#0f172a', 80),
+        plusSlate: icon('plus', '#64748b', 14),
+        minusSlate: icon('minus', '#64748b', 14),
       },
     })
   },
 
-  onShow() {
-    if (this.data.isAutoPlay) {
-      this.startAutoPlay()
-    }
-  },
-
-  onHide() {
-    this.stopAutoPlay()
-  },
-
   onUnload() {
-    this.stopAutoPlay()
     Object.keys(labTimeouts).forEach(key => {
       const timer = labTimeouts[key]
       if (timer) clearTimeout(timer)
@@ -157,60 +199,15 @@ Page({
     labTimeouts = {}
   },
 
-  startAutoPlay() {
-    if (!this.data.isAutoPlay || labTimer || this.data.ranks.length === 0) return
-
-    labTimer = setInterval(() => {
-      const nextIndex = (this.data.rankIndex + 1) % this.data.ranks.length
-      this.setData({
-        rankIndex: nextIndex,
-        currentRank: this.data.ranks[nextIndex],
-        nextRank: this.data.ranks[nextIndex + 1] || null,
-        rankProgress: this.getRankProgress(this.data.ranks, nextIndex, this.data.totalHappiness),
-        nextLabel: this.getNextLabel(this.data.ranks, nextIndex, this.data.totalHappiness),
-      })
-    }, AUTO_PLAY_INTERVAL)
-  },
-
-  stopAutoPlay() {
-    if (labTimer) {
-      clearInterval(labTimer)
-      labTimer = null
-    }
-  },
-
-  toggleAutoPlay() {
-    const nextValue = !this.data.isAutoPlay
-    this.playLabIcon()
-    this.setData({ isAutoPlay: nextValue })
-
-    if (nextValue) {
-      this.startAutoPlay()
-      return
-    }
-
-    this.stopAutoPlay()
-  },
-
-  playLabIcon() {
-    const pending = labTimeouts.lab
-    if (pending) clearTimeout(pending)
-
-    this.setData({ 'iconAnimations.lab': true })
-    labTimeouts.lab = setTimeout(() => {
-      this.setData({ 'iconAnimations.lab': false })
-      labTimeouts.lab = null
-    }, 2200)
-  },
-
   pulseState(
     timerKey: string,
     path: string,
     activeValue: string | number | boolean,
     restValue: string | number | boolean,
-    duration: number = CARD_FEEDBACK_DURATION,
+    duration: number,
   ) {
     const pending = labTimeouts[timerKey]
+
     if (pending) {
       clearTimeout(pending)
       labTimeouts[timerKey] = null
@@ -224,59 +221,63 @@ Page({
     })
   },
 
-  selectRank(e: WechatMiniprogram.TouchEvent) {
-    const { index } = e.currentTarget.dataset
-    const nextIndex = Number(index)
-    this.stopAutoPlay()
-    this.setData({
-      rankIndex: nextIndex,
-      currentRank: this.data.ranks[nextIndex],
-      nextRank: this.data.ranks[nextIndex + 1] || null,
-      rankProgress: this.getRankProgress(this.data.ranks, nextIndex, this.data.totalHappiness),
-      nextLabel: this.getNextLabel(this.data.ranks, nextIndex, this.data.totalHappiness),
-      isAutoPlay: false,
-    })
-    this.pulseState('lab-rank', 'pressStates.rankIndex', nextIndex, -1)
+  triggerHeaderAnimation() {
+    this.pulseState('header-icon', 'iconAnimations.header', true, false, ICON_ANIMATION_DURATION)
   },
 
-  completeTask(e: WechatMiniprogram.TouchEvent) {
-    const { id } = e.currentTarget.dataset
-    const target = this.data.tasks.find(item => item.id === id)
-    if (!target || target.current >= target.total) return
+  selectRank(e: WechatMiniprogram.TouchEvent) {
+    const rankIndex = Number(e.currentTarget.dataset.index)
+    const rankDisplay = buildRankDisplay(this.data.ranks, rankIndex, this.data.totalHappiness)
 
-    const nextTasks = this.data.tasks.map(task => {
-      if (task.id !== id || task.current >= task.total) return task
-      const current = task.current + 1
+    this.setData({
+      rankIndex,
+      ...rankDisplay,
+    })
+
+    this.pulseState('rank-press', 'pressStates.rankIndex', rankIndex, -1, PRESS_DURATION)
+    this.pulseState('rank-icon', 'iconAnimations.activeRankIndex', rankIndex, -1, ICON_ANIMATION_DURATION)
+  },
+
+  adjustTask(e: WechatMiniprogram.TouchEvent) {
+    const { id, delta } = e.currentTarget.dataset
+    const step = Number(delta)
+    const targetTask = this.data.tasks.find(task => task.id === id)
+
+    if (!targetTask) return
+    if ((step > 0 && targetTask.count >= targetTask.limit) || (step < 0 && targetTask.count <= 0)) return
+
+    let changedReward = 0
+
+    const tasks = this.data.tasks.map(task => {
+      if (task.id !== id) return task
+
+      const count = Math.max(0, Math.min(task.limit, task.count + step))
+      const done = count >= task.limit
+      changedReward = task.reward * step
+
       return {
         ...task,
-        current,
-        count: `${current}/${task.total}`,
-        progressPercent: Math.round((current / task.total) * 100),
-        done: current >= task.total,
+        count,
+        done,
+        countText: `${count}/${task.limit}`,
+        progressPercent: Math.round((count / task.limit) * 100),
+        badgeText: buildTaskBadgeText(task.reward, done),
       }
     })
 
-    this.pulseState('lab-task', 'pressStates.taskId', String(id), '')
+    const totalHappiness = Math.max(0, this.data.totalHappiness + changedReward)
+    const todayHappiness = Math.max(0, this.data.todayHappiness + changedReward)
+    const rankDisplay = buildRankDisplay(this.data.ranks, this.data.rankIndex, totalHappiness)
+    const actionKey = `${id}:${step > 0 ? 'plus' : 'minus'}`
+
     this.setData({
-      tasks: nextTasks,
-      totalHappiness: this.data.totalHappiness + target.rewardValue,
-      todayHappiness: this.data.todayHappiness + target.rewardValue,
-      rankProgress: this.getRankProgress(this.data.ranks, this.data.rankIndex, this.data.totalHappiness + target.rewardValue),
-      nextLabel: this.getNextLabel(this.data.ranks, this.data.rankIndex, this.data.totalHappiness + target.rewardValue),
+      tasks,
+      totalHappiness,
+      todayHappiness,
+      ...rankDisplay,
     })
-  },
 
-  getRankProgress(ranks: RankRuntimeItem[], index: number, totalHappiness: number) {
-    if (index >= ranks.length - 1) return 100
-
-    const current = ranks[index]
-    const next = ranks[index + 1]
-    const raw = ((totalHappiness - current.exp) / (next.exp - current.exp)) * 100
-    return Math.max(0, Math.min(100, raw))
-  },
-
-  getNextLabel(ranks: RankRuntimeItem[], index: number, totalHappiness: number) {
-    if (index >= ranks.length - 1) return '已达最高等级'
-    return `距离 Lv.${ranks[index + 1].level} 还差 ${Math.max(ranks[index + 1].exp - totalHappiness, 0)}`
+    this.pulseState('task-action', 'pressStates.taskActionKey', actionKey, '', PRESS_DURATION)
+    this.pulseState('task-icon', 'iconAnimations.activeTaskId', String(id), '', ICON_ANIMATION_DURATION)
   },
 })

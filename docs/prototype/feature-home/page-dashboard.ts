@@ -5,15 +5,10 @@ import {
   BarChart3, 
   FlaskConical, 
   User,
-  LayoutGrid,
+  LayoutGrid, 
   TrendingUp,
   Waves,
-  Ship,
-  Anchor,
-  Compass,
   Star,
-  ChevronRight,
-  Plus,
   LogOut,
   Eye,
   EyeOff,
@@ -21,8 +16,6 @@ import {
   Gift,
   Heart,
   X,
-  History,
-  Sunset,
   ListTodo,
   CalendarDays,
   Baby,
@@ -38,6 +31,14 @@ const App = () => {
   const [workSeconds, setWorkSeconds] = useState(0);
   const [showAmount, setShowAmount] = useState(true);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  
+  // 时间显示维度状态: 0:天, 1:年月天, 2:月天, 3:周天
+  const [timeMode, setTimeMode] = useState({
+    life: 0,
+    career: 0,
+    retire: 0,
+    final: 0
+  });
   
   // 弹窗编辑状态
   const [editH, setEditH] = useState(0);
@@ -55,9 +56,8 @@ const App = () => {
   const birthday = new Date("1995-06-15"); 
   const firstJobDate = new Date("2018-07-01"); 
   const retirementDate = new Date("2055-06-15"); 
-  const endOfLifeDate = new Date("2080-06-15"); // 约85岁
+  const endOfLifeDate = new Date("2080-06-15"); 
 
-  // 计算天数逻辑
   const getDaysDiff = (start, end) => Math.floor((end - start) / (1000 * 60 * 60 * 24));
   const now = new Date();
   
@@ -71,10 +71,40 @@ const App = () => {
 
   const tideTasks = { total: 6, completed: 2 };
   const importantDates = [
-    { id: 1, title: "结婚纪念日", date: "10月20日", icon: <Heart size={16} />, color: "text-rose-500", bgColor: "bg-rose-50", remaining: 28, tag: "Romantic" },
-    { id: 2, title: "我的生日", date: "12月05日", icon: <Gift size={16} />, color: "text-amber-500", bgColor: "bg-amber-50", remaining: 74, tag: "Birthday" },
-    { id: 3, title: "Q3 季度奖金", date: "09月30日", icon: <Star size={16} />, color: "text-blue-500", bgColor: "bg-blue-50", remaining: 8, tag: "Bonus" }
+    { id: 1, title: "结婚纪念日", date: "10月20日", icon: <Heart size={18} />, color: "text-rose-500", bgColor: "bg-rose-50", ringColor: "ring-rose-100", remaining: 28 },
+    { id: 2, title: "我的生日", date: "12月05日", icon: <Gift size={18} />, color: "text-amber-500", bgColor: "bg-amber-50", ringColor: "ring-amber-100", remaining: 74 },
+    { id: 3, title: "Q3 季度奖金", date: "09月30日", icon: <Star size={18} />, color: "text-blue-500", bgColor: "bg-blue-50", ringColor: "ring-blue-100", remaining: 8 }
   ];
+
+  // 时间维度转换逻辑
+  const formatTimeDimension = (totalDays, mode) => {
+    const absDays = Math.abs(totalDays);
+    if (mode === 0) return `${absDays.toLocaleString()}天`;
+    
+    if (mode === 1) { // 年月天
+      const years = Math.floor(absDays / 365);
+      const months = Math.floor((absDays % 365) / 30);
+      const days = (absDays % 365) % 30;
+      return `${years}年${months}个月${days}天`;
+    }
+    
+    if (mode === 2) { // 月天
+      const months = Math.floor(absDays / 30);
+      const days = absDays % 30;
+      return `${months}个月${days}天`;
+    }
+    
+    if (mode === 3) { // 周天
+      const weeks = Math.floor(absDays / 7);
+      const days = absDays % 7;
+      return `${weeks}周${days}天`;
+    }
+    return `${absDays}天`;
+  };
+
+  const toggleMode = (key) => {
+    setTimeMode(prev => ({ ...prev, [key]: (prev[key] + 1) % 4 }));
+  };
 
   useEffect(() => {
     let interval;
@@ -218,7 +248,6 @@ const App = () => {
             <h1 className="text-xl font-extrabold tracking-tight text-slate-900">薪潮涌动</h1>
           </div>
         </div>
-        <p className="text-sm text-slate-500 font-medium tracking-tight">此刻，金钱正如潮水般涌来</p>
       </header>
 
       {/* Main Content */}
@@ -382,63 +411,77 @@ const App = () => {
           </div>
         </section>
 
-        {/* 岁月坐标 */}
+        {/* 岁月坐标 - 适度调大比例的横向版 */}
         <section className="space-y-4">
            <div className="flex justify-between items-center px-1">
              <div className="flex items-center gap-2">
                <div className="w-1 h-3 bg-blue-600 rounded-full"></div>
                <h3 className="text-sm font-black text-slate-800 tracking-tight">岁月坐标</h3>
              </div>
+             <HeaderAction label="新增坐标" />
            </div>
-           <div className="space-y-3">
+           <div className="flex flex-col gap-3">
               {importantDates.map((item) => (
-                <div key={item.id} className="bg-white border border-slate-100 rounded-3xl p-4 shadow-sm flex items-center gap-4">
-                    <div className={`shrink-0 h-12 w-12 ${item.bgColor} ${item.color} rounded-2xl flex items-center justify-center`}>
-                      {item.icon}
+                <div 
+                  key={item.id} 
+                  className="bg-white border border-slate-100 rounded-[1.25rem] px-5 py-4 shadow-sm hover:shadow-md transition-shadow flex items-center justify-between group active:scale-[0.99]"
+                >
+                    <div className="flex items-center gap-4">
+                      <div className={`h-10 w-10 ${item.bgColor} ${item.color} rounded-xl flex items-center justify-center ring-2 ${item.ringColor} transition-transform group-hover:scale-110`}>
+                        {item.icon}
+                      </div>
+                      <div className="flex flex-col">
+                          <h4 className="text-[15px] font-bold text-slate-800 leading-tight tracking-tight">{item.title}</h4>
+                          <span className="text-[11px] font-bold opacity-50 tabular-nums mt-0.5">{item.date}</span>
+                      </div>
                     </div>
-                    <div className="flex-1">
-                        <h4 className="text-sm font-bold text-slate-800">{item.title}</h4>
-                        <p className="text-[10px] text-slate-400 font-medium tabular-nums">{item.date}</p>
-                    </div>
-                    <div className="flex items-baseline gap-1">
+                    
+                    <div className="flex items-center gap-2">
                       <span className={`text-2xl font-black tracking-tighter tabular-nums ${item.color}`}>{item.remaining}</span>
-                      <span className="text-[10px] font-bold text-slate-400 uppercase">天后</span>
+                      <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wide">天后</span>
                     </div>
                 </div>
               ))}
            </div>
         </section>
 
-        {/* 人生航程看板 - 四维重构版 */}
-        <section className="space-y-6 pb-24">
+        {/* 人生航程看板 */}
+        <section className="space-y-4 pb-24">
            <div className="flex justify-between items-center px-1">
              <div className="flex items-center gap-2">
                <div className="w-1.5 h-4 bg-slate-900 rounded-full"></div>
                <h3 className="text-base font-black text-slate-800 tracking-tight">人生航程看板</h3>
              </div>
-             <div className="px-2 py-1 bg-slate-100 rounded text-[9px] font-black text-slate-400 uppercase">Voyage Ledger</div>
+             <div className="px-2 py-0.5 bg-slate-100 rounded text-[8px] font-black text-slate-400 uppercase tracking-tighter">Voyage Ledger</div>
            </div>
 
-           <div className="grid grid-cols-1 gap-4">
+           <div className="grid grid-cols-1 gap-3">
               
               {/* 1. 生命至今 */}
-              <div className="relative overflow-hidden bg-white border border-slate-100 rounded-[2rem] p-6 shadow-sm group">
-                  <div className="absolute top-0 right-0 p-4 opacity-[0.03] group-hover:scale-110 transition-transform">
-                     <Baby size={80} />
+              <div 
+                onClick={() => toggleMode('life')}
+                className="relative overflow-hidden bg-white border border-slate-100 rounded-[1.5rem] p-4 shadow-sm group active:scale-[0.98] transition-all cursor-pointer"
+              >
+                  <div className="absolute top-0 right-0 p-3 opacity-[0.03] group-hover:scale-110 transition-transform">
+                     <Baby size={60} />
                   </div>
-                  <div className="flex items-center gap-3 mb-6">
-                     <div className="p-2 bg-indigo-600 rounded-xl text-white shadow-lg shadow-indigo-100">
-                        <Baby size={18} />
-                     </div>
-                     <span className="text-xs font-black text-indigo-500 uppercase tracking-widest">生命航程 (LIFE)</span>
+                  <div className="flex items-center justify-between mb-3 relative z-10">
+                    <div className="flex items-center gap-2.5">
+                       <div className="p-1.5 bg-indigo-600 rounded-lg text-white shadow-md shadow-indigo-100">
+                          <Baby size={14} />
+                       </div>
+                       <span className="text-[10px] font-black text-indigo-500 uppercase tracking-widest">生命航程 (LIFE)</span>
+                    </div>
                   </div>
                   <div className="flex justify-between items-end relative z-10">
                      <div>
                         <div className="flex items-baseline gap-2">
-                           <span className="text-4xl font-black text-slate-900 tracking-tighter tabular-nums">{lifeDays.toLocaleString()}</span>
-                           <span className="text-sm font-bold text-slate-400">天</span>
+                           <span className="text-[13px] font-black text-slate-400">已过</span>
+                           <span className="text-2xl font-black text-slate-900 tracking-tighter tabular-nums">
+                             {formatTimeDimension(lifeDays, timeMode.life)}
+                           </span>
                         </div>
-                        <p className="text-xs text-slate-500 mt-2 max-w-[280px] leading-relaxed font-medium">
+                        <p className="text-[11px] text-slate-500 mt-1 max-w-[280px] leading-snug font-medium">
                            这是你从<span className="text-slate-900 font-black">诞生启航</span>至今所经历的日夜。
                         </p>
                      </div>
@@ -446,23 +489,30 @@ const App = () => {
               </div>
 
               {/* 2. 第一份工作至今 */}
-              <div className="relative overflow-hidden bg-white border border-slate-100 rounded-[2rem] p-6 shadow-sm group">
-                  <div className="absolute top-0 right-0 p-4 opacity-[0.03] group-hover:rotate-12 transition-transform">
-                     <Briefcase size={80} />
+              <div 
+                onClick={() => toggleMode('career')}
+                className="relative overflow-hidden bg-white border border-slate-100 rounded-[1.5rem] p-4 shadow-sm group active:scale-[0.98] transition-all cursor-pointer"
+              >
+                  <div className="absolute top-0 right-0 p-3 opacity-[0.03] group-hover:rotate-12 transition-transform">
+                     <Briefcase size={60} />
                   </div>
-                  <div className="flex items-center gap-3 mb-6">
-                     <div className="p-2 bg-blue-600 rounded-xl text-white shadow-lg shadow-blue-100">
-                        <Briefcase size={18} />
-                     </div>
-                     <span className="text-xs font-black text-blue-500 uppercase tracking-widest">职场航程 (CAREER)</span>
+                  <div className="flex items-center justify-between mb-3 relative z-10">
+                    <div className="flex items-center gap-2.5">
+                       <div className="p-1.5 bg-blue-600 rounded-lg text-white shadow-md shadow-blue-100">
+                          <Briefcase size={14} />
+                       </div>
+                       <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest">职场航程 (CAREER)</span>
+                    </div>
                   </div>
                   <div className="flex justify-between items-end relative z-10">
                      <div>
                         <div className="flex items-baseline gap-2">
-                           <span className="text-4xl font-black text-slate-900 tracking-tighter tabular-nums">{careerDays.toLocaleString()}</span>
-                           <span className="text-sm font-bold text-slate-400">天</span>
+                           <span className="text-[13px] font-black text-slate-400">已过</span>
+                           <span className="text-2xl font-black text-slate-900 tracking-tighter tabular-nums">
+                              {formatTimeDimension(careerDays, timeMode.career)}
+                           </span>
                         </div>
-                        <p className="text-xs text-slate-500 mt-2 max-w-[280px] leading-relaxed font-medium">
+                        <p className="text-[11px] text-slate-500 mt-1 max-w-[280px] leading-snug font-medium">
                            自步入<span className="text-blue-600 font-black">社会熔炉</span>起，你已交付出的岁月。
                         </p>
                      </div>
@@ -470,55 +520,69 @@ const App = () => {
               </div>
 
               {/* 3. 距离退休还有多少天 */}
-              <div className="relative overflow-hidden bg-emerald-50 border border-emerald-100 rounded-[2rem] p-6 group">
-                  <div className="absolute top-0 right-0 p-4 opacity-[0.1] text-emerald-600">
-                     <Flag size={80} />
+              <div 
+                onClick={() => toggleMode('retire')}
+                className="relative overflow-hidden bg-emerald-50/50 border border-emerald-100 rounded-[1.5rem] p-4 group active:scale-[0.98] transition-all cursor-pointer"
+              >
+                  <div className="absolute top-0 right-0 p-3 opacity-[0.1] text-emerald-600">
+                     <Flag size={60} />
                   </div>
-                  <div className="flex items-center gap-3 mb-6">
-                     <div className="p-2 bg-emerald-600 rounded-xl text-white shadow-lg shadow-emerald-100">
-                        <Flag size={18} />
-                     </div>
-                     <span className="text-xs font-black text-emerald-700 uppercase tracking-widest">退役倒计时 (RETIRE)</span>
+                  <div className="flex items-center justify-between mb-3 relative z-10">
+                    <div className="flex items-center gap-2.5">
+                       <div className="p-1.5 bg-emerald-600 rounded-lg text-white shadow-md shadow-emerald-100">
+                          <Flag size={14} />
+                       </div>
+                       <span className="text-[10px] font-black text-emerald-700 uppercase tracking-widest">退役倒计时 (RETIRE)</span>
+                    </div>
                   </div>
                   <div className="flex justify-between items-end relative z-10">
                      <div>
                         <div className="flex items-baseline gap-2">
-                           <span className="text-4xl font-black text-emerald-700 tracking-tighter tabular-nums">{daysToRetire.toLocaleString()}</span>
-                           <span className="text-sm font-bold text-emerald-400">天</span>
+                           <span className="text-[13px] font-black text-emerald-600/40">还剩</span>
+                           <span className="text-2xl font-black text-emerald-700 tracking-tighter tabular-nums">
+                              {formatTimeDimension(daysToRetire, timeMode.retire)}
+                           </span>
                         </div>
-                        <p className="text-xs text-emerald-800/60 mt-2 font-medium">
+                        <p className="text-[11px] text-emerald-800/60 mt-1 font-medium leading-snug">
                            距离你可以<span className="text-emerald-700 font-black">正式卸甲</span>，还有这些定额任务。
                         </p>
                      </div>
                   </div>
-                  <div className="mt-4 h-1.5 w-full bg-emerald-200/50 rounded-full overflow-hidden">
+                  <div className="mt-3 h-1 w-full bg-emerald-200/50 rounded-full overflow-hidden">
                      <div className="h-full bg-emerald-500" style={{ width: '45%' }}></div>
                   </div>
               </div>
 
               {/* 4. 距离死亡还有多少天 */}
-              <div className="relative overflow-hidden bg-rose-50 border border-rose-100 rounded-[2rem] p-6 group">
-                  <div className="absolute top-0 right-0 p-4 opacity-[0.1] text-rose-600 animate-pulse">
-                     <Skull size={80} />
+              <div 
+                onClick={() => toggleMode('final')}
+                className="relative overflow-hidden bg-rose-50/50 border border-rose-100 rounded-[1.5rem] p-4 group active:scale-[0.98] transition-all cursor-pointer"
+              >
+                  <div className="absolute top-0 right-0 p-3 opacity-[0.1] text-rose-600 animate-pulse">
+                     <Skull size={60} />
                   </div>
-                  <div className="flex items-center gap-3 mb-6">
-                     <div className="p-2 bg-rose-600 rounded-xl text-white shadow-lg shadow-rose-200">
-                        <Skull size={18} />
-                     </div>
-                     <span className="text-xs font-black text-rose-700 uppercase tracking-widest">终点倒计时 (FINAL)</span>
+                  <div className="flex items-center justify-between mb-3 relative z-10">
+                    <div className="flex items-center gap-2.5">
+                       <div className="p-1.5 bg-rose-600 rounded-lg text-white shadow-md shadow-rose-200">
+                          <Skull size={14} />
+                       </div>
+                       <span className="text-[10px] font-black text-rose-700 uppercase tracking-widest">终点倒计时 (FINAL)</span>
+                    </div>
                   </div>
                   <div className="flex justify-between items-end relative z-10">
                      <div>
                         <div className="flex items-baseline gap-2">
-                           <span className="text-4xl font-black text-rose-600 tracking-tighter tabular-nums">{daysToFinal.toLocaleString()}</span>
-                           <span className="text-sm font-bold text-rose-400">天</span>
+                           <span className="text-[13px] font-black text-rose-400">还剩</span>
+                           <span className="text-2xl font-black text-rose-600 tracking-tighter tabular-nums">
+                              {formatTimeDimension(daysToFinal, timeMode.final)}
+                           </span>
                         </div>
-                        <p className="text-xs text-rose-800/70 mt-2 font-black italic">
+                        <p className="text-[10px] text-rose-800/70 mt-1 font-black italic tracking-tight">
                            "警告：航线即将耗尽，此数据不可逆转。"
                         </p>
                      </div>
                   </div>
-                  <div className="mt-6 p-3 bg-white/40 rounded-xl border border-rose-100 text-[10px] text-rose-900/60 leading-tight">
+                  <div className="mt-4 p-2.5 bg-white/60 rounded-xl border border-rose-100/50 text-[9px] text-rose-900/50 leading-tight">
                      * 基于预估 85 岁自然终点计算。每一秒都是该生命周期中不可再生的奢侈品。
                   </div>
               </div>

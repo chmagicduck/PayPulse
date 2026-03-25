@@ -4,8 +4,29 @@ import { animatedIconPair, icon, type IconImagePair } from '../../../../lib/icon
 const vm = dashboardStaticViewModel
 const ICON_ANIMATION_DURATION = 2200
 const CARD_FEEDBACK_DURATION = 260
+const JOURNEY_IDS = ['life', 'career', 'retire', 'final'] as const
+
+type JourneyId = (typeof JOURNEY_IDS)[number]
+type JourneyDisplayItem = (typeof vm.lifeJourney.items)[number] & {
+  displayValue: string
+}
+type JourneyTimeModes = Record<JourneyId, number>
+
+const INITIAL_JOURNEY_TIME_MODES: JourneyTimeModes = {
+  life: 0,
+  career: 0,
+  retire: 0,
+  final: 0,
+}
 
 let homeTimers: Record<string, ReturnType<typeof setTimeout> | null> = {}
+
+function buildJourneyDisplayItems(timeModes: JourneyTimeModes): JourneyDisplayItem[] {
+  return vm.lifeJourney.items.map(item => ({
+    ...item,
+    displayValue: item.valueModes[timeModes[item.id]],
+  }))
+}
 
 Page({
   data: {
@@ -17,6 +38,8 @@ Page({
     editH: '00',
     editM: '00',
     editS: '00',
+    journeyTimeModes: INITIAL_JOURNEY_TIME_MODES,
+    journeyDisplayItems: buildJourneyDisplayItems(INITIAL_JOURNEY_TIME_MODES),
     iconEye: '',
     iconEyeOff: '',
     iconLogOut: '',
@@ -237,19 +260,36 @@ Page({
   },
 
   triggerJourneyLifeAnimation() {
+    this.toggleJourneyDisplayMode('life')
     this.triggerCardFeedback('journeyLife', 'journeyLife', 2000)
   },
 
   triggerJourneyCareerAnimation() {
+    this.toggleJourneyDisplayMode('career')
     this.triggerCardFeedback('journeyCareer', 'journeyCareer', 2000)
   },
 
   triggerJourneyRetireAnimation() {
+    this.toggleJourneyDisplayMode('retire')
     this.triggerCardFeedback('journeyRetire', 'journeyRetire', 2200)
   },
 
   triggerJourneyFinalAnimation() {
+    this.toggleJourneyDisplayMode('final')
     this.triggerCardFeedback('journeyFinal', 'journeyFinal', 2200)
+  },
+
+  toggleJourneyDisplayMode(id: JourneyId) {
+    const currentModes = this.data.journeyTimeModes as JourneyTimeModes
+    const nextModes: JourneyTimeModes = {
+      ...currentModes,
+      [id]: (currentModes[id] + 1) % 4,
+    }
+
+    this.setData({
+      journeyTimeModes: nextModes,
+      journeyDisplayItems: buildJourneyDisplayItems(nextModes),
+    })
   },
 
   toggleAmount() {

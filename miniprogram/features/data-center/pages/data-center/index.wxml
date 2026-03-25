@@ -117,10 +117,4 @@
       </view>
     </view>
   </view>
-
-  <view class="fake-tabbar">
-    <view class="fake-tabbar__item">领潮中心</view>
-    <view class="fake-tabbar__item">洋流战报</view>
-    <view class="fake-tabbar__item fake-tabbar__item--active">个人基地</view>
-  </view>
 </view>

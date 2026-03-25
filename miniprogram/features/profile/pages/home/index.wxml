@@ -1,86 +1,99 @@
 <view class="page-view profile-page">
   <view class="profile-nav" style="padding-top: {{statusBarHeight}}px;">
-    <view class="profile-nav__spacer"></view>
+    <view class="profile-nav__content">
+      <view class="profile-nav__brand">
+        <view class="profile-nav__logo" bind:tap="triggerHeaderAnimation">
+          <image class="profile-nav__logo-icon" src="{{iconAnimations.header ? icons.headerPair.animatedSrc : icons.headerPair.staticSrc}}" mode="aspectFit" />
+        </view>
+        <text class="profile-nav__title">{{vm.header.title}}</text>
+      </view>
+    </view>
   </view>
 
   <view class="profile-main">
     <view class="profile-hero">
-      <view class="profile-hero__row">
-        <view class="profile-identity">
-          <view class="avatar-shell {{pressStates.avatar ? 'avatar-shell--pressed' : ''}}" bind:tap="openAvatarModal">
-            <view class="avatar-shell__frame avatar-shell__frame--{{currentRank.tone}}">
-              <image class="avatar-shell__image" src="{{currentAvatar}}" mode="aspectFill" />
-              <view class="avatar-shell__hint">
-                <text class="avatar-shell__hint-text">更换头像</text>
-              </view>
-            </view>
-            <view class="avatar-shell__badge avatar-shell__badge--{{currentRank.tone}}">
-              <image class="icon-sm" src="{{iconAnimations.avatarBadge ? currentRank.badgeIconPair.animatedSrc : currentRank.badgeIconPair.staticSrc}}" mode="aspectFit" />
+      <view class="profile-identity">
+        <view class="avatar-shell {{pressStates.avatar ? 'avatar-shell--pressed' : ''}}" bind:tap="openAvatarModal">
+          <view class="avatar-shell__frame avatar-shell__frame--{{currentRank.tone}}">
+            <image class="avatar-shell__image" src="{{currentAvatar}}" mode="aspectFill" />
+            <view class="avatar-shell__hint">
+              <text class="avatar-shell__hint-text">{{vm.modal.avatarHint}}</text>
             </view>
           </view>
-
-          <view class="profile-identity__text">
-            <view class="profile-identity__name-row">
-              <text class="profile-identity__name">{{vm.user.name}}</text>
-              <view class="profile-identity__vip profile-identity__vip--{{currentRank.tone}}">
-                <text class="profile-identity__vip-text">{{vm.user.badge}}</text>
-              </view>
-            </view>
-            <text class="profile-identity__id">{{vm.user.id}}</text>
+          <view class="avatar-shell__badge avatar-shell__badge--{{currentRank.tone}}">
+            <image class="icon-sm" src="{{iconAnimations.avatarBadge ? currentRank.badgeIconPair.animatedSrc : currentRank.badgeIconPair.staticSrc}}" mode="aspectFit" />
           </view>
         </view>
 
-        <view class="preview-toggle preview-toggle--{{isAutoPlay ? 'active' : 'idle'}} {{pressStates.previewToggle ? 'preview-toggle--pressed' : ''}}" bind:tap="toggleAutoPlay">
-          <image class="preview-toggle__icon {{isAutoPlay ? 'preview-toggle__icon--active' : ''}} {{pressStates.previewToggle ? 'preview-toggle__icon--pressed' : ''}}" src="{{iconAnimations.sparkles ? icons.sparklesPair.animatedSrc : icons.sparklesPair.staticSrc}}" mode="aspectFit" />
+        <view class="profile-identity__copy">
+          <text class="profile-identity__name">{{vm.user.name}}</text>
+          <view class="profile-identity__pill">
+            <text class="profile-identity__pill-text">累计摸鱼打卡：{{vm.user.checkInDays}}天</text>
+          </view>
         </view>
       </view>
 
-      <view class="rank-preview {{pressStates.rankPreview ? 'rank-preview--pressed' : ''}}" bind:tap="triggerRankPreviewFeedback">
-        <view class="rank-preview__header">
-          <view class="rank-preview__titles">
-            <view class="rank-preview__label-row">
-              <image class="icon-xs" src="{{iconAnimations.trophy ? icons.trophyPair.animatedSrc : icons.trophyPair.staticSrc}}" mode="aspectFit" />
-              <text class="rank-preview__eyebrow">{{vm.rankPreview.title}}</text>
-            </view>
-            <text class="rank-preview__name rank-preview__name--{{currentRank.tone}}">Lv.{{currentRank.level}} {{currentRank.name}}</text>
+      <view class="rank-card">
+        <view class="rank-card__glow"></view>
+
+        <view class="rank-card__head">
+          <view class="rank-card__copy">
+            <text class="rank-card__eyebrow">{{vm.rankPanel.eyebrow}}</text>
+            <text class="rank-card__title rank-card__title--{{currentRank.tone}}">Lv.{{currentRank.level}} {{currentRank.name}}</text>
           </view>
-          <text class="rank-preview__meta">{{vm.rankPreview.totalLabel}} {{vm.rankPreview.totalValue}}</text>
+
+          <view class="rank-card__today">
+            <text class="rank-card__today-label">{{vm.rankPanel.todayLabel}}</text>
+            <view class="rank-card__today-value-row">
+              <text class="rank-card__today-value">{{todayHappiness}}</text>
+              <text class="rank-card__today-unit">{{vm.rankPanel.todayUnit}}</text>
+            </view>
+          </view>
         </view>
 
-        <view class="rank-preview__bar">
-          <view class="rank-preview__bar-fill rank-preview__bar-fill--{{currentRank.tone}}" style="width: {{(currentRank.level / vm.ranks.length) * 100}}%;"></view>
+        <view class="rank-card__progress">
+          <view class="rank-card__progress-bar">
+            <view class="rank-card__progress-fill rank-card__progress-fill--{{currentRank.tone}}" style="width: {{progressPercent}}%;"></view>
+          </view>
+          <view class="rank-card__progress-meta">
+            <text class="rank-card__meta-text">{{vm.rankPanel.totalLabel}} {{totalHappiness}}</text>
+            <text class="rank-card__meta-text" wx:if="{{nextRank}}">
+              {{vm.rankPanel.nextLabel}}
+              <text class="rank-card__meta-strong">{{pointsToNext}}</text>
+            </text>
+            <text class="rank-card__meta-text rank-card__meta-text--max" wx:else>{{vm.rankPanel.maxLabel}}</text>
+          </view>
         </view>
 
         <view class="rank-axis">
           <view class="rank-axis__line"></view>
           <block wx:for="{{ranks}}" wx:key="level">
-            <view class="rank-axis__item {{index === rankIndex ? 'rank-axis__item--active' : 'rank-axis__item--inactive'}}">
+            <view
+              class="rank-axis__item {{rankIndex === index ? 'rank-axis__item--active' : 'rank-axis__item--inactive'}} {{pressStates.rankIndex === index ? 'rank-axis__item--pressed' : ''}}"
+              data-index="{{index}}"
+              bind:tap="selectRank"
+            >
               <view class="rank-axis__badge rank-axis__badge--{{item.tone}}">
-                <image class="rank-axis__icon" src="{{item.axisIconSrc}}" mode="aspectFit" />
+                <image class="rank-axis__icon" src="{{iconAnimations.activeRankIndex === index ? item.axisIconPair.animatedSrc : item.axisIconPair.staticSrc}}" mode="aspectFit" />
               </view>
             </view>
           </block>
-        </view>
-
-        <view class="rank-preview__auto" wx:if="{{isAutoPlay}}">
-          <view class="rank-preview__auto-dot"></view>
-          <text class="rank-preview__auto-text">{{vm.rankPreview.autoPreviewText}}</text>
         </view>
       </view>
     </view>
 
     <view class="profile-section">
-      <pp-section-header
-        title="{{vm.sections.primary.title}}"
-        barTone="{{vm.sections.primary.barTone}}"
-      />
+      <view class="section-head">
+        <view class="section-head__bar section-head__bar--blue"></view>
+        <text class="section-head__title">{{vm.sections.console.title}}</text>
+      </view>
 
       <view class="menu-list">
-        <block wx:for="{{primaryItems}}" wx:key="title">
-          <view class="menu-card {{pressStates.primaryIndex === index ? 'menu-card--pressed' : ''}}" data-index="{{index}}" bind:tap="pressPrimaryCard">
+        <block wx:for="{{consoleItems}}" wx:key="title">
+          <view class="menu-card {{pressStates.consoleIndex === index ? 'menu-card--pressed' : ''}}" data-index="{{index}}" bind:tap="pressConsoleCard">
             <view class="menu-card__main">
               <view class="menu-card__icon menu-card__icon--{{item.tone}}">
-                <image class="icon-md" src="{{pressStates.primaryIndex === index ? item.iconPair.animatedSrc : item.iconPair.staticSrc}}" mode="aspectFit" />
+                <image class="icon-md" src="{{iconAnimations.consoleIndex === index ? item.iconPair.animatedSrc : item.iconPair.staticSrc}}" mode="aspectFit" />
               </view>
               <view class="menu-card__copy">
                 <view class="menu-card__title-row">
@@ -99,41 +112,41 @@
     </view>
 
     <view class="profile-section">
-      <pp-section-header
-        title="{{vm.sections.secondary.title}}"
-        barTone="{{vm.sections.secondary.barTone}}"
-      />
+      <view class="section-head">
+        <view class="section-head__bar section-head__bar--muted"></view>
+        <text class="section-head__title">{{vm.sections.about.title}}</text>
+      </view>
 
-      <view class="list-card">
-        <block wx:for="{{secondaryItems}}" wx:key="title">
-          <view class="list-card__item {{item.isLast ? 'list-card__item--last' : ''}} {{pressStates.secondaryIndex === index ? 'list-card__item--pressed' : ''}}" data-index="{{index}}" bind:tap="pressSecondaryCard">
-            <view class="list-card__main">
-              <view class="list-card__icon">
-                <image class="icon-md" src="{{pressStates.secondaryIndex === index ? item.iconPair.animatedSrc : item.iconPair.staticSrc}}" mode="aspectFit" />
+      <view class="support-list">
+        <block wx:for="{{aboutItems}}" wx:key="title">
+          <view class="support-row {{pressStates.aboutIndex === index ? 'support-row--pressed' : ''}}" data-index="{{index}}" bind:tap="pressAboutCard">
+            <view class="support-row__main">
+              <view class="support-row__icon">
+                <image class="icon-md" src="{{iconAnimations.aboutIndex === index ? item.iconPair.animatedSrc : item.iconPair.staticSrc}}" mode="aspectFit" />
               </view>
-              <view class="list-card__copy">
-                <text class="list-card__title">{{item.title}}</text>
-                <text class="list-card__desc">{{item.desc}}</text>
+              <view class="support-row__copy">
+                <text class="support-row__title">{{item.title}}</text>
+                <text class="support-row__desc">{{item.desc}}</text>
               </view>
             </view>
-            <image class="list-card__arrow" src="{{icons.chevronRight}}" mode="aspectFit" />
+            <image class="support-row__arrow" src="{{icons.chevronRight}}" mode="aspectFit" />
           </view>
         </block>
       </view>
     </view>
 
     <view class="profile-section profile-section--last">
-      <pp-section-header
-        title="{{vm.sections.storage.sectionTitle}}"
-        barTone="{{vm.sections.storage.barTone}}"
-      />
+      <view class="section-head">
+        <view class="section-head__bar section-head__bar--dark"></view>
+        <text class="section-head__title">{{vm.sections.storage.sectionTitle}}</text>
+      </view>
 
       <view class="storage-card {{pressStates.storage ? 'storage-card--pressed' : ''}}" bind:tap="pressStorageCard">
         <view class="storage-card__glow"></view>
         <view class="storage-card__content">
           <view class="storage-card__main">
             <view class="storage-card__icon">
-              <image class="icon-lg" src="{{pressStates.storage ? storageCard.iconPair.animatedSrc : storageCard.iconPair.staticSrc}}" mode="aspectFit" />
+              <image class="icon-lg" src="{{iconAnimations.storage ? storageCard.iconPair.animatedSrc : storageCard.iconPair.staticSrc}}" mode="aspectFit" />
             </view>
             <view class="storage-card__copy">
               <text class="storage-card__title">{{storageCard.title}}</text>
@@ -146,14 +159,14 @@
     </view>
   </view>
 
-  <view class="avatar-modal" wx:if="{{showAvatarModal}}" bind:tap="closeAvatarModal">
-    <view class="avatar-sheet" catch:tap="">
+  <view class="avatar-modal {{avatarModalVisible ? 'avatar-modal--visible' : ''}}" wx:if="{{showAvatarModal}}" bind:tap="closeAvatarModal">
+    <view class="avatar-sheet {{avatarModalVisible ? 'avatar-sheet--visible' : ''}}" catch:tap="">
       <view class="avatar-sheet__header">
         <view class="avatar-sheet__titles">
           <text class="avatar-sheet__title">{{vm.modal.title}}</text>
           <text class="avatar-sheet__subtitle">{{vm.modal.subtitle}}</text>
         </view>
-        <view class="avatar-sheet__close" bind:tap="closeAvatarModal">
+        <view class="avatar-sheet__close {{pressStates.modalClose ? 'avatar-sheet__close--pressed' : ''}}" bind:tap="closeAvatarModal">
           <image class="icon-lg" src="{{icons.x}}" mode="aspectFit" />
         </view>
       </view>
@@ -169,11 +182,9 @@
         </block>
       </view>
 
-      <view class="avatar-sheet__confirm" bind:tap="confirmAvatar">
+      <view class="avatar-sheet__confirm {{pressStates.modalConfirm ? 'avatar-sheet__confirm--pressed' : ''}}" bind:tap="confirmAvatar">
         <text class="avatar-sheet__confirm-text">{{vm.modal.confirmText}}</text>
       </view>
     </view>
   </view>
-
-  <pp-tab-bar activeTab="profile" />
 </view>

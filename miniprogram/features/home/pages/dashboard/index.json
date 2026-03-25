@@ -1,7 +1,6 @@
 {
   "navigationStyle": "custom",
   "usingComponents": {
-    "pp-tab-bar": "/components/navigation/pp-tab-bar/index",
     "pp-section-header": "../../../../components/ui/pp-section-header/index"
   }
 }

@@ -9,7 +9,7 @@
           <text class="nav-bar__title">{{vm.header.title}}</text>
         </view>
       </view>
-      <text class="nav-bar__subtitle">{{vm.header.subtitle}}</text>
+      <text wx:if="{{vm.header.subtitle}}" class="nav-bar__subtitle">{{vm.header.subtitle}}</text>
     </view>
   </view>
 
@@ -165,17 +165,22 @@
       <pp-section-header
         title="{{vm.importantDates.sectionTitle}}"
         barTone="blue"
+        manageText="{{vm.importantDates.actionText}}"
+        manageTone="blue"
+        chevronSrc="{{iconChevronRightBlue}}"
       />
 
       <view class="dates-list">
         <view class="date-item {{pressStates.dateHeart ? 'date-item--active' : ''}}" bind:tap="triggerDateHeartAnimation">
           <view class="date-item__row">
-            <view class="date-item__icon date-item__icon--rose">
-              <image class="icon-md" src="{{iconAnimations.dateHeart ? iconPairs.heartRose.animatedSrc : iconPairs.heartRose.staticSrc}}" mode="aspectFit" />
-            </view>
-            <view class="date-item__info">
-              <text class="date-item__title">{{vm.importantDates.items[0].title}}</text>
-              <text class="date-item__date">{{vm.importantDates.items[0].date}}</text>
+            <view class="date-item__main">
+              <view class="date-item__icon date-item__icon--rose">
+                <image class="icon-md" src="{{iconAnimations.dateHeart ? iconPairs.heartRose.animatedSrc : iconPairs.heartRose.staticSrc}}" mode="aspectFit" />
+              </view>
+              <view class="date-item__info">
+                <text class="date-item__title">{{vm.importantDates.items[0].title}}</text>
+                <text class="date-item__date">{{vm.importantDates.items[0].date}}</text>
+              </view>
             </view>
             <view class="date-item__remaining">
               <text class="date-item__days date-item__days--rose">{{vm.importantDates.items[0].remaining}}</text>
@@ -186,12 +191,14 @@
 
         <view class="date-item {{pressStates.dateGift ? 'date-item--active' : ''}}" bind:tap="triggerDateGiftAnimation">
           <view class="date-item__row">
-            <view class="date-item__icon date-item__icon--amber">
-              <image class="icon-md" src="{{iconAnimations.dateGift ? iconPairs.giftAmber.animatedSrc : iconPairs.giftAmber.staticSrc}}" mode="aspectFit" />
-            </view>
-            <view class="date-item__info">
-              <text class="date-item__title">{{vm.importantDates.items[1].title}}</text>
-              <text class="date-item__date">{{vm.importantDates.items[1].date}}</text>
+            <view class="date-item__main">
+              <view class="date-item__icon date-item__icon--amber">
+                <image class="icon-md" src="{{iconAnimations.dateGift ? iconPairs.giftAmber.animatedSrc : iconPairs.giftAmber.staticSrc}}" mode="aspectFit" />
+              </view>
+              <view class="date-item__info">
+                <text class="date-item__title">{{vm.importantDates.items[1].title}}</text>
+                <text class="date-item__date">{{vm.importantDates.items[1].date}}</text>
+              </view>
             </view>
             <view class="date-item__remaining">
               <text class="date-item__days date-item__days--amber">{{vm.importantDates.items[1].remaining}}</text>
@@ -202,12 +209,14 @@
 
         <view class="date-item {{pressStates.dateStar ? 'date-item--active' : ''}}" bind:tap="triggerDateStarAnimation">
           <view class="date-item__row">
-            <view class="date-item__icon date-item__icon--blue">
-              <image class="icon-md" src="{{iconAnimations.dateStar ? iconPairs.starBlue.animatedSrc : iconPairs.starBlue.staticSrc}}" mode="aspectFit" />
-            </view>
-            <view class="date-item__info">
-              <text class="date-item__title">{{vm.importantDates.items[2].title}}</text>
-              <text class="date-item__date">{{vm.importantDates.items[2].date}}</text>
+            <view class="date-item__main">
+              <view class="date-item__icon date-item__icon--blue">
+                <image class="icon-md" src="{{iconAnimations.dateStar ? iconPairs.starBlue.animatedSrc : iconPairs.starBlue.staticSrc}}" mode="aspectFit" />
+              </view>
+              <view class="date-item__info">
+                <text class="date-item__title">{{vm.importantDates.items[2].title}}</text>
+                <text class="date-item__date">{{vm.importantDates.items[2].date}}</text>
+              </view>
             </view>
             <view class="date-item__remaining">
               <text class="date-item__days date-item__days--blue">{{vm.importantDates.items[2].remaining}}</text>
@@ -236,17 +245,13 @@
             <view class="journey-card__icon journey-card__icon--indigo">
               <image class="icon-md" src="{{iconAnimations.journeyLife ? iconPairs.babyWhite.animatedSrc : iconPairs.babyWhite.staticSrc}}" mode="aspectFit" />
             </view>
-            <text class="journey-card__eyebrow journey-card__eyebrow--indigo">{{vm.lifeJourney.items[0].eyebrow}}</text>
+            <text class="journey-card__eyebrow journey-card__eyebrow--indigo">{{journeyDisplayItems[0].eyebrow}}</text>
           </view>
           <view class="journey-card__number">
-            <text class="journey-card__value journey-card__value--slate">{{vm.lifeJourney.items[0].value}}</text>
-            <text class="journey-card__unit journey-card__unit--slate">{{vm.lifeJourney.items[0].unit}}</text>
+            <text class="journey-card__status">{{journeyDisplayItems[0].statusLabel}}</text>
+            <text class="journey-card__value journey-card__value--slate">{{journeyDisplayItems[0].displayValue}}</text>
           </view>
-          <text class="journey-card__desc">
-            {{vm.lifeJourney.items[0].descriptionPrefix}}
-            <text class="journey-card__desc-strong">{{vm.lifeJourney.items[0].descriptionHighlight}}</text>
-            {{vm.lifeJourney.items[0].descriptionSuffix}}
-          </text>
+          <text class="journey-card__desc">{{journeyDisplayItems[0].descriptionPrefix}}<text class="journey-card__desc-strong">{{journeyDisplayItems[0].descriptionHighlight}}</text>{{journeyDisplayItems[0].descriptionSuffix}}</text>
         </view>
 
         <view class="journey-card journey-card--white {{pressStates.journeyCareer ? 'journey-card--active' : ''}}" bind:tap="triggerJourneyCareerAnimation">
@@ -255,17 +260,13 @@
             <view class="journey-card__icon journey-card__icon--blue">
               <image class="icon-md" src="{{iconAnimations.journeyCareer ? iconPairs.briefcaseWhite.animatedSrc : iconPairs.briefcaseWhite.staticSrc}}" mode="aspectFit" />
             </view>
-            <text class="journey-card__eyebrow journey-card__eyebrow--blue">{{vm.lifeJourney.items[1].eyebrow}}</text>
+            <text class="journey-card__eyebrow journey-card__eyebrow--blue">{{journeyDisplayItems[1].eyebrow}}</text>
           </view>
           <view class="journey-card__number">
-            <text class="journey-card__value journey-card__value--slate">{{vm.lifeJourney.items[1].value}}</text>
-            <text class="journey-card__unit journey-card__unit--slate">{{vm.lifeJourney.items[1].unit}}</text>
+            <text class="journey-card__status">{{journeyDisplayItems[1].statusLabel}}</text>
+            <text class="journey-card__value journey-card__value--slate">{{journeyDisplayItems[1].displayValue}}</text>
           </view>
-          <text class="journey-card__desc">
-            {{vm.lifeJourney.items[1].descriptionPrefix}}
-            <text class="journey-card__desc-strong journey-card__desc-strong--blue">{{vm.lifeJourney.items[1].descriptionHighlight}}</text>
-            {{vm.lifeJourney.items[1].descriptionSuffix}}
-          </text>
+          <text class="journey-card__desc">{{journeyDisplayItems[1].descriptionPrefix}}<text class="journey-card__desc-strong journey-card__desc-strong--blue">{{journeyDisplayItems[1].descriptionHighlight}}</text>{{journeyDisplayItems[1].descriptionSuffix}}</text>
         </view>
 
         <view class="journey-card journey-card--emerald {{pressStates.journeyRetire ? 'journey-card--active' : ''}}" bind:tap="triggerJourneyRetireAnimation">
@@ -274,19 +275,15 @@
             <view class="journey-card__icon journey-card__icon--emerald">
               <image class="icon-md" src="{{iconAnimations.journeyRetire ? iconPairs.flagWhite.animatedSrc : iconPairs.flagWhite.staticSrc}}" mode="aspectFit" />
             </view>
-            <text class="journey-card__eyebrow journey-card__eyebrow--emerald">{{vm.lifeJourney.items[2].eyebrow}}</text>
+            <text class="journey-card__eyebrow journey-card__eyebrow--emerald">{{journeyDisplayItems[2].eyebrow}}</text>
           </view>
           <view class="journey-card__number">
-            <text class="journey-card__value journey-card__value--emerald">{{vm.lifeJourney.items[2].value}}</text>
-            <text class="journey-card__unit journey-card__unit--emerald">{{vm.lifeJourney.items[2].unit}}</text>
+            <text class="journey-card__status journey-card__status--emerald">{{journeyDisplayItems[2].statusLabel}}</text>
+            <text class="journey-card__value journey-card__value--emerald">{{journeyDisplayItems[2].displayValue}}</text>
           </view>
-          <text class="journey-card__desc journey-card__desc--emerald">
-            {{vm.lifeJourney.items[2].descriptionPrefix}}
-            <text class="journey-card__desc-strong journey-card__desc-strong--emerald">{{vm.lifeJourney.items[2].descriptionHighlight}}</text>
-            {{vm.lifeJourney.items[2].descriptionSuffix}}
-          </text>
+          <text class="journey-card__desc journey-card__desc--emerald">{{journeyDisplayItems[2].descriptionPrefix}}<text class="journey-card__desc-strong journey-card__desc-strong--emerald">{{journeyDisplayItems[2].descriptionHighlight}}</text>{{journeyDisplayItems[2].descriptionSuffix}}</text>
           <view class="journey-card__progress">
-            <view class="journey-card__progress-fill" style="width: {{vm.lifeJourney.items[2].progress}}%"></view>
+            <view class="journey-card__progress-fill" style="width: {{journeyDisplayItems[2].progress}}%"></view>
           </view>
         </view>
 
@@ -296,15 +293,15 @@
             <view class="journey-card__icon journey-card__icon--rose">
               <image class="icon-md" src="{{iconAnimations.journeyFinal ? iconPairs.skullWhite.animatedSrc : iconPairs.skullWhite.staticSrc}}" mode="aspectFit" />
             </view>
-            <text class="journey-card__eyebrow journey-card__eyebrow--rose">{{vm.lifeJourney.items[3].eyebrow}}</text>
+            <text class="journey-card__eyebrow journey-card__eyebrow--rose">{{journeyDisplayItems[3].eyebrow}}</text>
           </view>
           <view class="journey-card__number">
-            <text class="journey-card__value journey-card__value--rose">{{vm.lifeJourney.items[3].value}}</text>
-            <text class="journey-card__unit journey-card__unit--rose">{{vm.lifeJourney.items[3].unit}}</text>
+            <text class="journey-card__status journey-card__status--rose">{{journeyDisplayItems[3].statusLabel}}</text>
+            <text class="journey-card__value journey-card__value--rose">{{journeyDisplayItems[3].displayValue}}</text>
           </view>
-          <text class="journey-card__quote">{{vm.lifeJourney.items[3].quote}}</text>
+          <text class="journey-card__quote">{{journeyDisplayItems[3].quote}}</text>
           <view class="journey-card__note">
-            <text class="journey-card__note-text">{{vm.lifeJourney.items[3].note}}</text>
+            <text class="journey-card__note-text">{{journeyDisplayItems[3].note}}</text>
           </view>
         </view>
       </view>
@@ -350,5 +347,4 @@
     </view>
   </view>
 
-  <pp-tab-bar activeTab="home" />
 </view>
