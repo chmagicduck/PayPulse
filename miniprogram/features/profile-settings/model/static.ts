@@ -1,0 +1,28 @@
+export const profileSettingsStaticViewModel = {
+  title: '航行档案设置',
+  bannerTitle: '校准你的航向',
+  bannerDescription: '输入坐标参数，静态阶段先完成高保真表单还原，后续再接正式校验与存储。',
+  workModes: [
+    { key: 'double', text: '双休' },
+    { key: 'single-sat', text: '休六' },
+    { key: 'single-sun', text: '休日' },
+    { key: 'big-small', text: '大小周' },
+  ],
+  form: {
+    nickname: '摸鱼小队长',
+    birthday: '1995-06-15',
+    gender: 'male',
+    careerStartDate: '2018-07-01',
+    retirementAge: '60',
+    expectedLifespan: '85',
+    monthlySalary: '15000',
+    payDay: '10',
+    workMode: 'double',
+    isCurrentBigWeek: true,
+    startTime: '09:00',
+    endTime: '18:00',
+    lunchBreakEnabled: false,
+    lunchStartTime: '12:00',
+    lunchEndTime: '13:30',
+  },
+} as const

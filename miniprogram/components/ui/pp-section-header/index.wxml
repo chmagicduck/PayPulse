@@ -1,7 +1,10 @@
-<view class="pp-section-header">
+<view class="pp-section-header {{subtitle ? 'pp-section-header--with-subtitle' : ''}}">
   <view class="pp-section-header__title-group">
-    <view class="{{barClassName}}"></view>
-    <text class="pp-section-header__title">{{title}}</text>
+    <view class="{{barClassName}}" wx:if="{{showBar}}"></view>
+    <view class="pp-section-header__copy">
+      <text class="pp-section-header__title">{{title}}</text>
+      <text class="pp-section-header__subtitle" wx:if="{{subtitle}}">{{subtitle}}</text>
+    </view>
   </view>
 
   <view class="pp-section-header__manage" wx:if="{{showManage}}">

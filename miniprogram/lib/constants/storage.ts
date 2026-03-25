@@ -1,5 +1,4 @@
 export const storageKeys = {
-  appThemeId: 'app.theme-id',
   homeScaffold: 'home.scaffold',
   profileSettings: 'profile.settings',
   profileAvatar: 'profile.avatar',

@@ -1,4 +1,4 @@
-# 微信小程序高保真原型还原指南
+﻿# 微信小程序高保真原型还原指南
 
 ## 适用场景
 
@@ -17,8 +17,8 @@
 
 ### 原型事实源
 
-- 页面视觉结构：`docs/prototype/feature-*/page-*.ts`
-- 原型清单：`docs/prototype/manifest.json`
+- 页面视觉结构：`docs/prototype/<version>/features.<feature-id>.pages.<page-id>.ts`
+- 原型定位：按文件名直接映射页面路径，无需 manifest
 
 ### 代码事实源
 
@@ -45,8 +45,8 @@
 如果原型更新并移除了某个区域，不能只改 WXML/LESS，必须同步清理：
 
 - `model/static.ts` 中对应字段
-- `index.ts` 中对应状态与图标变量
-- `index.less` 中无效样式块
+- 页面 TS 中对应状态与图标变量
+- 页面 Less 中无效样式块
 
 目标是让代码结构与原型结构保持一致，避免“页面已经删了，但数据模型还拖着旧字段”。
 
@@ -78,8 +78,7 @@
 
 ```text
 miniprogram/theme/
-  themes/
-    ocean-default.less
+  tokens.less
   foundations/
     base.less
     mixins.less
@@ -182,8 +181,8 @@ Skyline 下很多元素默认会被拉伸。以下元素都要显式写：
 
 需要高保真顶部区域时：
 
-- 页面 `index.json` 使用 `navigationStyle: "custom"`
-- `index.ts` 中读取 `statusBarHeight`
+- 页面 `<page-id>.json` 使用 `navigationStyle: "custom"`
+- 页面 TS 中读取 `statusBarHeight`
 - WXML 顶部留出状态栏高度
 
 ### 5. tab bar 预留底部安全区
@@ -235,7 +234,7 @@ React 原型里常见的：
 
 ### 第一步：读原型，不要先看旧代码
 
-先读 `docs/prototype/feature-*/page-*.ts`，确认：
+先读 `docs/prototype/<version>/features.<feature-id>.pages.<page-id>.ts`，确认：
 
 - 页面结构
 - 区块顺序
@@ -275,14 +274,14 @@ React 原型里常见的：
 
 ### 第四步：实现页面 TS
 
-`index.ts` 负责：
+`<page-id>.ts` 负责：
 
 - 引入 `static.ts`
 - 生成 data URI 图标
 - 管理视觉交互状态
 - 管理短暂点击态
 
-不要在 `index.ts` 中接入正式业务模型。
+不要在页面 TS 中接入正式业务模型。
 
 ### 第五步：实现 WXML
 
@@ -340,16 +339,14 @@ Less 负责：
 miniprogram/
   lib/icons.ts
   theme/
-    themes/
     foundations/
     entries/
   features/<feature>/
     model/static.ts
-    pages/<page>/
-      index.json
-      index.ts
-      index.wxml
-      index.less
+    pages/<page>.json
+    pages/<page>.ts
+    pages/<page>.wxml
+    pages/<page>.less
 ```
 
 ## 一句话原则

@@ -8,9 +8,17 @@ Component({
       type: String,
       value: '',
     },
+    subtitle: {
+      type: String,
+      value: '',
+    },
     barTone: {
       type: String,
       value: 'blue',
+    },
+    showBar: {
+      type: Boolean,
+      value: true,
     },
     tagText: {
       type: String,

@@ -16,6 +16,19 @@
     flex: 1;
   }
 
+  &__copy {
+    min-width: 0;
+    flex: 1;
+  }
+
+  &--with-subtitle {
+    align-items: flex-start;
+
+    .pp-section-header__title-group {
+      align-items: flex-start;
+    }
+  }
+
   &__bar {
     width: 6rpx;
     height: 20rpx;
@@ -30,19 +43,22 @@
   }
 
   &__title {
-    font-size: 26rpx;
-    font-weight: 900;
-    color: @slate800;
-    letter-spacing: -0.025em;
-    line-height: 1.2;
+    display: block;
+    .type-section-title();
+  }
+
+  &__subtitle {
+    display: block;
+    margin-top: 10rpx;
+    .type-eyebrow();
   }
 
   &__tag {
     flex-shrink: 0;
-    font-size: 18rpx;
+    .type-eyebrow();
+    font-size: 16rpx;
     font-weight: 700;
-    letter-spacing: -0.025em;
-    color: @slate400;
+    letter-spacing: 0.08em;
     white-space: nowrap;
 
     &--blue { color: @blue500; }
@@ -56,10 +72,11 @@
   }
 
   &__manage-text {
+    .type-text-secondary();
     font-size: 18rpx;
     font-weight: 700;
+    line-height: 1;
     letter-spacing: -0.05em;
-    color: @slate400;
     white-space: nowrap;
 
     &--blue { color: @blue600; }

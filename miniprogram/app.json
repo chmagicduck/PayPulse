@@ -1,15 +1,15 @@
 {
   "pages": [
-    "features/home/pages/dashboard/index",
-    "features/report/pages/ocean-report/index",
-    "features/lab/pages/lab/index",
-    "features/profile/pages/home/index",
-    "features/profile/pages/settings/index",
-    "features/time-axis/pages/time-axis-settings/index",
-    "features/calendar/pages/calendar/index",
-    "features/community/pages/join/index",
-    "features/about/pages/about/index",
-    "features/data-center/pages/data-center/index"
+    "features/home/pages/dashboard",
+    "features/report/pages/ocean-report",
+    "features/lab/pages/lab",
+    "features/profile/pages/home",
+    "features/profile-settings/pages/settings",
+    "features/time-axis/pages/time-axis-settings",
+    "features/calendar/pages/calendar",
+    "features/community/pages/join",
+    "features/about/pages/about",
+    "features/data-center/pages/data-center"
   ],
   "window": {
     "backgroundColor": "#ffffff",
@@ -25,25 +25,25 @@
     "borderStyle": "white",
     "list": [
       {
-        "pagePath": "features/home/pages/dashboard/index",
+        "pagePath": "features/home/pages/dashboard",
         "text": "领潮中心",
         "iconPath": "assets/images/tabbar/tab-home.png",
         "selectedIconPath": "assets/images/tabbar/tab-home-active.png"
       },
       {
-        "pagePath": "features/report/pages/ocean-report/index",
+        "pagePath": "features/report/pages/ocean-report",
         "text": "洋流战报",
         "iconPath": "assets/images/tabbar/tab-chart.png",
         "selectedIconPath": "assets/images/tabbar/tab-chart-active.png"
       },
       {
-        "pagePath": "features/lab/pages/lab/index",
+        "pagePath": "features/lab/pages/lab",
         "text": "动力室",
         "iconPath": "assets/images/tabbar/tab-lab.png",
         "selectedIconPath": "assets/images/tabbar/tab-lab-active.png"
       },
       {
-        "pagePath": "features/profile/pages/home/index",
+        "pagePath": "features/profile/pages/home",
         "text": "个人基地",
         "iconPath": "assets/images/tabbar/tab-profile.png",
         "selectedIconPath": "assets/images/tabbar/tab-profile-active.png"

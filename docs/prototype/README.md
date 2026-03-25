@@ -1,12 +1,16 @@
 # Prototype 目录
 
-高保真原型按 feature 分组，不再按页面中文标题平铺存放。
-
 ## 规则
 
-- 新原型文件放到 `feature-<feature-id>/` 下
-- 文件统一使用 `page-<page-id>.ts` 命名
-- 新增或移动原型时必须同步更新 `manifest.json`
-- `legacy/` 只保留迁移说明，不再放实际原型
+- 新原型统一放进 `docs/prototype/<version>/`
+- 文件名必须直接映射代码页面路径
+- `legacy/` 只保留旧结构说明
+
+## 命名示例
+
+```text
+docs/prototype/1.0.0/features.profile.pages.home.ts
+-> miniprogram/features/profile/pages/home.*
+```
 
 原型文件是输入产物，不参与运行时逻辑。

@@ -9,7 +9,7 @@
 
 ## 存储规则
 
-- 每个持久化 key 都必须在 PRD front matter 或 `states.md` 中登记
+- 每个持久化 key 都必须在当前版本 PRD 的状态或存储章节中登记
 - 存储访问逻辑放在 feature model 内，不放页面里
 - 解析与校验逻辑应与存储访问放在一起
 

@@ -10,4 +10,7 @@
 - `model/actions.ts`
 - `model/storage.ts`
 - `components/`
-- `pages/<page-id>/`
+- `pages/<page-id>.ts`
+- `pages/<page-id>.wxml`
+- `pages/<page-id>.less`
+- `pages/<page-id>.json`

@@ -47,7 +47,7 @@ export const profileHomeStaticViewModel = {
           tone: 'blue',
           iconName: 'user',
           iconColor: '#3b82f6',
-          url: '/features/profile/pages/settings/index',
+          url: '/features/profile-settings/pages/settings',
         },
         {
           title: '岁月坐标设置',
@@ -55,7 +55,7 @@ export const profileHomeStaticViewModel = {
           tone: 'emerald',
           iconName: 'map-pin',
           iconColor: '#10b981',
-          url: '/features/time-axis/pages/time-axis-settings/index',
+          url: '/features/time-axis/pages/time-axis-settings',
         },
         {
           title: '查看日历',
@@ -63,7 +63,7 @@ export const profileHomeStaticViewModel = {
           tone: 'indigo',
           iconName: 'calendar',
           iconColor: '#4f46e5',
-          url: '/features/calendar/pages/calendar/index',
+          url: '/features/calendar/pages/calendar',
         }
       ],
     },
@@ -75,14 +75,14 @@ export const profileHomeStaticViewModel = {
           desc: '与万千船手交流摸鱼心得',
           iconName: 'users',
           iconColor: '#64748b',
-          url: '/features/community/pages/join/index',
+          url: '/features/community/pages/join',
         },
         {
           title: '关于软件',
           desc: '版本 v2.4.0 (Build 2024)',
           iconName: 'info',
           iconColor: '#64748b',
-          url: '/features/about/pages/about/index',
+          url: '/features/about/pages/about',
         },
       ],
     },
@@ -92,7 +92,7 @@ export const profileHomeStaticViewModel = {
       desc: '本地备份、同步与隐私清理',
       iconName: 'database',
       iconColor: '#60a5fa',
-      url: '/features/data-center/pages/data-center/index',
+      url: '/features/data-center/pages/data-center',
     },
   },
   modal: {
@@ -100,34 +100,5 @@ export const profileHomeStaticViewModel = {
     subtitle: 'Select Preset Avatar',
     confirmText: '确认修改',
     avatarHint: '更换',
-  },
-} as const
-
-export const profileSettingsStaticViewModel = {
-  title: '航行档案设置',
-  bannerTitle: '校准你的航向',
-  bannerDescription: '输入坐标参数，静态阶段先完成高保真表单还原，后续再接正式校验与存储。',
-  workModes: [
-    { key: 'double', text: '双休' },
-    { key: 'single-sat', text: '休六' },
-    { key: 'single-sun', text: '休日' },
-    { key: 'big-small', text: '大小周' },
-  ],
-  form: {
-    nickname: '摸鱼小队长',
-    birthday: '1995-06-15',
-    gender: 'male',
-    careerStartDate: '2018-07-01',
-    retirementAge: '60',
-    expectedLifespan: '85',
-    monthlySalary: '15000',
-    payDay: '10',
-    workMode: 'double',
-    isCurrentBigWeek: true,
-    startTime: '09:00',
-    endTime: '18:00',
-    lunchBreakEnabled: false,
-    lunchStartTime: '12:00',
-    lunchEndTime: '13:30',
   },
 } as const
