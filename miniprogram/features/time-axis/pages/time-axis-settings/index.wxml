@@ -1,2 +1,130 @@
-<view class="page-view">
+<view class="page-view time-axis-page">
+  <view class="time-axis-nav" style="padding-top: {{statusBarHeight}}px;">
+    <view class="time-axis-nav__content">
+      <view class="time-axis-nav__back" bind:tap="handleBack">
+        <image class="icon-lg" src="{{icons.chevronLeft}}" mode="aspectFit" />
+      </view>
+      <text class="time-axis-nav__title">{{vm.title}}</text>
+      <view class="time-axis-nav__action" bind:tap="openCreateModal">
+        <image class="icon-lg" src="{{icons.plus}}" mode="aspectFit" />
+      </view>
+    </view>
+  </view>
+
+  <view class="time-axis-groups">
+    <block wx:for="{{vm.groups}}" wx:key="*this">
+      <view class="time-axis-groups__item {{selectedGroup === item ? 'time-axis-groups__item--active' : ''}}" data-value="{{item}}" bind:tap="selectGroup">
+        <text class="time-axis-groups__text">{{item}}</text>
+      </view>
+    </block>
+  </view>
+
+  <view class="time-axis-main">
+    <view class="entry-list" wx:if="{{visibleEntries.length}}">
+      <block wx:for="{{visibleEntries}}" wx:key="id">
+        <view class="entry-card" data-id="{{item.id}}" bind:tap="openEditModal">
+          <view class="entry-card__main">
+            <view class="entry-card__icon entry-card__icon--{{item.tone}}">
+              <image class="icon-md" src="{{item.iconSrc}}" mode="aspectFit" />
+            </view>
+            <view class="entry-card__copy">
+              <text class="entry-card__title">{{item.title}}</text>
+              <view class="entry-card__meta">
+                <text class="entry-card__date">{{item.date}}</text>
+                <view class="entry-card__tag">
+                  <text class="entry-card__tag-text">{{item.tag}}</text>
+                </view>
+              </view>
+            </view>
+          </view>
+
+          <view class="entry-card__side">
+            <text class="entry-card__countdown {{item.isPast ? 'entry-card__countdown--past' : ''}}">{{item.countdown}}</text>
+            <view class="entry-card__group">
+              <text class="entry-card__group-text">{{item.group}}</text>
+              <image class="icon-xs" src="{{icons.chevronRight}}" mode="aspectFit" />
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <view class="entry-empty" wx:else>
+      <image class="entry-empty__icon" src="{{iconChoices[2].iconPair.staticSrc}}" mode="aspectFit" />
+      <text class="entry-empty__title">档案库为空</text>
+      <text class="entry-empty__desc">先创建一个坐标，后续就能从个人基地快速查阅。</text>
+    </view>
+  </view>
+
+  <view class="drawer-overlay {{isModalOpen ? 'drawer-overlay--visible' : ''}}" bind:tap="closeModal">
+    <view class="drawer-sheet {{isModalOpen ? 'drawer-sheet--visible' : ''}}" catch:tap="">
+      <view class="drawer-sheet__header">
+        <text class="drawer-sheet__title">{{editingId ? '编辑档案' : '新增档案'}}</text>
+        <view class="drawer-sheet__close" bind:tap="closeModal">
+          <image class="icon-lg" src="{{icons.x}}" mode="aspectFit" />
+        </view>
+      </view>
+
+      <view class="drawer-field">
+        <text class="drawer-field__label">标识图标</text>
+        <view class="icon-grid">
+          <block wx:for="{{iconChoices}}" wx:key="id">
+            <view class="icon-grid__item icon-grid__item--{{item.tone}} {{form.iconId === item.id ? 'icon-grid__item--active' : ''}}" data-value="{{item.id}}" bind:tap="selectIcon">
+              <image class="icon-md" src="{{item.iconPair.staticSrc}}" mode="aspectFit" />
+            </view>
+          </block>
+        </view>
+      </view>
+
+      <view class="drawer-field">
+        <text class="drawer-field__label">档案标题</text>
+        <input class="drawer-field__input" value="{{form.title}}" data-field="title" bindinput="updateField" placeholder="输入标题" />
+      </view>
+
+      <view class="drawer-row">
+        <view class="drawer-field drawer-field--half">
+          <text class="drawer-field__label">日期</text>
+          <picker mode="date" value="{{form.date}}" data-field="date" bindchange="updateField">
+            <view class="drawer-field__picker">{{form.date || '选择日期'}}</view>
+          </picker>
+        </view>
+
+        <view class="drawer-field drawer-field--half">
+          <text class="drawer-field__label">分组</text>
+          <input class="drawer-field__input" value="{{form.group}}" data-field="group" bindinput="updateField" />
+        </view>
+      </view>
+
+      <view class="drawer-field">
+        <text class="drawer-field__label">日历体系</text>
+        <view class="segmented">
+          <view class="segmented__item {{form.type === 'solar' ? 'segmented__item--active' : ''}}" data-value="solar" bind:tap="toggleType">
+            <text class="segmented__text">公历</text>
+          </view>
+          <view class="segmented__item {{form.type === 'lunar' ? 'segmented__item--active' : ''}}" data-value="lunar" bind:tap="toggleType">
+            <text class="segmented__text">农历</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="drawer-switch">
+        <view class="drawer-switch__left">
+          <image class="icon-sm" src="{{icons.calendar}}" mode="aspectFit" />
+          <text class="drawer-switch__label">周年提醒</text>
+        </view>
+        <view class="switch {{form.isAnniversary ? 'switch--active' : ''}}" bind:tap="toggleAnniversary">
+          <view class="switch__thumb"></view>
+        </view>
+      </view>
+
+      <view class="drawer-actions">
+        <view class="drawer-actions__ghost" wx:if="{{editingId}}" bind:tap="deleteEntry">
+          <text>删除</text>
+        </view>
+        <view class="drawer-actions__primary" bind:tap="saveEntry">
+          <text>{{editingId ? '保存修改' : '创建档案'}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
 </view>

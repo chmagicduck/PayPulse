@@ -1,9 +1,21 @@
 export const labStaticViewModel = {
   header: {
-    title: '动力室',
+    title: '动力舱',
     previewOff: '路线预览',
     previewOn: '预览中',
   },
+  ranks: [
+    { level: 1, name: '海滩漫步者', exp: 0, iconName: 'shell', tone: 'slate', iconColor: '#94a3b8' },
+    { level: 2, name: '浅滩摸鱼手', exp: 50, iconName: 'waves', tone: 'cyan', iconColor: '#0891b2' },
+    { level: 3, name: '茶歇守卫官', exp: 120, iconName: 'coffee', tone: 'orange', iconColor: '#ea580c' },
+    { level: 4, name: '划水见习生', exp: 200, iconName: 'wind', tone: 'emerald', iconColor: '#10b981' },
+    { level: 5, name: '资深舵手', exp: 350, iconName: 'compass', tone: 'blue', iconColor: '#3b82f6' },
+    { level: 6, name: '隐身巡航员', exp: 500, iconName: 'ghost', tone: 'indigo', iconColor: '#6366f1' },
+    { level: 7, name: '风暴避难者', exp: 750, iconName: 'anchor', tone: 'violet', iconColor: '#7c3aed' },
+    { level: 8, name: '极速快艇王', exp: 1000, iconName: 'zap', tone: 'yellow', iconColor: '#a16207' },
+    { level: 9, name: '深海霸主', exp: 1500, iconName: 'ship', tone: 'rose', iconColor: '#e11d48' },
+    { level: 10, name: '深海大懒鬼', exp: 2000, iconName: 'crown', tone: 'amber', iconColor: '#d97706' },
+  ],
   rank: {
     level: 'Lv.3 茶歇守卫官',
     todayGain: '45',

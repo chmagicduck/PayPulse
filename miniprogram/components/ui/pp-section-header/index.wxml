@@ -5,7 +5,7 @@
   </view>
 
   <view class="pp-section-header__manage" wx:if="{{showManage}}">
-    <text class="pp-section-header__manage-text">{{manageText}}</text>
+    <text class="{{manageClassName}}">{{manageText}}</text>
     <image class="pp-section-header__chevron" wx:if="{{showChevron}}" src="{{chevronSrc}}" mode="aspectFit" />
   </view>
 

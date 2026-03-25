@@ -24,6 +24,10 @@ Component({
       type: String,
       value: '',
     },
+    manageTone: {
+      type: String,
+      value: '',
+    },
     chevronSrc: {
       type: String,
       value: '',
@@ -33,15 +37,17 @@ Component({
   data: {
     barClassName: 'pp-section-header__bar pp-section-header__bar--blue',
     tagClassName: 'pp-section-header__tag',
+    manageClassName: 'pp-section-header__manage-text',
     showManage: false,
     showTag: false,
     showChevron: false,
   },
 
   observers: {
-    'barTone, tagTone, manageText, tagText, chevronSrc'(
+    'barTone, tagTone, manageTone, manageText, tagText, chevronSrc'(
       barTone: string,
       tagTone: string,
+      manageTone: string,
       manageText: string,
       tagText: string,
       chevronSrc: string,
@@ -50,10 +56,14 @@ Component({
       const tagClassName = tagTone
         ? `pp-section-header__tag pp-section-header__tag--${tagTone}`
         : 'pp-section-header__tag'
+      const manageClassName = manageTone
+        ? `pp-section-header__manage-text pp-section-header__manage-text--${manageTone}`
+        : 'pp-section-header__manage-text'
 
       this.setData({
         barClassName: `pp-section-header__bar pp-section-header__bar--${safeBarTone}`,
         tagClassName,
+        manageClassName,
         showManage: !!manageText,
         showTag: !manageText && !!tagText,
         showChevron: !!manageText && !!chevronSrc,

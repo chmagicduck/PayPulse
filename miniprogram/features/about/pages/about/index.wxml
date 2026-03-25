@@ -1,3 +1,84 @@
-<view class="page-view">
+<view class="page-view about-page">
+  <view class="about-nav" style="padding-top: {{statusBarHeight}}px;">
+    <view class="about-nav__content">
+      <view class="about-nav__back" bind:tap="handleBack">
+        <image class="icon-lg" src="{{icons.chevronLeft}}" mode="aspectFit" />
+      </view>
+      <text class="about-nav__title">关于软件</text>
+      <view class="about-nav__placeholder"></view>
+    </view>
+  </view>
 
+  <view class="about-main">
+    <view class="brand-hero">
+      <view class="brand-hero__logo">
+        <image class="brand-hero__logo-icon" src="{{icons.anchor}}" mode="aspectFit" />
+        <view class="brand-hero__badge">
+          <text class="brand-hero__badge-text">版本 {{vm.currentVersion}}</text>
+        </view>
+      </view>
+
+      <text class="brand-hero__name">{{vm.appName}}</text>
+      <text class="brand-hero__slogan">{{vm.slogan}}</text>
+
+      <view class="brand-tags">
+        <block wx:for="{{vm.featureBadges}}" wx:key="*this">
+          <view class="brand-tags__item {{index === 1 ? 'brand-tags__item--blue' : ''}}">
+            <text class="brand-tags__text {{index === 1 ? 'brand-tags__text--blue' : ''}}">{{item}}</text>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <view class="tab-switch">
+      <view class="tab-switch__item {{activeTab === 'changelog' ? 'tab-switch__item--active' : ''}}" data-value="changelog" bind:tap="switchTab">
+        <text class="tab-switch__text">更新日志</text>
+      </view>
+      <view class="tab-switch__item {{activeTab === 'concept' ? 'tab-switch__item--active' : ''}}" data-value="concept" bind:tap="switchTab">
+        <text class="tab-switch__text">设计理念</text>
+      </view>
+    </view>
+
+    <view class="about-content" wx:if="{{activeTab === 'changelog'}}">
+      <block wx:for="{{vm.releases}}" wx:key="version">
+        <view class="timeline-item">
+          <view class="timeline-item__dot"></view>
+          <view class="timeline-item__body">
+            <view class="timeline-item__head">
+              <text class="timeline-item__version">版本 {{item.version}}</text>
+              <text class="timeline-item__date">{{item.date}}</text>
+            </view>
+            <text class="timeline-item__title">{{item.title}}</text>
+
+            <view class="timeline-card">
+              <text class="timeline-card__desc">{{item.description}}</text>
+              <block wx:for="{{item.features}}" wx:key="*this">
+                <view class="timeline-card__feature">
+                  <image class="icon-xs" src="{{icons.checkCircle2}}" mode="aspectFit" />
+                  <text class="timeline-card__feature-text">{{item}}</text>
+                </view>
+              </block>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <view class="concept-list" wx:else>
+      <block wx:for="{{vm.concepts}}" wx:key="title">
+        <view class="concept-card">
+          <view class="concept-card__icon">
+            <image class="icon-sm" src="{{index === 0 ? icons.compass : index === 1 ? icons.cpu : icons.heart}}" mode="aspectFit" />
+          </view>
+          <text class="concept-card__title">{{item.title}}</text>
+          <text class="concept-card__desc">{{item.desc}}</text>
+        </view>
+      </block>
+    </view>
+
+    <view class="about-footer">
+      <text class="about-footer__copy">薪潮涌动工作室 · 深度定制</text>
+      <text class="about-footer__legal">© 2026 版权所有</text>
+    </view>
+  </view>
 </view>

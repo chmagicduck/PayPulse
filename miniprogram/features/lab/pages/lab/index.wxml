@@ -1,2 +1,130 @@
-<view class="page-view">
+<view class="page-view lab-page">
+  <view class="lab-nav" style="padding-top: {{statusBarHeight}}px;">
+    <view class="lab-nav__content">
+      <view class="lab-nav__brand">
+        <view class="lab-nav__logo">
+          <image class="lab-nav__logo-icon" src="{{iconAnimations.lab ? icons.labPair.animatedSrc : icons.labPair.staticSrc}}" mode="aspectFit" />
+        </view>
+        <text class="lab-nav__title">{{vm.header.title}}</text>
+      </view>
+
+      <view class="preview-pill {{isAutoPlay ? 'preview-pill--active' : ''}}" bind:tap="toggleAutoPlay">
+        <view class="preview-pill__dot"></view>
+        <text class="preview-pill__text">{{isAutoPlay ? vm.header.previewOn : vm.header.previewOff}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="lab-main">
+    <view class="rank-card">
+      <view class="rank-card__glow"></view>
+      <view class="rank-card__head">
+        <view>
+          <text class="rank-card__eyebrow">当前航行等级</text>
+          <text class="rank-card__title rank-card__title--{{currentRank.tone}}">Lv.{{currentRank.level}} {{currentRank.name}}</text>
+        </view>
+        <view class="rank-card__today">
+          <text class="rank-card__today-label">今日获得</text>
+          <text class="rank-card__today-value">{{todayHappiness}}</text>
+        </view>
+      </view>
+
+      <view class="rank-card__bar">
+        <view class="rank-card__bar-fill rank-card__bar-fill--{{currentRank.tone}}" style="width: {{rankProgress}}%;"></view>
+      </view>
+
+      <view class="rank-card__meta">
+        <text class="rank-card__meta-text">总累计 {{totalHappiness}}</text>
+        <text class="rank-card__meta-text">{{nextLabel}}</text>
+      </view>
+
+      <view class="rank-axis">
+        <view class="rank-axis__line"></view>
+        <block wx:for="{{ranks}}" wx:key="level">
+          <view class="rank-axis__item {{rankIndex === index ? 'rank-axis__item--active' : ''}} {{pressStates.rankIndex === index ? 'rank-axis__item--pressed' : ''}}" data-index="{{index}}" bind:tap="selectRank">
+            <view class="rank-axis__badge rank-axis__badge--{{item.tone}}">
+              <image class="rank-axis__icon" src="{{item.axisIcon}}" mode="aspectFit" />
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <view class="lab-section">
+      <view class="section-head">
+        <view class="section-head__title-row">
+          <view class="section-head__bar section-head__bar--blue"></view>
+          <text class="section-head__title">日常巡航任务</text>
+        </view>
+        <text class="section-head__subtitle">每日 00:00 重置</text>
+      </view>
+
+      <view class="task-list">
+        <block wx:for="{{tasks}}" wx:key="id">
+          <view class="task-card {{item.done ? 'task-card--done' : ''}} {{pressStates.taskId === item.id ? 'task-card--pressed' : ''}}" data-id="{{item.id}}" bind:tap="completeTask">
+            <view class="task-card__icon task-card__icon--{{item.tone}}">
+              <image class="icon-md" src="{{pressStates.taskId === item.id ? item.iconPair.animatedSrc : item.iconPair.staticSrc}}" mode="aspectFit" />
+            </view>
+
+            <view class="task-card__content">
+              <view class="task-card__title-row">
+                <text class="task-card__title">{{item.title}}</text>
+                <view class="task-card__reward">
+                  <text class="task-card__reward-text">{{item.reward}}</text>
+                </view>
+              </view>
+              <text class="task-card__desc">{{item.desc}}</text>
+
+              <view class="task-card__progress">
+                <view class="task-card__progress-track">
+                  <view class="task-card__progress-fill task-card__progress-fill--{{item.tone}}" style="width: {{item.progressPercent}}%;"></view>
+                </view>
+                <text class="task-card__count">{{item.count}}</text>
+              </view>
+            </view>
+
+            <view class="task-card__state" wx:if="{{item.done}}">
+              <image class="icon-sm" src="{{icons.checkCircle2}}" mode="aspectFit" />
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <view class="lab-section lab-section--last">
+      <view class="section-head">
+        <view class="section-head__title-row">
+          <view class="section-head__bar section-head__bar--slate"></view>
+          <text class="section-head__title">成就航迹</text>
+        </view>
+      </view>
+
+      <view class="achievement-list">
+        <block wx:for="{{vm.achievements}}" wx:key="title">
+          <view class="achievement-card">
+            <view class="achievement-card__head">
+              <view class="achievement-card__icon">
+                <image class="icon-sm" src="{{icons.medal}}" mode="aspectFit" />
+              </view>
+              <view class="achievement-card__copy">
+                <text class="achievement-card__title">{{item.title}}</text>
+                <text class="achievement-card__desc">{{item.desc}}</text>
+              </view>
+              <image class="icon-xs" src="{{icons.arrowUpRight}}" mode="aspectFit" />
+            </view>
+
+            <view class="achievement-card__meta">
+              <text class="achievement-card__label">{{item.progressLabel}}</text>
+              <text class="achievement-card__label">{{item.progress}}</text>
+            </view>
+            <view class="achievement-card__track">
+              <view class="achievement-card__fill" style="width: {{item.progress}};"></view>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+  </view>
+
+  <pp-tab-bar activeTab="lab" />
 </view>

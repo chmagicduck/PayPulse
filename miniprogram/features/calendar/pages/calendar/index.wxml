@@ -1,2 +1,97 @@
-<view class="page-view">
+<view class="page-view calendar-page">
+  <view class="calendar-nav" style="padding-top: {{statusBarHeight}}px;">
+    <view class="calendar-nav__content">
+      <view class="calendar-nav__back" bind:tap="handleBack">
+        <image class="icon-lg" src="{{icons.chevronLeft}}" mode="aspectFit" />
+      </view>
+      <text class="calendar-nav__title">{{vm.title}}</text>
+      <view class="calendar-nav__placeholder"></view>
+    </view>
+  </view>
+
+  <view class="calendar-main">
+    <view class="calendar-head">
+      <view>
+        <text class="calendar-head__title">{{currentMonth.year}} <text class="calendar-head__month">{{currentMonth.monthLabel}}</text></text>
+        <text class="calendar-head__subtitle">Voyage Timeline</text>
+      </view>
+      <view class="calendar-head__actions">
+        <view class="calendar-head__action" bind:tap="prevMonth">
+          <image class="icon-sm" src="{{icons.chevronLeft}}" mode="aspectFit" />
+        </view>
+        <view class="calendar-head__action" bind:tap="nextMonth">
+          <image class="icon-sm" src="{{icons.chevronRight}}" mode="aspectFit" />
+        </view>
+      </view>
+    </view>
+
+    <view class="calendar-card">
+      <view class="weekday-row">
+        <block wx:for="{{vm.weekLabels}}" wx:key="*this">
+          <text class="weekday-row__item">{{item}}</text>
+        </block>
+      </view>
+
+      <view class="days-grid">
+        <block wx:for="{{emptySlots}}" wx:key="*this">
+          <view class="days-grid__empty"></view>
+        </block>
+        <block wx:for="{{currentMonth.days}}" wx:key="day">
+          <view class="days-grid__cell">
+            <view
+              class="day-chip day-chip--{{item.status || 'default'}} {{selectedDay === item.day ? 'day-chip--selected' : ''}}"
+              data-day="{{item.day}}"
+              bind:tap="selectDay"
+            >
+              <text class="day-chip__text">{{item.day}}</text>
+              <text class="day-chip__badge" wx:if="{{item.badge}}">{{item.badge}}</text>
+              <view class="day-chip__dot" wx:if="{{selectedDay === item.day}}"></view>
+            </view>
+          </view>
+        </block>
+      </view>
+
+      <view class="legend-grid">
+        <view class="legend-item">
+          <image class="icon-xs" src="{{icons.coins}}" mode="aspectFit" />
+          <text class="legend-item__text">薪日</text>
+        </view>
+        <view class="legend-item">
+          <image class="icon-xs" src="{{icons.anchor}}" mode="aspectFit" />
+          <text class="legend-item__text">法定假日</text>
+        </view>
+        <view class="legend-item">
+          <image class="icon-xs" src="{{icons.waves}}" mode="aspectFit" />
+          <text class="legend-item__text">周末休息</text>
+        </view>
+        <view class="legend-item">
+          <image class="icon-xs" src="{{icons.zap}}" mode="aspectFit" />
+          <text class="legend-item__text">补班</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="calendar-section">
+      <view class="section-title">
+        <view class="section-title__bar"></view>
+        <text class="section-title__text">今日航行状态</text>
+      </view>
+
+      <view class="detail-card detail-card--{{selectedStatus}}">
+        <view class="detail-card__head">
+          <view>
+            <text class="detail-card__eyebrow">{{currentMonth.monthLabel}}{{selectedDay}}日</text>
+            <text class="detail-card__title">{{currentDetail.title}}</text>
+          </view>
+          <image class="icon-sm" src="{{icons.info}}" mode="aspectFit" />
+        </view>
+        <text class="detail-card__desc">{{currentDetail.desc}}</text>
+      </view>
+    </view>
+
+    <view class="reminder-card">
+      <text class="reminder-card__title">下一关键提醒</text>
+      <text class="reminder-card__desc">{{currentMonth.reminder}}</text>
+    </view>
+  </view>
 </view>

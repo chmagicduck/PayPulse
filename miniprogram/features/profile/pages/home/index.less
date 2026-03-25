@@ -101,6 +101,23 @@
   width: 160rpx;
   height: 160rpx;
   min-width: 160rpx;
+  transition: transform @duration-fast ease;
+
+  &--pressed {
+    transform: scale(0.95);
+
+    .avatar-shell__frame {
+      box-shadow: 0 26rpx 56rpx rgba(15, 23, 42, 0.16);
+    }
+
+    .avatar-shell__hint {
+      opacity: 1;
+    }
+
+    .avatar-shell__badge {
+      transform: scale(1.08) translateY(-2rpx);
+    }
+  }
 
   &__frame {
     position: relative;
@@ -112,6 +129,7 @@
     border: 4rpx solid @slate200;
     background: transparent;
     box-shadow: 0 20rpx 48rpx rgba(15, 23, 42, 0.12);
+    transition: border-color @duration-slow ease, box-shadow @duration-normal ease;
 
     &--slate { border-color: @slate200; }
     &--cyan { border-color: @cyan100; }
@@ -139,6 +157,8 @@
     align-items: center;
     justify-content: center;
     background: rgba(15, 23, 42, 0.12);
+    opacity: 0;
+    transition: opacity @duration-normal ease;
   }
 
   &__hint-text {
@@ -168,6 +188,7 @@
     align-items: center;
     justify-content: center;
     box-shadow: 0 12rpx 24rpx rgba(15, 23, 42, 0.14);
+    transition: transform @duration-normal ease, background-color @duration-slow ease;
 
     &--slate { background: @slate100; }
     &--cyan { background: @cyan50; }
@@ -191,6 +212,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform @duration-fast ease, border-color @duration-normal ease, box-shadow @duration-normal ease, background-color @duration-normal ease;
 
   &--active {
     background: @blue50;
@@ -202,10 +224,25 @@
     background: @white;
   }
 
+  &--pressed {
+    transform: scale(0.94);
+    border-color: @blue200;
+    box-shadow: 0 16rpx 32rpx rgba(37, 99, 235, 0.12);
+  }
+
   &__icon {
     width: 40rpx;
     height: 40rpx;
     min-width: 40rpx;
+    transition: transform @duration-fast ease, opacity @duration-fast ease;
+  }
+
+  &__icon--active {
+    animation: pulse 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  &__icon--pressed {
+    transform: scale(1.12) rotate(8deg);
   }
 }
 
@@ -217,6 +254,17 @@
   border-radius: 64rpx;
   padding: 40rpx;
   box-shadow: @shadow-sm;
+  transition: transform @duration-fast ease, border-color @duration-normal ease, box-shadow @duration-normal ease;
+
+  &--pressed {
+    transform: scale(0.992);
+    border-color: @blue100;
+    box-shadow: 0 18rpx 36rpx rgba(37, 99, 235, 0.08);
+
+    .rank-preview__bar-fill {
+      transform: scaleX(1.01);
+    }
+  }
 
   &__header {
     display: flex;
@@ -286,6 +334,8 @@
   &__bar-fill {
     height: 100%;
     border-radius: 999rpx;
+    transition: width @duration-slow ease, transform @duration-fast ease, background-color @duration-slow ease;
+    transform-origin: left center;
 
     &--slate { background: @slate400; }
     &--cyan { background: @cyan600; }
@@ -414,6 +464,24 @@
   border: 1rpx solid @slate100;
   border-radius: 48rpx;
   box-shadow: @shadow-sm;
+  transition: transform @duration-fast ease, border-color @duration-normal ease, box-shadow @duration-normal ease;
+
+  &--pressed {
+    transform: scale(0.992);
+    border-color: @blue100;
+    box-shadow: 0 18rpx 36rpx rgba(37, 99, 235, 0.08);
+
+    .menu-card__icon {
+      background: @blue50;
+      border-color: @blue100;
+      transform: scale(1.05);
+    }
+
+    .menu-card__arrow {
+      transform: translateX(4rpx);
+      opacity: 1;
+    }
+  }
 
   &__main {
     display: flex;
@@ -429,9 +497,11 @@
     min-width: 72rpx;
     border-radius: 24rpx;
     background: @slate50;
+    border: 1rpx solid transparent;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: transform @duration-fast ease, background-color @duration-normal ease, border-color @duration-normal ease;
   }
 
   &__copy {
@@ -484,6 +554,8 @@
     width: 32rpx;
     height: 32rpx;
     min-width: 32rpx;
+    opacity: 0.82;
+    transition: transform @duration-fast ease, opacity @duration-fast ease;
   }
 }
 
@@ -501,9 +573,24 @@
     gap: 20rpx;
     padding: 32rpx;
     border-bottom: 1rpx solid @slate50;
+    transition: background-color @duration-fast ease;
 
     &--last {
       border-bottom: 0;
+    }
+
+    &--pressed {
+      background: @slate50;
+
+      .list-card__icon {
+        transform: scale(1.06);
+        opacity: 1;
+      }
+
+      .list-card__arrow {
+        transform: translateX(4rpx);
+        opacity: 1;
+      }
     }
   }
 
@@ -522,6 +609,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    opacity: 0.8;
+    transition: transform @duration-fast ease, opacity @duration-fast ease;
   }
 
   &__copy {
@@ -549,6 +638,8 @@
     width: 28rpx;
     height: 28rpx;
     min-width: 28rpx;
+    opacity: 0.76;
+    transition: transform @duration-fast ease, opacity @duration-fast ease;
   }
 }
 
@@ -559,6 +650,27 @@
   background: @slate900;
   box-shadow: 0 20rpx 48rpx rgba(148, 163, 184, 0.28);
   padding: 40rpx;
+  transition: transform @duration-fast ease, box-shadow @duration-normal ease;
+
+  &--pressed {
+    transform: scale(0.986);
+    box-shadow: 0 28rpx 60rpx rgba(15, 23, 42, 0.26);
+
+    .storage-card__glow {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    .storage-card__icon {
+      background: rgba(255, 255, 255, 0.16);
+      transform: scale(1.05);
+    }
+
+    .storage-card__arrow {
+      transform: translateX(4rpx);
+      opacity: 0.72;
+    }
+  }
 
   &__glow {
     position: absolute;
@@ -569,6 +681,7 @@
     border-radius: 50%;
     background: rgba(37, 99, 235, 0.22);
     filter: blur(44rpx);
+    transition: transform @duration-normal ease, opacity @duration-normal ease;
   }
 
   &__content {
@@ -597,6 +710,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: transform @duration-fast ease, background-color @duration-normal ease;
   }
 
   &__copy {
@@ -625,6 +739,7 @@
     height: 36rpx;
     min-width: 36rpx;
     opacity: 0.5;
+    transition: transform @duration-fast ease, opacity @duration-fast ease;
   }
 }
 
@@ -725,11 +840,16 @@
     overflow: hidden;
     border: 4rpx solid @slate100;
     opacity: 0.64;
+    transition: transform @duration-fast ease, opacity @duration-fast ease, border-color @duration-normal ease, box-shadow @duration-normal ease;
 
     &--active {
       opacity: 1;
       border-color: @blue600;
       box-shadow: 0 16rpx 32rpx rgba(37, 99, 235, 0.14);
+    }
+
+    &--pressed {
+      transform: scale(0.95);
     }
   }
 

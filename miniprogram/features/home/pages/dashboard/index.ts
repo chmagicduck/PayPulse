@@ -1,7 +1,11 @@
 import { dashboardStaticViewModel } from '../../model/static'
-import { icon } from '../../../../lib/icons'
+import { animatedIconPair, icon, type IconImagePair } from '../../../../lib/icons'
 
 const vm = dashboardStaticViewModel
+const ICON_ANIMATION_DURATION = 2200
+const CARD_FEEDBACK_DURATION = 260
+
+let homeTimers: Record<string, ReturnType<typeof setTimeout> | null> = {}
 
 Page({
   data: {
@@ -13,62 +17,239 @@ Page({
     editH: '00',
     editM: '00',
     editS: '00',
-    // 图标 data URI — 在 onLoad 中生成
-    iconWavesWhite: '',
     iconEye: '',
     iconEyeOff: '',
-    iconCompassBlue: '',
-    iconCoffeeBlue: '',
-    iconBriefcaseBlue: '',
     iconLogOut: '',
-    iconCoffeeWhite: '',
     iconSettingsSlate: '',
     iconListTodo: '',
-    iconWallet: '',
-    iconWalletGhost: '',
-    iconCompassEmerald: '',
-    iconCompassEmeraldGhost: '',
-    iconHeartRose: '',
-    iconGiftAmber: '',
-    iconStarBlue: '',
-    iconChevronRight: '',
-    iconPlus: '',
-    iconHistorySlate: '',
-    iconAnchorAmber: '',
-    iconShipBlue: '',
-    iconSunsetRose: '',
+    iconChevronRightBlue: '',
     iconX: '',
+    iconPairs: {
+      wavesWhite: { staticSrc: '', animatedSrc: '' } as IconImagePair,
+      coffeeWhite: { staticSrc: '', animatedSrc: '' } as IconImagePair,
+      coffeeBlue: { staticSrc: '', animatedSrc: '' } as IconImagePair,
+      walletWhite: { staticSrc: '', animatedSrc: '' } as IconImagePair,
+      calendarDaysWhite: { staticSrc: '', animatedSrc: '' } as IconImagePair,
+      heartRose: { staticSrc: '', animatedSrc: '' } as IconImagePair,
+      giftAmber: { staticSrc: '', animatedSrc: '' } as IconImagePair,
+      starBlue: { staticSrc: '', animatedSrc: '' } as IconImagePair,
+      babyWhite: { staticSrc: '', animatedSrc: '' } as IconImagePair,
+      babyIndigo: { staticSrc: '', animatedSrc: '' } as IconImagePair,
+      briefcaseWhite: { staticSrc: '', animatedSrc: '' } as IconImagePair,
+      briefcaseBlue: { staticSrc: '', animatedSrc: '' } as IconImagePair,
+      flagWhite: { staticSrc: '', animatedSrc: '' } as IconImagePair,
+      flagEmerald: { staticSrc: '', animatedSrc: '' } as IconImagePair,
+      skullWhite: { staticSrc: '', animatedSrc: '' } as IconImagePair,
+      skullRose: { staticSrc: '', animatedSrc: '' } as IconImagePair,
+    },
+    iconAnimations: {
+      logo: false,
+      moyu: false,
+      tideWallet: false,
+      tideWeekend: false,
+      dateHeart: false,
+      dateGift: false,
+      dateStar: false,
+      journeyLife: false,
+      journeyCareer: false,
+      journeyRetire: false,
+      journeyFinal: false,
+    },
+    pressStates: {
+      task: false,
+      tideWallet: false,
+      tideWeekend: false,
+      dateHeart: false,
+      dateGift: false,
+      dateStar: false,
+      journeyLife: false,
+      journeyCareer: false,
+      journeyRetire: false,
+      journeyFinal: false,
+    },
   },
 
   onLoad() {
     const { statusBarHeight } = wx.getSystemInfoSync()
     this.setData({
       statusBarHeight: statusBarHeight || 0,
-      iconWavesWhite: icon('waves', '#ffffff', 18),
       iconEye: icon('eye', '#bfdbfe', 14),
       iconEyeOff: icon('eye-off', '#bfdbfe', 14),
-      iconCompassBlue: icon('compass', '#2563eb', 12),
-      iconCoffeeBlue: icon('coffee', '#bfdbfe', 10),
-      iconBriefcaseBlue: icon('briefcase', '#bfdbfe', 10),
-      iconLogOut: icon('log-out', '#94a3b8', 18),
-      iconCoffeeWhite: icon('coffee', '#ffffff', 18),
-      iconSettingsSlate: icon('settings2', '#cbd5e1', 16),
+      iconLogOut: icon('log-out', '#bfdbfe', 12),
+      iconSettingsSlate: icon('settings2', '#bfdbfe', 12),
       iconListTodo: icon('list-todo', '#2563eb', 16),
-      iconWallet: icon('wallet', '#2563eb', 16),
-      iconWalletGhost: icon('wallet', '#2563eb', 80),
-      iconCompassEmerald: icon('compass', '#059669', 16),
-      iconCompassEmeraldGhost: icon('compass', '#059669', 80),
-      iconHeartRose: icon('heart', '#f43f5e', 16),
-      iconGiftAmber: icon('gift', '#f59e0b', 16),
-      iconStarBlue: icon('star', '#3b82f6', 16),
-      iconChevronRight: icon('chevron-right', '#cbd5e1', 12),
-      iconPlus: icon('plus', '#cbd5e1', 16),
-      iconHistorySlate: icon('history', '#94a3b8', 14),
-      iconAnchorAmber: icon('anchor', '#f59e0b', 14),
-      iconShipBlue: icon('ship', '#3b82f6', 14),
-      iconSunsetRose: icon('sunset', '#f43f5e', 14),
+      iconChevronRightBlue: icon('chevron-right', '#2563eb', 12),
       iconX: icon('x', '#94a3b8', 18),
+      iconPairs: this.buildAnimatedIconPairs(),
     })
+  },
+
+  onUnload() {
+    Object.keys(homeTimers).forEach(key => {
+      const timer = homeTimers[key]
+      if (timer) clearTimeout(timer)
+    })
+    homeTimers = {}
+  },
+
+  buildAnimatedIconPairs() {
+    return {
+      wavesWhite: animatedIconPair('waves', {
+        color: '#ffffff',
+        animation: 'wave',
+        durationMs: 2800,
+      }),
+      coffeeWhite: animatedIconPair('coffee', {
+        color: '#ffffff',
+        animation: 'bounce',
+        durationMs: 1800,
+      }),
+      coffeeBlue: animatedIconPair('coffee', {
+        color: '#2563eb',
+        animation: 'bounce',
+        durationMs: 1800,
+      }),
+      walletWhite: animatedIconPair('wallet', {
+        color: '#ffffff',
+        animation: 'float',
+        durationMs: 2200,
+      }),
+      calendarDaysWhite: animatedIconPair('calendar-days', {
+        color: '#ffffff',
+        animation: 'float',
+        durationMs: 2200,
+      }),
+      heartRose: animatedIconPair('heart', {
+        color: '#f43f5e',
+        animation: 'pulse',
+        durationMs: 1800,
+      }),
+      giftAmber: animatedIconPair('gift', {
+        color: '#f59e0b',
+        animation: 'bounce',
+        durationMs: 2000,
+      }),
+      starBlue: animatedIconPair('star', {
+        color: '#3b82f6',
+        animation: 'twinkle',
+        durationMs: 2000,
+      }),
+      babyWhite: animatedIconPair('baby', {
+        color: '#ffffff',
+        animation: 'bounce',
+        durationMs: 2000,
+      }),
+      babyIndigo: animatedIconPair('baby', {
+        color: '#6366f1',
+        animation: 'bounce',
+        durationMs: 2000,
+      }),
+      briefcaseWhite: animatedIconPair('briefcase', {
+        color: '#ffffff',
+        animation: 'float',
+        durationMs: 2000,
+      }),
+      briefcaseBlue: animatedIconPair('briefcase', {
+        color: '#2563eb',
+        animation: 'float',
+        durationMs: 2000,
+      }),
+      flagWhite: animatedIconPair('flag', {
+        color: '#ffffff',
+        animation: 'wave',
+        durationMs: 2200,
+      }),
+      flagEmerald: animatedIconPair('flag', {
+        color: '#059669',
+        animation: 'wave',
+        durationMs: 2200,
+      }),
+      skullWhite: animatedIconPair('skull', {
+        color: '#ffffff',
+        animation: 'pulse',
+        durationMs: 2000,
+      }),
+      skullRose: animatedIconPair('skull', {
+        color: '#e11d48',
+        animation: 'pulse',
+        durationMs: 2000,
+      }),
+    }
+  },
+
+  playTransientState(path: string, key: string, duration: number) {
+    const pending = homeTimers[key]
+
+    if (pending) {
+      clearTimeout(pending)
+      homeTimers[key] = null
+    }
+
+    this.setData({ [path]: false }, () => {
+      this.setData({ [path]: true }, () => {
+        homeTimers[key] = setTimeout(() => {
+          this.setData({ [path]: false })
+          homeTimers[key] = null
+        }, duration)
+      })
+    })
+  },
+
+  playIconAnimation(key: string, duration: number = ICON_ANIMATION_DURATION) {
+    this.playTransientState(`iconAnimations.${key}`, `icon:${key}`, duration)
+  },
+
+  playPressState(key: string, duration: number = CARD_FEEDBACK_DURATION) {
+    this.playTransientState(`pressStates.${key}`, `press:${key}`, duration)
+  },
+
+  triggerCardFeedback(animationKey: string, pressKey: string, animationDuration: number = ICON_ANIMATION_DURATION) {
+    this.playPressState(pressKey)
+    this.playIconAnimation(animationKey, animationDuration)
+  },
+
+  triggerLogoAnimation() {
+    this.playIconAnimation('logo', 2800)
+  },
+
+  triggerTaskCardFeedback() {
+    this.playPressState('task')
+  },
+
+  triggerWalletTideAnimation() {
+    this.triggerCardFeedback('tideWallet', 'tideWallet', 2000)
+  },
+
+  triggerWeekendTideAnimation() {
+    this.triggerCardFeedback('tideWeekend', 'tideWeekend', 2000)
+  },
+
+  triggerDateHeartAnimation() {
+    this.triggerCardFeedback('dateHeart', 'dateHeart', 1800)
+  },
+
+  triggerDateGiftAnimation() {
+    this.triggerCardFeedback('dateGift', 'dateGift', 2000)
+  },
+
+  triggerDateStarAnimation() {
+    this.triggerCardFeedback('dateStar', 'dateStar', 2000)
+  },
+
+  triggerJourneyLifeAnimation() {
+    this.triggerCardFeedback('journeyLife', 'journeyLife', 2000)
+  },
+
+  triggerJourneyCareerAnimation() {
+    this.triggerCardFeedback('journeyCareer', 'journeyCareer', 2000)
+  },
+
+  triggerJourneyRetireAnimation() {
+    this.triggerCardFeedback('journeyRetire', 'journeyRetire', 2200)
+  },
+
+  triggerJourneyFinalAnimation() {
+    this.triggerCardFeedback('journeyFinal', 'journeyFinal', 2200)
   },
 
   toggleAmount() {
@@ -76,7 +257,9 @@ Page({
   },
 
   toggleMoYu() {
-    this.setData({ isMoYu: !this.data.isMoYu })
+    const nextIsMoYu = !this.data.isMoYu
+    this.setData({ isMoYu: nextIsMoYu })
+    this.playIconAnimation('moyu', 1800)
   },
 
   openEditModal() {

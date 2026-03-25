@@ -1,3 +1,126 @@
-<view class="page-view">
+<view class="page-view data-center-page">
+  <view class="data-center-nav" style="padding-top: {{statusBarHeight}}px;">
+    <view class="data-center-nav__content">
+      <view class="data-center-nav__back" bind:tap="handleBack">
+        <image class="icon-lg" src="{{icons.chevronLeft}}" mode="aspectFit" />
+      </view>
+      <text class="data-center-nav__title">{{vm.title}}</text>
+      <view class="data-center-nav__placeholder"></view>
+    </view>
+  </view>
 
+  <view class="data-center-main">
+    <view class="section-title">
+      <view class="section-title__bar section-title__bar--blue"></view>
+      <text class="section-title__text">存储指标</text>
+    </view>
+
+    <view class="storage-grid">
+      <view class="storage-card">
+        <view class="storage-card__head">
+          <view class="storage-card__icon">
+            <image class="icon-lg" src="{{icons.hardDrive}}" mode="aspectFit" />
+          </view>
+          <view class="storage-card__number">
+            <text class="storage-card__eyebrow">本地空间</text>
+            <text class="storage-card__value">{{storageUsedText}} <text class="storage-card__unit">MB</text></text>
+          </view>
+        </view>
+
+        <view class="storage-card__bar-meta">
+          <text>航行数据占比</text>
+          <text>{{storagePercentText}}</text>
+        </view>
+        <view class="storage-card__bar">
+          <view class="storage-card__bar-fill" style="width: {{(storageUsed / storageCapacity) * 100}}%;"></view>
+        </view>
+        <view class="storage-card__foot">
+          <text>总容量上限 {{vm.storage.capacity}} MB</text>
+          <view class="storage-card__secure">
+            <image class="icon-xs" src="{{icons.shieldCheck}}" mode="aspectFit" />
+            <text>安全加密中</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="sync-card">
+        <view class="sync-card__icon">
+          <image class="icon-lg" src="{{icons.cloud}}" mode="aspectFit" />
+        </view>
+        <text class="sync-card__title">云端同步中心</text>
+        <text class="sync-card__desc">即将开放跨设备多端航行同步</text>
+        <view class="sync-card__tag">
+          <text class="sync-card__tag-text">敬请期待</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-title">
+      <view class="section-title__bar section-title__bar--dark"></view>
+      <text class="section-title__text">核心操作</text>
+    </view>
+
+    <view class="action-list">
+      <view class="action-item action-item--primary" bind:tap="handleExport">
+        <view class="action-item__main">
+          <view class="action-item__icon action-item__icon--blue">
+            <image class="icon-md" src="{{exportStatus === 'success' ? icons.checkCircle2 : icons.download}}" mode="aspectFit" />
+          </view>
+          <view class="action-item__copy">
+            <text class="action-item__title">{{exportStatus === 'success' ? '导出成功' : '导出备份数据'}}</text>
+            <text class="action-item__desc">生成 JSON 格式航行日志副本</text>
+          </view>
+        </view>
+        <view class="action-item__side">
+          <text class="action-item__state" wx:if="{{exportStatus === 'exporting'}}">处理中</text>
+          <image class="icon-xs" wx:if="{{exportStatus !== 'exporting'}}" src="{{icons.arrowRightLeft}}" mode="aspectFit" />
+        </view>
+      </view>
+
+      <view class="action-item action-item--danger" bind:tap="openResetModal">
+        <view class="action-item__main">
+          <view class="action-item__icon action-item__icon--rose">
+            <image class="icon-md" src="{{icons.trash2}}" mode="aspectFit" />
+          </view>
+          <view class="action-item__copy">
+            <text class="action-item__title action-item__title--rose">重置所有数据</text>
+            <text class="action-item__desc action-item__desc--rose">擦除所有本地缓存与航行记录</text>
+          </view>
+        </view>
+        <view class="action-item__danger-tag">
+          <text>危险操作</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="notice-card">
+      <image class="icon-sm" src="{{icons.databasePair.staticSrc}}" mode="aspectFit" />
+      <text class="notice-card__text">{{vm.notice}}</text>
+    </view>
+  </view>
+
+  <view class="reset-overlay {{showResetModal ? 'reset-overlay--visible' : ''}}" bind:tap="closeResetModal">
+    <view class="reset-modal {{showResetModal ? 'reset-modal--visible' : ''}}" catch:tap="">
+      <view class="reset-modal__icon">
+        <image class="reset-modal__icon-img" src="{{icons.alertTriangle}}" mode="aspectFit" />
+      </view>
+      <text class="reset-modal__title">确定要清空航程吗</text>
+      <text class="reset-modal__desc">此操作将永久删除个人配置、任务进度和薪资记录。</text>
+
+      <view class="reset-modal__actions">
+        <view class="reset-modal__btn reset-modal__btn--ghost" bind:tap="closeResetModal">
+          <text>取消保留</text>
+        </view>
+        <view class="reset-modal__btn reset-modal__btn--danger" bind:tap="confirmReset">
+          <text>确认清除</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="fake-tabbar">
+    <view class="fake-tabbar__item">领潮中心</view>
+    <view class="fake-tabbar__item">洋流战报</view>
+    <view class="fake-tabbar__item fake-tabbar__item--active">个人基地</view>
+  </view>
 </view>

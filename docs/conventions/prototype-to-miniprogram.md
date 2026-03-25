@@ -2,180 +2,356 @@
 
 ## 适用场景
 
-将 React + Tailwind 高保真原型（`docs/prototype/`）1:1 还原为微信小程序页面。只做视觉还原，不实现业务逻辑，用假数据替代。
+将 `docs/prototype/` 下的 React + Tailwind 高保真原型 1:1 还原为微信小程序页面。
 
-## 核心踩坑经验
+本指南只覆盖“静态高保真还原阶段”：
 
-### 1. Skyline `defaultDisplayBlock: true` 是万恶之源
+- 只还原视觉与演示级交互
+- 使用假数据，不接正式业务逻辑
+- 不接真实存储，不接真实接口
+- 不为了架构整洁主动偏离原型
 
-所有元素默认是 block，会导致：
-- 本该是正方形的图标容器被拉成长方形
-- flex 子元素宽度异常
-- 行内元素撑满整行
+如果原型与既有实现冲突，默认以最新高保真原型为唯一基准。
 
-**解决方案**：所有需要固定尺寸的元素必须写 `width` + `height` + `min-width`：
+## 当前事实源
 
-```less
-// 错误：会被拉伸
-.icon-wrap {
-  padding: 16rpx;
-  border-radius: 16rpx;
-}
+### 原型事实源
 
-// 正确：显式约束
-.icon-wrap {
-  width: 64rpx;
-  height: 64rpx;
-  min-width: 64rpx;
-  border-radius: 16rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+- 页面视觉结构：`docs/prototype/feature-*/page-*.ts`
+- 原型清单：`docs/prototype/manifest.json`
+
+### 代码事实源
+
+- 静态数据：`miniprogram/features/<feature>/model/static.ts`
+- 主题入口：`miniprogram/theme/`
+- 图标与 SVG 生成：`miniprogram/lib/icons.ts`
+
+## 已验证的工作模式
+
+### 1. 先忠实还原，再考虑抽象
+
+静态高保真阶段的优先级是：
+
+1. 原型还原度
+2. 页面结构稳定
+3. 共享抽象与复用
+4. 业务逻辑接入
+
+不要为了“先设计一个完美组件”而提前改造页面结构。
+只有当两个以上页面已经稳定复用同一结构时，才考虑上提为共享组件。
+
+### 2. 页面变更时，结构和数据模型要一起收敛
+
+如果原型更新并移除了某个区域，不能只改 WXML/LESS，必须同步清理：
+
+- `model/static.ts` 中对应字段
+- `index.ts` 中对应状态与图标变量
+- `index.less` 中无效样式块
+
+目标是让代码结构与原型结构保持一致，避免“页面已经删了，但数据模型还拖着旧字段”。
+
+### 3. 静态阶段不接正式业务
+
+允许实现的内容：
+
+- 显示/隐藏
+- 弹层开合
+- 视觉级轮播
+- 点击态/按下态反馈
+- SVG 静态图与动画图切换
+
+本阶段不实现：
+
+- 正式路由流转
+- 真实用户数据同步
+- 真实计时、真实计算链路
+- 正式持久化
+- store 驱动的业务状态
+
+## 主题层规范
+
+### 主题目录以 Less 为中心
+
+统一使用 `miniprogram/theme/`，不再新增平行的 `miniprogram/styles/`。
+
+当前推荐结构：
+
+```text
+miniprogram/theme/
+  themes/
+    ocean-default.less
+  foundations/
+    base.less
+    mixins.less
+    animation.less
+    typography.less
+  entries/
+    core.less
+    static-page.less
 ```
 
-同理：圆点、徽章、Logo、关闭按钮等所有非文本容器都要显式尺寸。
+### 导入规则
 
-### 2. 图标方案：Base64 Data URI
+- 组件 Less：优先引入 `theme/entries/core.less`
+- 页面 Less：优先引入 `theme/entries/static-page.less`
 
-微信小程序 `<image>` 不支持 CSS `currentColor`，内联 `<svg>` 标签兼容性不稳。
+不要再新增：
 
-**最佳方案**：`lib/icons.ts` 工具 —— JS 生成 SVG 字符串 → `wx.arrayBufferToBase64` → data URI → `<image src>`。
+- `styles/variables.less`
+- `styles/static-page.less`
+- TS 版 theme API
 
-```typescript
-// lib/icons.ts 已实现
-import { icon } from '../../../../lib/icons'
+### 视觉修改原则
 
-// 在 onLoad 中生成所有需要的图标
-this.setData({
-  iconEye: icon('eye', '#bfdbfe', 14),      // 名称, 颜色, 尺寸
-  iconCoffee: icon('coffee', '#ffffff', 18),
-})
-```
+- 视觉 token 优先改 `theme/`
+- 页面局部差异再落到页面 Less
+- 不要把大面积颜色、圆角、阴影常量散落到多个页面
 
-```xml
-<image class="icon-sm" src="{{iconEye}}" mode="aspectFit" />
-```
+## SVG 与图标规范
 
-**图标路径数据来源**：Lucide Icons 官方 SVG path。新增图标只需在 `lib/icons.ts` 的 `PATHS` 对象中添加。
+### 1. 默认方案是 `<image>` + base64 SVG
 
-### 3. 避开微信原生胶囊按钮
+微信小程序里，以下方案都不可靠或维护成本过高：
 
-自定义导航栏右侧必须留出胶囊按钮空间：
+- 依赖 `currentColor` 的内联 SVG
+- `rich-text` 渲染 SVG
+- 指望 `<animate>` 在所有场景都稳定播放
 
-```less
-.nav-badge {
-  margin-right: 190rpx; // 避开胶囊
-}
-```
+当前统一方案：
 
-更精确的做法是用 `wx.getMenuButtonBoundingClientRect()` 动态获取。
+- 在 `miniprogram/lib/icons.ts` 中生成 SVG 字符串
+- 转成 base64 data URI
+- 通过 `<image src="...">` 使用
 
-### 4. 导航栏状态栏适配
+### 2. 动效方案是双资源切换
 
-```typescript
-const { statusBarHeight } = wx.getSystemInfoSync()
-```
+涉及原型动态图标时，统一使用双图源：
 
-```xml
-<view style="padding-top: {{statusBarHeight}}px;">
-```
+- `staticSrc`
+- `animatedSrc`
 
-### 5. 布局用 flex 不用 grid
+页面点击或触摸后，短暂切换到 `animatedSrc`，而不是依赖运行时 SVG 动画。
 
-Skyline 下 `display: grid` 的 `1fr 1fr` 可能导致子元素溢出。改用 flex：
+推荐工具函数：
 
-```less
-// 避免
-.grid { display: grid; grid-template-columns: 1fr 1fr; }
+- `icon()`
+- `animatedIconPair()`
+- `animatedScenePair()`
 
-// 推荐
-.grid { display: flex; gap: 16rpx; }
-.grid-item { flex: 1; }
+### 3. 不再使用 `rich-text` 做 SVG
 
-// 2x2 网格
-.grid { display: flex; flex-wrap: wrap; gap: 12rpx; }
-.grid-item { width: calc(50% - 6rpx); }
-```
+这一条是硬约束。后续如果新增原型动画图标，也继续走双 base64 方案，不要重新引入 `rich-text`。
 
-### 6. 不要用 scroll-view 做页面主滚动
+### 4. 图标缺失时先补 `icons.ts`
 
-会导致灰色遮罩、弹性效果异常。直接用 `<view>` 让页面自然滚动。
+如果原型中出现新图标：
 
-### 7. 底部标签栏用纯白背景
+1. 先确认 Lucide 名称
+2. 补到 `miniprogram/lib/icons.ts`
+3. 再在页面 `onLoad` 中生成对应图标
 
-`rgba(255,255,255,0.95)` + `backdrop-filter` 在安全区域下方会透出页面灰色背景。直接用 `#ffffff`。
+## 页面实现约束
 
-### 8. `box-sizing: border-box` 必须全局设置
+### 1. 主滚动不用 `scroll-view`
 
-```less
-view, text, image, input {
-  box-sizing: border-box;
-}
-```
+页面主滚动一律使用自然页面滚动，不用 `scroll-view` 包整页。
 
-## 还原工作流
+### 2. 非文本容器必须显式尺寸
 
-### 第一步：读原型，提取假数据
+Skyline 下很多元素默认会被拉伸。以下元素都要显式写：
 
-读 `docs/prototype/feature-xxx/page-xxx.ts`，提取所有静态文本、数字到 `model/static.ts`。不含图标路径（图标在 JS 中通过 `icon()` 生成）。
+- `width`
+- `height`
+- `min-width`
 
-### 第二步：确认图标清单
+典型对象包括：
 
-列出原型中所有 Lucide 图标名称和使用颜色。检查 `lib/icons.ts` 的 `PATHS` 是否包含，缺的补上。
+- icon 容器
+- 圆点
+- badge
+- logo
+- 关闭按钮
+- 头像容器
 
-### 第三步：写页面 TS
+### 3. 复杂布局优先用 flex
 
-- 导入 `static.ts` 假数据和 `icon()` 函数
-- `data` 中声明所有图标变量（初始空字符串）
-- `onLoad` 中批量 `setData` 所有图标 data URI
-- 只写视觉交互（切换显示/隐藏），不写业务逻辑
+优先使用 `flex`，谨慎使用 `grid`。
+特别是双列卡片、2x2 看板这类区域，优先用 `flex + wrap`。
 
-### 第四步：写 WXML
+### 4. 页面导航采用自定义导航
 
-- 导航栏直接写在页面内（不用组件），不固定
-- 用 `<image src="{{iconXxx}}">` 引用图标
-- 底部放 `<pp-tab-bar activeTab="xxx" />`
+需要高保真顶部区域时：
 
-### 第五步：写 Less
+- 页面 `index.json` 使用 `navigationStyle: "custom"`
+- `index.ts` 中读取 `statusBarHeight`
+- WXML 顶部留出状态栏高度
 
-核心原则：
-- 所有非文本容器显式 `width` + `height` + `min-width`
-- 用 flex 不用 grid
-- 主内容区用 `<view>` 不用 `scroll-view`
-- padding 底部留 `200rpx` 给标签栏
+### 5. tab bar 预留底部安全区
 
-### 第六步：对照原型微调
+页面主体底部要预留足够 padding，避免内容压到 `pp-tab-bar`。
 
-逐区块对比：字号、间距、圆角、颜色、行高。Tailwind 到 rpx 的常用换算：
+## 交互还原规则
 
-| Tailwind | rpx |
-|----------|-----|
-| text-[10px] | 18-20rpx |
-| text-xs (12px) | 22-24rpx |
-| text-sm (14px) | 26-28rpx |
-| text-lg (18px) | 32-36rpx |
-| text-xl (20px) | 36-40rpx |
-| text-3xl (30px) | 52-56rpx |
-| text-4xl (36px) | 64-72rpx |
-| p-4 (16px) | 28-32rpx |
-| p-5 (20px) | 36-40rpx |
-| p-6 (24px) | 44-48rpx |
-| rounded-2xl (16px) | 28-32rpx |
-| rounded-3xl (24px) | 40-48rpx |
-| gap-3 (12px) | 20-24rpx |
-| gap-4 (16px) | 28-32rpx |
+### 1. 原型 hover/active 要翻译成小程序点击态
 
-## 文件清单模板
+React 原型里常见的：
 
-```
+- `hover:scale-*`
+- `active:scale-*`
+- `hover:border-*`
+- `group-hover:*`
+
+在小程序里要翻译成：
+
+- 页面 `data` 中的短暂 pressed state
+- `bind:tap` 触发
+- 200ms 到 300ms 的短反馈
+- WXML class 切换
+
+### 2. 点击态不只换图标
+
+如果原型有明显反馈，至少应联动以下一项或多项：
+
+- 边框颜色
+- 阴影强度
+- icon 容器背景
+- 缩放
+- 箭头位移
+- 覆盖层透明度
+
+不要只做“图标亮一下”，那不算完成高保真还原。
+
+### 3. 自动播放和演示轮播可以保留
+
+如果原型有明显演示属性，例如：
+
+- 等级自动轮播
+- 自动预览提示
+- 演示用切换效果
+
+静态阶段可以保留，但应明确这是“视觉交互”，不是正式业务。
+
+## 推荐工作流
+
+### 第一步：读原型，不要先看旧代码
+
+先读 `docs/prototype/feature-*/page-*.ts`，确认：
+
+- 页面结构
+- 区块顺序
+- 文字文案
+- 图标清单
+- hover/active 反馈
+- 弹层与演示交互
+
+### 第二步：提取静态数据
+
+把静态文本、数字、标签、列表项抽到：
+
+`miniprogram/features/<feature>/model/static.ts`
+
+静态数据里放：
+
+- 标题
+- 描述
+- 数字
+- 区块配置
+- mock 列表
+
+静态数据里不放：
+
+- data URI
+- 页面临时 pressed state
+- 由 `icon()` 生成的图标字符串
+
+### 第三步：补图标与资源
+
+处理顺序：
+
+1. 检查 `icons.ts` 是否已有所需图标
+2. 缺失图标补 `ICON_PATHS`
+3. 本地图片资源放到 `miniprogram/assets/`
+4. 不直接依赖线上随机头像或远程 SVG
+
+### 第四步：实现页面 TS
+
+`index.ts` 负责：
+
+- 引入 `static.ts`
+- 生成 data URI 图标
+- 管理视觉交互状态
+- 管理短暂点击态
+
+不要在 `index.ts` 中接入正式业务模型。
+
+### 第五步：实现 WXML
+
+WXML 只表达：
+
+- 结构
+- 文案绑定
+- class 切换
+- 事件绑定
+
+避免把复杂判断堆成难以维护的模板逻辑。
+
+### 第六步：实现 Less
+
+Less 负责：
+
+- 间距
+- 圆角
+- 阴影
+- 色彩
+- 点击态视觉变化
+
+优先贴近原型，不要擅自“优化成另一套设计”。
+
+### 第七步：做逐区块对照
+
+至少逐区块检查：
+
+- 顺序是否一致
+- 留白是否一致
+- 圆角是否一致
+- 阴影是否一致
+- 字号和字重是否一致
+- 点击态是否一致
+- 弹层是否一致
+
+## 还原验收清单
+
+提交前至少确认以下项目：
+
+- [ ] 页面主结构与最新原型一致
+- [ ] 已删除原型中的废弃区域没有残留在代码里
+- [ ] 静态数据模型已同步收敛
+- [ ] 页面与组件都走 `miniprogram/theme/` 入口
+- [ ] 未重新引入 `miniprogram/styles/`
+- [ ] SVG 使用 `<image>` + base64 方案
+- [ ] 动态图标使用 `staticSrc / animatedSrc`
+- [ ] 主滚动未使用 `scroll-view`
+- [ ] 非文本容器已显式尺寸
+- [ ] 只实现视觉交互，没有混入正式业务逻辑
+
+## 文件模板
+
+```text
 miniprogram/
-  lib/icons.ts                           # 图标工具（全局共用）
+  lib/icons.ts
+  theme/
+    themes/
+    foundations/
+    entries/
   features/<feature>/
-    model/static.ts                      # 假数据
+    model/static.ts
     pages/<page>/
-      index.json                         # navigationStyle: custom + usingComponents
-      index.ts                           # 假数据 + icon() 生成
-      index.wxml                         # 视觉结构
-      index.less                         # 样式
+      index.json
+      index.ts
+      index.wxml
+      index.less
 ```
+
+## 一句话原则
+
+高保真原型还原阶段，默认选择“更像原型”的实现，而不是“更像正式业务”的实现。
