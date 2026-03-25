@@ -10,7 +10,7 @@
 
 ```text
 docs/prototype/1.0.0/features.profile.pages.home.ts
--> miniprogram/features/profile/pages/home.*
+-> miniprogram/features/profile/home.*
 ```
 
-原型文件是输入产物，不参与运行时逻辑。
+原型文件是视觉输入产物，不参与运行时逻辑。

@@ -11,8 +11,9 @@
 ## 当前约定
 
 - 一个版本对应一个 PRD 目录
-- 版本目录至少包含 `README.md`、`overview.md`、`glossary.md`、`domain-model.md`、`data-model.md`、`page-map.md`、`acceptance.md` 和 `pages/*.md`
+- PRD 的主事实源是 `miniprogram/features/` 下已经完成的静态页面
+- 原型只在静态页事实不足时作为补充
 - 共享业务规则只写一次，统一放 `domain-model.md`
 - 共享数据结构只写一次，统一放 `data-model.md`
 - 页面文档只写页面目标、信息结构、交互、页面局部状态和验收点
-- `feature-*` 目录中的旧 PRD 已废弃，不再继续沿用
+- 所有关键结论都要区分 `页面直接事实`、`跨页推理`、`闭环假设`

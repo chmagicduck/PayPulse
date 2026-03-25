@@ -13,6 +13,22 @@
 - `miniprogram/lib/`：纯工具与平台封装
 - `miniprogram/store/`：全局状态
 
+## 版本工作流目录契约
+
+同一版本的三层产物必须保持可追溯：
+
+```text
+docs/prototype/1.0.0/   # 原型输入
+miniprogram/features/   # 静态页面输出
+docs/prd/1.0.0/         # 反推后的业务 PRD
+```
+
+要求：
+
+- 原型负责视觉目标
+- 静态页面负责页面结构、局部状态和演示交互
+- PRD 负责共享规则、数据结构、启动流程和验收口径
+
 ## PRD 目录契约
 
 每个版本 PRD 默认拥有：
@@ -32,11 +48,11 @@ docs/prd/1.0.0/
 
 职责边界：
 
-- `README.md`：版本入口与阅读顺序
+- `README.md`：版本入口、阅读顺序、来源标签说明
 - `overview.md`：版本目标、范围、非目标
 - `glossary.md`：统一术语
-- `domain-model.md`：共享业务规则与计算口径
-- `data-model.md`：共享状态与存储结构
+- `domain-model.md`：共享业务规则、计算口径、启动和重置流程
+- `data-model.md`：共享状态、字段结构、持久化 key、派生关系
 - `page-map.md`：页面路由、入口和跳转链路
 - `acceptance.md`：版本级验收链路
 - `pages/*.md`：页面级 PRD，仅记录页面目标、信息结构、交互、局部状态和边界
@@ -55,10 +71,10 @@ docs/prototype/1.0.0/
 
 ```text
 features.profile.pages.home.ts
--> miniprogram/features/profile/pages/home.ts
--> miniprogram/features/profile/pages/home.wxml
--> miniprogram/features/profile/pages/home.less
--> miniprogram/features/profile/pages/home.json
+-> miniprogram/features/profile/home.ts
+-> miniprogram/features/profile/home.wxml
+-> miniprogram/features/profile/home.less
+-> miniprogram/features/profile/home.json
 ```
 
 ## Feature 目录契约
@@ -67,14 +83,16 @@ features.profile.pages.home.ts
 
 - `README.md`
 - `public.ts`
-- `model/`
-- `components/`
-- `pages/`
+- `model.ts`
+- `<page>.ts`
+- `<page>.wxml`
+- `<page>.less`
+- `<page>.json`
 
-页面文件必须平铺：
+页面文件必须直接平铺在 feature 根目录：
 
 ```text
-pages/
+features/profile/
   home.ts
   home.wxml
   home.less
