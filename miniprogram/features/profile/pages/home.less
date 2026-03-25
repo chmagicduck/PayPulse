@@ -227,30 +227,22 @@
 }
 
 .menu-card {
+  .card-surface(@radius-card);
+  .card-press-scale();
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20rpx;
   padding: 28rpx 32rpx;
-  border-radius: 48rpx;
-  background: @white;
-  border: 1rpx solid @slate100;
-  box-shadow: @shadow-sm;
-  transition: transform @duration-fast ease, border-color @duration-normal ease, box-shadow @duration-normal ease;
 
   &--pressed {
-    transform: scale(0.992);
-    border-color: @blue100;
-    box-shadow: 0 18rpx 36rpx rgba(37, 99, 235, 0.08);
-
     .menu-card__icon {
-      transform: scale(1.05);
+      .press-icon-scale();
       border-color: @blue100;
     }
 
     .menu-card__arrow {
-      transform: translateX(4rpx);
-      opacity: 1;
+      .press-arrow-active();
     }
   }
 
@@ -333,10 +325,7 @@
 
 .support-list {
   overflow: hidden;
-  border-radius: 64rpx;
-  background: @white;
-  border: 1rpx solid @slate100;
-  box-shadow: @shadow-sm;
+  .card-surface(@radius-card-lg);
 }
 
 .support-row {

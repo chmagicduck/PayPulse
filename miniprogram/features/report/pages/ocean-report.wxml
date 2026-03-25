@@ -16,14 +16,13 @@
 
   <view class="report-main">
     <view class="report-section">
-      <view class="section-head section-head--trend">
-        <view class="section-head__copy">
-          <view class="section-head__title-row">
-            <view class="section-head__bar section-head__bar--indigo"></view>
-            <text class="section-head__title">{{vm.trend.title}}</text>
-          </view>
-          <text class="section-head__subtitle">{{vm.trend.subtitle}}</text>
-        </view>
+      <view class="report-section-head report-section-head--trend">
+        <pp-section-header
+          title="{{vm.trend.title}}"
+          subtitle="{{vm.trend.subtitle}}"
+          barTone="indigo"
+          trimBottom="{{true}}"
+        />
 
         <view class="tab-switch">
           <block wx:for="{{vm.trend.tabs}}" wx:key="key">
@@ -76,12 +75,9 @@
     </view>
 
     <view class="report-section">
-      <view class="section-head">
-        <view class="section-head__title-row">
-          <view class="section-head__bar section-head__bar--amber"></view>
-          <text class="section-head__title">{{vm.annual.title}}</text>
-        </view>
-        <image class="section-head__arrow" src="{{icons.arrowUpRight}}" mode="aspectFit" />
+      <view class="report-section-head">
+        <pp-section-header title="{{vm.annual.title}}" barTone="amber" trimBottom="{{true}}" />
+        <image class="report-section-head__arrow" src="{{icons.arrowUpRight}}" mode="aspectFit" />
       </view>
 
       <view class="annual-grid">
@@ -98,11 +94,8 @@
     </view>
 
     <view class="report-section">
-      <view class="section-head section-head--ratio">
-        <view class="section-head__title-row">
-          <view class="section-head__bar section-head__bar--blue"></view>
-          <text class="section-head__title">{{vm.ratio.title}}</text>
-        </view>
+      <view class="report-section-head report-section-head--ratio">
+        <pp-section-header title="{{vm.ratio.title}}" barTone="blue" trimBottom="{{true}}" />
 
         <view class="range-switch">
           <block wx:for="{{vm.ratio.ranges}}" wx:key="key">
@@ -151,11 +144,8 @@
     </view>
 
     <view class="report-section report-section--last">
-      <view class="section-head">
-        <view class="section-head__title-row">
-          <view class="section-head__bar section-head__bar--slate"></view>
-          <text class="section-head__title">{{vm.history.title}}</text>
-        </view>
+      <view class="report-section-head">
+        <pp-section-header title="{{vm.history.title}}" barTone="slate" trimBottom="{{true}}" />
       </view>
 
       <view class="history-list">

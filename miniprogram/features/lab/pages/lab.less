@@ -75,11 +75,8 @@
 }
 
 .task-card {
+  .card-surface(@radius-card);
   padding: 28rpx;
-  border-radius: 48rpx;
-  background: @white;
-  border: 1rpx solid @slate100;
-  box-shadow: @shadow-sm;
 
   &__top {
     margin-bottom: 24rpx;
@@ -272,11 +269,8 @@
 .achievement-card {
   position: relative;
   overflow: hidden;
+  .card-surface(@radius-card);
   padding: 28rpx;
-  border-radius: 48rpx;
-  background: @white;
-  border: 1rpx solid @slate100;
-  box-shadow: @shadow-sm;
 
   &__ghost {
     position: absolute;

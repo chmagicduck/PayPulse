@@ -731,50 +731,6 @@
   }
 }
 
-.journey-board__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20rpx;
-  padding: 0 4rpx;
-  margin-bottom: 32rpx;
-}
-
-.journey-board__title-group {
-  display: flex;
-  align-items: center;
-  gap: 12rpx;
-}
-
-.journey-board__bar {
-  width: 8rpx;
-  height: 20rpx;
-  min-width: 8rpx;
-  border-radius: @radius-pill;
-  background: @slate900;
-}
-
-.journey-board__title {
-  font-size: 32rpx;
-  font-weight: 900;
-  color: @slate800;
-  letter-spacing: -0.03em;
-}
-
-.journey-board__badge {
-  padding: 4rpx 16rpx;
-  border-radius: 8rpx;
-  background: @slate100;
-}
-
-.journey-board__badge-text {
-  font-size: 12rpx;
-  font-weight: 900;
-  color: @slate400;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
 .journey-list {
   display: flex;
   flex-direction: column;
@@ -784,11 +740,9 @@
 .journey-card {
   position: relative;
   overflow: hidden;
-  border-radius: 48rpx;
-  border: 1rpx solid @slate100;
+  .card-chrome(@radius-card);
   padding: 32rpx;
-  box-shadow: @shadow-sm;
-  transition: transform @duration-fast ease, border-color @duration-normal ease, box-shadow @duration-normal ease;
+  .card-press-emphasis(0.992, 0 20rpx 40rpx rgba(15, 23, 42, 0.08));
 
   &--white {
     background: @white;
@@ -802,11 +756,6 @@
   &--rose {
     background: @rose50;
     border-color: rgba(244, 63, 94, 0.14);
-  }
-
-  &--active {
-    transform: scale(0.992);
-    box-shadow: 0 20rpx 40rpx rgba(15, 23, 42, 0.08);
   }
 
   &__ghost {

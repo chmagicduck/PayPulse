@@ -20,6 +20,10 @@ Component({
       type: Boolean,
       value: true,
     },
+    trimBottom: {
+      type: Boolean,
+      value: false,
+    },
     tagText: {
       type: String,
       value: '',

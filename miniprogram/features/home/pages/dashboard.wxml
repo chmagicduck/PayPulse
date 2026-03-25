@@ -228,18 +228,14 @@
     </view>
 
     <view class="section section--last">
-      <view class="journey-board__header">
-        <view class="journey-board__title-group">
-          <view class="journey-board__bar"></view>
-          <text class="journey-board__title">{{vm.lifeJourney.sectionTitle}}</text>
-        </view>
-        <view class="journey-board__badge">
-          <text class="journey-board__badge-text">{{vm.lifeJourney.badgeText}}</text>
-        </view>
-      </view>
+      <pp-section-header
+        title="{{vm.lifeJourney.sectionTitle}}"
+        barTone="dark"
+        tagText="{{vm.lifeJourney.badgeText}}"
+      />
 
       <view class="journey-list">
-        <view class="journey-card journey-card--white {{pressStates.journeyLife ? 'journey-card--active' : ''}}" bind:tap="triggerJourneyLifeAnimation">
+        <view class="journey-card journey-card--white {{pressStates.journeyLife ? 'journey-card--pressed' : ''}}" bind:tap="triggerJourneyLifeAnimation">
           <image class="journey-card__ghost journey-card__ghost--indigo" src="{{iconAnimations.journeyLife ? iconPairs.babyIndigo.animatedSrc : iconPairs.babyIndigo.staticSrc}}" mode="aspectFit" />
           <view class="journey-card__head">
             <view class="journey-card__icon journey-card__icon--indigo">
@@ -254,7 +250,7 @@
           <text class="journey-card__desc">{{journeyDisplayItems[0].descriptionPrefix}}<text class="journey-card__desc-strong">{{journeyDisplayItems[0].descriptionHighlight}}</text>{{journeyDisplayItems[0].descriptionSuffix}}</text>
         </view>
 
-        <view class="journey-card journey-card--white {{pressStates.journeyCareer ? 'journey-card--active' : ''}}" bind:tap="triggerJourneyCareerAnimation">
+        <view class="journey-card journey-card--white {{pressStates.journeyCareer ? 'journey-card--pressed' : ''}}" bind:tap="triggerJourneyCareerAnimation">
           <image class="journey-card__ghost journey-card__ghost--blue" src="{{iconAnimations.journeyCareer ? iconPairs.briefcaseBlue.animatedSrc : iconPairs.briefcaseBlue.staticSrc}}" mode="aspectFit" />
           <view class="journey-card__head">
             <view class="journey-card__icon journey-card__icon--blue">
@@ -269,7 +265,7 @@
           <text class="journey-card__desc">{{journeyDisplayItems[1].descriptionPrefix}}<text class="journey-card__desc-strong journey-card__desc-strong--blue">{{journeyDisplayItems[1].descriptionHighlight}}</text>{{journeyDisplayItems[1].descriptionSuffix}}</text>
         </view>
 
-        <view class="journey-card journey-card--emerald {{pressStates.journeyRetire ? 'journey-card--active' : ''}}" bind:tap="triggerJourneyRetireAnimation">
+        <view class="journey-card journey-card--emerald {{pressStates.journeyRetire ? 'journey-card--pressed' : ''}}" bind:tap="triggerJourneyRetireAnimation">
           <image class="journey-card__ghost journey-card__ghost--emerald" src="{{iconAnimations.journeyRetire ? iconPairs.flagEmerald.animatedSrc : iconPairs.flagEmerald.staticSrc}}" mode="aspectFit" />
           <view class="journey-card__head">
             <view class="journey-card__icon journey-card__icon--emerald">
@@ -287,7 +283,7 @@
           </view>
         </view>
 
-        <view class="journey-card journey-card--rose {{pressStates.journeyFinal ? 'journey-card--active' : ''}}" bind:tap="triggerJourneyFinalAnimation">
+        <view class="journey-card journey-card--rose {{pressStates.journeyFinal ? 'journey-card--pressed' : ''}}" bind:tap="triggerJourneyFinalAnimation">
           <image class="journey-card__ghost journey-card__ghost--rose" src="{{iconAnimations.journeyFinal ? iconPairs.skullRose.animatedSrc : iconPairs.skullRose.staticSrc}}" mode="aspectFit" />
           <view class="journey-card__head">
             <view class="journey-card__icon journey-card__icon--rose">

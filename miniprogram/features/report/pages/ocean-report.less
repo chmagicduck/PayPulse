@@ -78,7 +78,7 @@
   }
 }
 
-.section-head {
+.report-section-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -91,38 +91,9 @@
     align-items: flex-end;
   }
 
-  &__copy {
+  > pp-section-header {
     min-width: 0;
     flex: 1;
-  }
-
-  &__title-row {
-    display: flex;
-    align-items: center;
-    gap: 12rpx;
-  }
-
-  &__bar {
-    width: 8rpx;
-    height: 24rpx;
-    min-width: 8rpx;
-    border-radius: 999rpx;
-
-    &--indigo { background: @indigo500; }
-    &--amber { background: @amber500; }
-    &--blue { background: @blue500; }
-    &--slate { background: @slate900; }
-  }
-
-  &__title {
-    .type-section-title();
-  }
-
-  &__subtitle {
-    display: block;
-    margin-top: 10rpx;
-    margin-left: 20rpx;
-    .type-eyebrow();
   }
 
   &__arrow {
@@ -194,18 +165,9 @@
   }
 }
 
-.chart-card,
-.ratio-card,
-.annual-card,
-.history-card {
-  background: @white;
-  border: 1rpx solid @slate100;
-  box-shadow: @shadow-sm;
-}
-
 .chart-card {
+  .card-surface(@radius-card-lg);
   padding: 32rpx;
-  border-radius: 64rpx;
 
   &__scroll {
     width: 100%;
@@ -372,17 +334,13 @@
 }
 
 .annual-card {
+  .card-surface(@radius-card);
+  .card-press-lift(-4rpx, rgba(99, 102, 241, 0.16), 0 18rpx 36rpx rgba(37, 99, 235, 0.08));
   width: calc((100% - 20rpx) / 2);
   min-width: calc((100% - 20rpx) / 2);
   box-sizing: border-box;
   padding: 28rpx;
-  border-radius: 48rpx;
   overflow: hidden;
-  transition: transform @duration-fast ease, border-color @duration-normal ease;
-
-  &--pressed {
-    transform: translateY(-4rpx);
-  }
 
   &__icon {
     width: 72rpx;
@@ -425,8 +383,8 @@
 }
 
 .ratio-card {
+  .card-surface(@radius-card-xl);
   padding: 40rpx;
-  border-radius: 80rpx;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -533,14 +491,9 @@
 }
 
 .history-card {
+  .card-surface(@radius-card-lg);
+  .card-press-scale(0.988, rgba(99, 102, 241, 0.16), 0 18rpx 36rpx rgba(99, 102, 241, 0.08));
   padding: 28rpx;
-  border-radius: 32rpx;
-  transition: transform @duration-fast ease, border-color @duration-normal ease;
-
-  &--pressed {
-    transform: scale(0.988);
-    border-color: rgba(99, 102, 241, 0.16);
-  }
 
   &__main {
     display: flex;

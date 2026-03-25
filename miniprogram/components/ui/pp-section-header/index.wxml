@@ -1,4 +1,4 @@
-<view class="pp-section-header {{subtitle ? 'pp-section-header--with-subtitle' : ''}}">
+<view class="pp-section-header {{subtitle ? 'pp-section-header--with-subtitle' : ''}} {{trimBottom ? 'pp-section-header--trim-bottom' : ''}}">
   <view class="pp-section-header__title-group">
     <view class="{{barClassName}}" wx:if="{{showBar}}"></view>
     <view class="pp-section-header__copy">

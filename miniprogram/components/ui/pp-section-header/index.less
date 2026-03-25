@@ -29,6 +29,10 @@
     }
   }
 
+  &--trim-bottom {
+    margin-bottom: 0;
+  }
+
   &__bar {
     width: 6rpx;
     height: 20rpx;
@@ -54,6 +58,14 @@
   }
 
   &__tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32rpx;
+    padding: 4rpx 14rpx;
+    border-radius: @radius-pill;
+    background: @slate100;
+    border: 1rpx solid @slate200;
     flex-shrink: 0;
     .type-eyebrow();
     font-size: 16rpx;
@@ -61,7 +73,11 @@
     letter-spacing: 0.08em;
     white-space: nowrap;
 
-    &--blue { color: @blue500; }
+    &--blue {
+      color: @blue500;
+      background: @blue50;
+      border-color: @blue100;
+    }
   }
 
   &__manage {
