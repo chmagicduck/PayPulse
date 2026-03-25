@@ -66,7 +66,7 @@
 .income-card {
   position: relative;
   overflow: hidden;
-  border-radius: 80rpx;
+  border-radius: @radius-card;
   background-color: @blue600;
   padding: 48rpx;
   box-shadow: 0 20rpx 50rpx rgba(37, 99, 235, 0.15);
@@ -246,7 +246,7 @@
 
   &__progress-panel {
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 48rpx;
+    border-radius: @radius-card;
     border: 1rpx solid rgba(255, 255, 255, 0.08);
     padding: 28rpx 28rpx 0;
     backdrop-filter: blur(12rpx);
@@ -402,18 +402,8 @@
 }
 
 .task-card {
-  background-color: @white;
-  border: 1rpx solid @slate100;
-  border-radius: 48rpx;
-  padding: 32rpx;
-  box-shadow: @shadow-sm;
-  transition: transform @duration-fast ease, border-color @duration-normal ease, box-shadow @duration-normal ease;
-
-  &--pressed {
-    transform: scale(0.992);
-    border-color: @blue100;
-    box-shadow: 0 18rpx 36rpx rgba(37, 99, 235, 0.08);
-  }
+  .card-shell(@radius-card, @card-pad-md);
+  .card-press-scale();
 
   &__row {
     display: flex;
@@ -503,11 +493,8 @@
   flex: 1;
   position: relative;
   overflow: hidden;
-  border: 1rpx solid @slate100;
-  border-radius: 80rpx;
-  padding: 40rpx;
-  box-shadow: @shadow-sm;
-  transition: transform @duration-fast ease, border-color @duration-normal ease, box-shadow @duration-normal ease;
+  .card-shell-chrome(@radius-card-xl, @card-pad-lg);
+  .card-press-scale(0.988, @blue100, 0 18rpx 36rpx rgba(37, 99, 235, 0.08));
 
   &--blue {
     background: linear-gradient(135deg, @white 0%, rgba(219, 234, 254, 0.34) 100%);
@@ -515,10 +502,6 @@
 
   &--emerald {
     background: linear-gradient(135deg, @white 0%, rgba(209, 250, 229, 0.38) 100%);
-  }
-
-  &--active {
-    transform: scale(0.988);
   }
 
   &__glow {
@@ -621,18 +604,8 @@
 }
 
 .date-item {
-  background-color: @white;
-  border: 1rpx solid @slate100;
-  border-radius: 40rpx;
-  padding: 32rpx 40rpx;
-  box-shadow: @shadow-sm;
-  transition: transform @duration-fast ease, border-color @duration-normal ease, box-shadow @duration-normal ease;
-
-  &--active {
-    transform: scale(0.988);
-    border-color: @blue100;
-    box-shadow: 0 18rpx 36rpx rgba(37, 99, 235, 0.08);
-  }
+  .card-shell(@radius-card-sm, @card-pad-md @card-pad-lg);
+  .card-press-scale(0.988, @blue100, 0 18rpx 36rpx rgba(37, 99, 235, 0.08));
 
   &__row {
     display: flex;
@@ -740,8 +713,7 @@
 .journey-card {
   position: relative;
   overflow: hidden;
-  .card-chrome(@radius-card);
-  padding: 32rpx;
+  .card-shell-chrome(@radius-card, @card-pad-md);
   .card-press-emphasis(0.992, 0 20rpx 40rpx rgba(15, 23, 42, 0.08));
 
   &--white {
@@ -949,52 +921,23 @@
 }
 
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 200;
-  background-color: rgba(15, 23, 42, 0.4);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  opacity: 0;
+  .sheet-overlay(200, 24rpx, 24rpx, rgba(15, 23, 42, 0.4));
   pointer-events: none;
-  transition: opacity @duration-slow ease;
 
   &--visible {
-    opacity: 1;
     pointer-events: auto;
   }
 }
 
 .modal-sheet {
-  width: 100%;
-  background-color: @white;
-  border-radius: 40rpx 40rpx 0 0;
-  padding: 40rpx 40rpx 80rpx;
-  box-shadow: 0 -20rpx 60rpx rgba(0, 0, 0, 0.15);
-  transform: translateY(100%);
-  transition: transform @duration-slow cubic-bezier(0.4, 0, 0.2, 1);
-
-  &--visible {
-    transform: translateY(0);
-  }
+  .sheet-surface(40rpx 40rpx 80rpx, @radius-sheet, 120rpx, 0.72, 0 30rpx 60rpx rgba(15, 23, 42, 0.16));
 
   &__handle {
-    width: 80rpx;
-    height: 6rpx;
-    background-color: @slate200;
-    border-radius: @radius-pill;
-    margin: 0 auto 40rpx;
+    .sheet-handle(80rpx, 6rpx, 40rpx);
   }
 
   &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 48rpx;
+    .sheet-header(24rpx, 48rpx, flex-start);
   }
 
   &__titles {
@@ -1003,10 +946,9 @@
   }
 
   &__title {
-    font-size: 32rpx;
+    .sheet-title(32rpx, 0);
     font-weight: 700;
     letter-spacing: -0.025em;
-    color: @slate900;
   }
 
   &__subtitle {
@@ -1016,13 +958,7 @@
   }
 
   &__close {
-    width: 56rpx;
-    height: 56rpx;
-    min-width: 56rpx;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
+    .sheet-close(999rpx, @slate100, @slate200, 0.92);
   }
 
   &__inputs {
@@ -1034,30 +970,22 @@
   }
 
   &__actions {
-    display: flex;
-    gap: 20rpx;
+    .sheet-actions(20rpx);
   }
 
   &__btn {
-    border-radius: 16rpx;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    .sheet-button-base(88rpx, 16rpx, 24rpx);
     padding: 24rpx 0;
     font-weight: 700;
-    font-size: 24rpx;
 
     &--cancel {
       flex: 1;
-      background-color: @slate100;
-      color: @slate600;
+      .sheet-button-ghost();
     }
 
     &--confirm {
       flex: 2;
-      background-color: @blue600;
-      color: @white;
-      box-shadow: 0 16rpx 32rpx rgba(37, 99, 235, 0.25);
+      .sheet-button-primary(@blue600, @white, 0 16rpx 32rpx rgba(37, 99, 235, 0.25));
     }
   }
 }

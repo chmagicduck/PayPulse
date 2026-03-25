@@ -84,6 +84,7 @@
 
     <view wx:if="{{showDrawer}}" class="drawer-overlay {{drawerVisible ? 'drawer-overlay--visible' : ''}}" bind:tap="closeDrawer">
     <view class="drawer-sheet {{drawerVisible ? 'drawer-sheet--visible' : ''}}" catch:tap="noop">
+      <view class="drawer-sheet__handle"></view>
       <view class="drawer-sheet__header">
         <text class="drawer-sheet__title">{{editingId ? vm.texts.editTitle : vm.texts.createTitle}}</text>
         <view class="drawer-sheet__close {{pressStates.closeButton ? 'drawer-sheet__close--pressed' : ''}}" bind:tap="pressCloseDrawer">

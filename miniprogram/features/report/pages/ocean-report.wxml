@@ -16,10 +16,11 @@
 
   <view class="report-main">
     <view class="report-section">
-      <view class="report-section-head report-section-head--trend">
+      <view class="report-section-head">
         <pp-section-header
           title="{{vm.trend.title}}"
           subtitle="{{vm.trend.subtitle}}"
+          subtitlePlacement="right"
           barTone="indigo"
           trimBottom="{{true}}"
         />
@@ -77,7 +78,6 @@
     <view class="report-section">
       <view class="report-section-head">
         <pp-section-header title="{{vm.annual.title}}" barTone="amber" trimBottom="{{true}}" />
-        <image class="report-section-head__arrow" src="{{icons.arrowUpRight}}" mode="aspectFit" />
       </view>
 
       <view class="annual-grid">
@@ -94,7 +94,7 @@
     </view>
 
     <view class="report-section">
-      <view class="report-section-head report-section-head--ratio">
+      <view class="report-section-head">
         <pp-section-header title="{{vm.ratio.title}}" barTone="blue" trimBottom="{{true}}" />
 
         <view class="range-switch">

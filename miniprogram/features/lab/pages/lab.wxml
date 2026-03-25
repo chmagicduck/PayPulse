@@ -57,7 +57,7 @@
     </view>
 
     <view class="lab-section">
-      <pp-section-header title="{{vm.sections.tasks.title}}" subtitle="{{vm.sections.tasks.subtitle}}" showBar="{{false}}" />
+      <pp-section-header title="{{vm.sections.tasks.title}}" subtitle="{{vm.sections.tasks.subtitle}}" subtitlePlacement="right" barTone="blue" />
 
       <view class="task-list">
         <block wx:for="{{tasks}}" wx:key="id">
@@ -116,7 +116,7 @@
     </view>
 
     <view class="lab-section lab-section--last">
-      <pp-section-header title="{{vm.sections.achievements.title}}" showBar="{{false}}" />
+      <pp-section-header title="{{vm.sections.achievements.title}}" barTone="amber" />
 
       <view class="achievement-list">
         <block wx:for="{{achievements}}" wx:key="id">

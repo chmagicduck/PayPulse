@@ -1,11 +1,13 @@
-<view class="pp-section-header {{subtitle ? 'pp-section-header--with-subtitle' : ''}} {{trimBottom ? 'pp-section-header--trim-bottom' : ''}}">
+<view class="pp-section-header {{showStackSubtitle ? 'pp-section-header--with-subtitle' : ''}} {{trimBottom ? 'pp-section-header--trim-bottom' : ''}}">
   <view class="pp-section-header__title-group">
     <view class="{{barClassName}}" wx:if="{{showBar}}"></view>
     <view class="pp-section-header__copy">
       <text class="pp-section-header__title">{{title}}</text>
-      <text class="pp-section-header__subtitle" wx:if="{{subtitle}}">{{subtitle}}</text>
+      <text class="pp-section-header__subtitle" wx:if="{{showStackSubtitle}}">{{subtitle}}</text>
     </view>
   </view>
+
+  <text class="pp-section-header__subtitle pp-section-header__subtitle--right" wx:if="{{showRightSubtitle}}">{{subtitle}}</text>
 
   <view class="pp-section-header__manage" wx:if="{{showManage}}">
     <text class="{{manageClassName}}">{{manageText}}</text>

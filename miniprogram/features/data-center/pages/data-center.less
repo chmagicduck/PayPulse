@@ -52,7 +52,7 @@
 .sync-card,
 .action-list,
 .notice-card,
-.reset-modal {
+.reset-sheet {
   background: @white;
   border: 1rpx solid @slate100;
   box-shadow: @shadow-sm;
@@ -61,7 +61,7 @@
 .storage-card {
   position: relative;
   overflow: hidden;
-  border-radius: 42rpx;
+  border-radius: @radius-card;
   padding: 28rpx;
 
   &__head {
@@ -145,7 +145,7 @@
 
 .sync-card {
   border-style: dashed;
-  border-radius: 42rpx;
+  border-radius: @radius-card;
   padding: 32rpx 28rpx;
   background: rgba(241, 245, 249, 0.55);
   display: flex;
@@ -198,7 +198,7 @@
 }
 
 .action-list {
-  border-radius: 42rpx;
+  border-radius: @radius-card;
   overflow: hidden;
   margin-bottom: 20rpx;
 }
@@ -284,7 +284,7 @@
 }
 
 .notice-card {
-  border-radius: 30rpx;
+  border-radius: @radius-card;
   padding: 22rpx 24rpx;
   background: @amber50;
   border-color: rgba(245, 158, 11, 0.14);
@@ -301,95 +301,77 @@
 }
 
 .reset-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(2, 6, 23, 0);
+  .sheet-overlay(40, 24rpx, 24rpx, rgba(2, 6, 23, 0.56));
   visibility: hidden;
-  opacity: 0;
-  z-index: 40;
-  transition: all @duration-slow ease;
 
   &--visible {
     visibility: visible;
-    opacity: 1;
-    background: rgba(2, 6, 23, 0.56);
   }
 }
 
-.reset-modal {
-  position: absolute;
-  left: 32rpx;
-  right: 32rpx;
-  top: 50%;
-  transform: translateY(-45%);
-  padding: 40rpx 32rpx;
-  border-radius: 46rpx;
-  opacity: 0;
-  transition: all @duration-slow ease;
+.reset-sheet {
+  .sheet-surface(40rpx 32rpx calc(36rpx + env(safe-area-inset-bottom)), @radius-sheet);
 
-  &--visible {
-    transform: translateY(-50%);
-    opacity: 1;
+  &__handle {
+    .sheet-handle();
   }
 
-  &__icon {
+  &__header {
+    .sheet-header(20rpx, 28rpx);
+  }
+
+  &__titles {
+    .sheet-title-group();
+  }
+
+  &__title {
+    .sheet-title(34rpx);
+    margin-bottom: 10rpx;
+  }
+
+  &__subtitle {
+    .sheet-subtitle(22rpx, 700, 1.7, 0, none);
+  }
+
+  &__close {
+    .sheet-close();
+  }
+
+  &__alert {
     width: 108rpx;
     height: 108rpx;
-    border-radius: 34rpx;
+    border-radius: @radius-card;
     background: @rose50;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 18rpx;
+    margin: 0 auto 24rpx;
   }
 
-  &__icon-img {
+  &__icon {
     width: 56rpx;
     height: 56rpx;
   }
 
-  &__title {
-    display: block;
-    text-align: center;
-    font-size: 34rpx;
-    color: @slate900;
-    font-weight: 900;
-    margin-bottom: 10rpx;
-  }
-
-  &__desc {
-    display: block;
-    text-align: center;
-    font-size: 22rpx;
-    color: @slate400;
-    font-weight: 700;
-    line-height: 1.7;
-    margin-bottom: 26rpx;
-  }
-
   &__actions {
-    display: flex;
-    gap: 14rpx;
+    .sheet-actions(14rpx);
   }
 
   &__btn {
     flex: 1;
-    height: 84rpx;
-    border-radius: 24rpx;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22rpx;
-    font-weight: 900;
+    .sheet-button-base(84rpx, 24rpx, 22rpx);
 
     &--ghost {
-      background: @slate100;
-      color: @slate600;
+      .sheet-button-ghost();
     }
 
     &--danger {
-      background: @rose600;
-      color: @white;
+      .sheet-button-primary(@rose600, @white, none);
+    }
+
+    &--danger-pressed {
+      transform: scale(0.98);
+      background: darken(@rose600, 4%);
     }
   }
 }

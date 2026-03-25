@@ -44,6 +44,16 @@
   background: @white;
 }
 
+.card-shell(@radius: @radius-card; @padding: @card-pad-md) {
+  .card-surface(@radius);
+  padding: @padding;
+}
+
+.card-shell-chrome(@radius: @radius-card; @padding: @card-pad-md) {
+  .card-chrome(@radius);
+  padding: @padding;
+}
+
 .card-press-scale(
   @scale: 0.992;
   @border-color: @blue100;
@@ -91,4 +101,151 @@
 
 .press-icon-scale(@scale: 1.05) {
   transform: scale(@scale);
+}
+
+.press-glow-active(@scale: 1.1; @opacity: 1) {
+  opacity: @opacity;
+  transform: scale(@scale);
+}
+
+.sheet-overlay(
+  @z-index: 90;
+  @side-padding: 24rpx;
+  @bottom-padding: 168rpx;
+  @visible-bg: rgba(15, 23, 42, 0.62)
+) {
+  position: fixed;
+  inset: 0;
+  z-index: @z-index;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 @side-padding calc(@bottom-padding + env(safe-area-inset-bottom));
+  background: rgba(15, 23, 42, 0);
+  backdrop-filter: blur(0);
+  opacity: 0;
+  transition: background-color 260ms ease, opacity 260ms ease, backdrop-filter 260ms ease;
+
+  &--visible {
+    background: @visible-bg;
+    backdrop-filter: blur(10rpx);
+    opacity: 1;
+  }
+}
+
+.sheet-surface(
+  @padding: 48rpx;
+  @radius: @radius-sheet;
+  @translate-y: 120rpx;
+  @rest-opacity: 0.72;
+  @shadow: 0 30rpx 60rpx rgba(15, 23, 42, 0.16)
+) {
+  width: 100%;
+  padding: @padding;
+  border-radius: @radius;
+  background: @white;
+  box-shadow: @shadow;
+  transform: translateY(@translate-y);
+  opacity: @rest-opacity;
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms ease;
+
+  &--visible {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.sheet-handle(@width: 72rpx; @height: 8rpx; @margin-bottom: 28rpx) {
+  width: @width;
+  height: @height;
+  min-width: @width;
+  margin: 0 auto @margin-bottom;
+  border-radius: @radius-pill;
+  background: @slate200;
+}
+
+.sheet-header(@gap: 24rpx; @margin-bottom: 40rpx; @align: center) {
+  display: flex;
+  align-items: @align;
+  justify-content: space-between;
+  gap: @gap;
+  margin-bottom: @margin-bottom;
+}
+
+.sheet-title-group() {
+  min-width: 0;
+  flex: 1;
+}
+
+.sheet-title(@size: 36rpx; @margin-bottom: 8rpx) {
+  display: block;
+  margin-bottom: @margin-bottom;
+  font-size: @size;
+  font-weight: 900;
+  line-height: 1.12;
+  letter-spacing: -0.04em;
+  color: @slate900;
+}
+
+.sheet-subtitle(
+  @size: 18rpx;
+  @weight: 700;
+  @line-height: 1;
+  @letter-spacing: 0.12em;
+  @text-transform: uppercase
+) {
+  display: block;
+  font-size: @size;
+  font-weight: @weight;
+  line-height: @line-height;
+  letter-spacing: @letter-spacing;
+  color: @slate400;
+  text-transform: @text-transform;
+}
+
+.sheet-close(@radius: 18rpx; @bg: @slate100; @pressed-bg: @slate200; @scale: 0.92) {
+  width: 56rpx;
+  height: 56rpx;
+  min-width: 56rpx;
+  border-radius: @radius;
+  background: @bg;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform @duration-fast ease, background-color @duration-fast ease;
+
+  &--pressed {
+    transform: scale(@scale);
+    background: @pressed-bg;
+  }
+}
+
+.sheet-actions(@gap: 16rpx) {
+  display: flex;
+  gap: @gap;
+}
+
+.sheet-button-base(@height: 88rpx; @radius: 28rpx; @font-size: 24rpx) {
+  height: @height;
+  border-radius: @radius;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: @font-size;
+  font-weight: 900;
+}
+
+.sheet-button-ghost(@bg: @slate100; @color: @slate600) {
+  background: @bg;
+  color: @color;
+}
+
+.sheet-button-primary(
+  @bg: @slate900;
+  @color: @white;
+  @shadow: 0 16rpx 32rpx rgba(15, 23, 42, 0.16)
+) {
+  background: @bg;
+  color: @color;
+  box-shadow: @shadow;
 }

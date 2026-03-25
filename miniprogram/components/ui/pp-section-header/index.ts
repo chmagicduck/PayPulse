@@ -12,6 +12,10 @@ Component({
       type: String,
       value: '',
     },
+    subtitlePlacement: {
+      type: String,
+      value: 'stack',
+    },
     barTone: {
       type: String,
       value: 'blue',
@@ -53,16 +57,20 @@ Component({
     showManage: false,
     showTag: false,
     showChevron: false,
+    showRightSubtitle: false,
+    showStackSubtitle: false,
   },
 
   observers: {
-    'barTone, tagTone, manageTone, manageText, tagText, chevronSrc'(
+    'barTone, tagTone, manageTone, manageText, tagText, chevronSrc, subtitle, subtitlePlacement'(
       barTone: string,
       tagTone: string,
       manageTone: string,
       manageText: string,
       tagText: string,
       chevronSrc: string,
+      subtitle: string,
+      subtitlePlacement: string,
     ) {
       const safeBarTone = barTone || 'blue'
       const tagClassName = tagTone
@@ -71,14 +79,19 @@ Component({
       const manageClassName = manageTone
         ? `pp-section-header__manage-text pp-section-header__manage-text--${manageTone}`
         : 'pp-section-header__manage-text'
+      const hasManage = !!manageText
+      const hasTag = !hasManage && !!tagText
+      const showRightSubtitle = subtitlePlacement === 'right' && !!subtitle && !hasManage && !hasTag
 
       this.setData({
         barClassName: `pp-section-header__bar pp-section-header__bar--${safeBarTone}`,
         tagClassName,
         manageClassName,
-        showManage: !!manageText,
-        showTag: !manageText && !!tagText,
-        showChevron: !!manageText && !!chevronSrc,
+        showManage: hasManage,
+        showTag: hasTag,
+        showChevron: hasManage && !!chevronSrc,
+        showRightSubtitle,
+        showStackSubtitle: !!subtitle && !showRightSubtitle,
       })
     },
   },

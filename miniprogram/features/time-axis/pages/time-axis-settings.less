@@ -104,7 +104,7 @@
   &__stack {
     position: absolute;
     inset: 0;
-    border-radius: 24rpx;
+    border-radius: @radius-card;
     background: @white;
     border: 1rpx solid @slate200;
     opacity: 0;
@@ -116,7 +116,7 @@
     width: 152rpx;
     height: 184rpx;
     min-width: 152rpx;
-    border-radius: 24rpx;
+    border-radius: @radius-card;
     border: 2rpx solid @slate100;
     background: @white;
     box-shadow: @shadow-sm;
@@ -202,22 +202,12 @@
 }
 
 .entry-card {
-  padding: 26rpx 28rpx;
-  border-radius: 40rpx;
-  border: 1rpx solid @slate100;
-  background: @white;
-  box-shadow: @shadow-sm;
+  .card-shell(@radius-card-sm, 26rpx 28rpx);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20rpx;
-  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
-
-  &--pressed {
-    transform: scale(0.992);
-    border-color: @blue100;
-    box-shadow: 0 18rpx 36rpx rgba(37, 99, 235, 0.08);
-  }
+  .card-press-scale();
 
   &__main {
     min-width: 0;
@@ -369,7 +359,7 @@
 .archive-cta {
   margin-top: 20rpx;
   padding: 34rpx 24rpx;
-  border-radius: 40rpx;
+  border-radius: @radius-card;
   border: 2rpx dashed @slate200;
   background: rgba(255, 255, 255, 0.72);
   display: flex;
@@ -379,7 +369,7 @@
   transition: transform 220ms ease, border-color 220ms ease, background-color 220ms ease;
 
   &--pressed {
-    transform: scale(0.992);
+    .press-icon-scale(0.992);
     border-color: @blue300;
     background: rgba(239, 246, 255, 0.72);
   }
@@ -411,70 +401,27 @@
 }
 
 .drawer-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 80;
-  background: rgba(15, 23, 42, 0);
-  backdrop-filter: blur(0);
-  opacity: 0;
-  transition: background-color 260ms ease, backdrop-filter 260ms ease, opacity 260ms ease;
-
-  &--visible {
-    background: rgba(15, 23, 42, 0.46);
-    backdrop-filter: blur(10rpx);
-    opacity: 1;
-  }
+  .sheet-overlay(80, 24rpx, 24rpx, rgba(15, 23, 42, 0.46));
 }
 
 .drawer-sheet {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 40rpx 32rpx calc(36rpx + env(safe-area-inset-bottom));
-  border-radius: 48rpx 48rpx 0 0;
-  background: @white;
-  box-shadow: 0 -18rpx 48rpx rgba(15, 23, 42, 0.1);
-  transform: translateY(120rpx);
-  opacity: 0.76;
-  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms ease;
+  .sheet-surface(40rpx 32rpx calc(36rpx + env(safe-area-inset-bottom)), @radius-sheet, 120rpx, 0.76, 0 30rpx 60rpx rgba(15, 23, 42, 0.16));
 
-  &--visible {
-    transform: translateY(0);
-    opacity: 1;
+  &__handle {
+    .sheet-handle();
   }
 
   &__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20rpx;
-    margin-bottom: 28rpx;
+    .sheet-header(20rpx, 28rpx);
   }
 
   &__title {
-    font-size: 34rpx;
-    font-weight: 900;
-    line-height: 1.1;
-    letter-spacing: -0.03em;
+    .sheet-title(34rpx, 0);
     color: @slate800;
   }
 
   &__close {
-    width: 64rpx;
-    height: 64rpx;
-    min-width: 64rpx;
-    border-radius: 999rpx;
-    background: @slate50;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 220ms ease, background-color 220ms ease;
-
-    &--pressed {
-      transform: scale(0.92);
-      background: @slate100;
-    }
+    .sheet-close(999rpx, @slate50, @slate100, 0.92);
   }
 
   &__close-icon {
@@ -562,10 +509,10 @@
   align-items: center;
   justify-content: space-between;
   gap: 20rpx;
-  transition: transform 220ms ease, border-color 220ms ease;
+  transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
 
   &--pressed {
-    transform: scale(0.992);
+    .press-icon-scale(0.992);
     border-color: @blue100;
   }
 

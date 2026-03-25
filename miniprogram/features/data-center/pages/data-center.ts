@@ -2,9 +2,12 @@ import { animatedIconPair, icon, type IconImagePair } from '../../../lib/icons'
 import { dataCenterStaticViewModel } from '../model/static'
 
 const vm = dataCenterStaticViewModel
+const MODAL_ENTER_DELAY = 30
+const MODAL_EXIT_DURATION = 280
 
 let exportTimer: ReturnType<typeof setTimeout> | null = null
 let successTimer: ReturnType<typeof setTimeout> | null = null
+let resetModalTimer: ReturnType<typeof setTimeout> | null = null
 
 Page({
   data: {
@@ -16,8 +19,10 @@ Page({
     storagePercentText: `${((Number(vm.storage.used) / Number(vm.storage.capacity)) * 100).toFixed(1)}%`,
     exportStatus: 'idle',
     showResetModal: false,
+    resetModalVisible: false,
     icons: {
       chevronLeft: '',
+      x: '',
       databasePair: { staticSrc: '', animatedSrc: '' } as IconImagePair,
       hardDrive: '',
       cloud: '',
@@ -28,6 +33,10 @@ Page({
       checkCircle2: '',
       arrowRightLeft: '',
     },
+    pressStates: {
+      modalClose: false,
+      modalConfirm: false,
+    },
   },
 
   onLoad() {
@@ -36,6 +45,7 @@ Page({
       statusBarHeight: statusBarHeight || 0,
       icons: {
         chevronLeft: icon('chevron-left', '#475569', 22),
+        x: icon('x', '#94a3b8', 20),
         databasePair: animatedIconPair('database', {
           color: '#60a5fa',
           animation: 'float',
@@ -56,6 +66,7 @@ Page({
   onUnload() {
     if (exportTimer) clearTimeout(exportTimer)
     if (successTimer) clearTimeout(successTimer)
+    if (resetModalTimer) clearTimeout(resetModalTimer)
   },
 
   handleBack() {
@@ -83,19 +94,70 @@ Page({
   },
 
   openResetModal() {
-    this.setData({ showResetModal: true })
+    if (resetModalTimer) {
+      clearTimeout(resetModalTimer)
+      resetModalTimer = null
+    }
+
+    this.setData({
+      showResetModal: true,
+      resetModalVisible: false,
+    }, () => {
+      resetModalTimer = setTimeout(() => {
+        this.setData({ resetModalVisible: true })
+        resetModalTimer = null
+      }, MODAL_ENTER_DELAY)
+    })
   },
 
   closeResetModal() {
-    this.setData({ showResetModal: false })
+    if (resetModalTimer) {
+      clearTimeout(resetModalTimer)
+      resetModalTimer = null
+    }
+
+    this.setData({
+      resetModalVisible: false,
+      'pressStates.modalClose': true,
+    }, () => {
+      setTimeout(() => {
+        this.setData({ 'pressStates.modalClose': false })
+      }, 220)
+
+      resetModalTimer = setTimeout(() => {
+        this.setData({
+          showResetModal: false,
+          resetModalVisible: false,
+        })
+        resetModalTimer = null
+      }, MODAL_EXIT_DURATION)
+    })
   },
 
   confirmReset() {
+    if (resetModalTimer) {
+      clearTimeout(resetModalTimer)
+      resetModalTimer = null
+    }
+
     this.setData({
-      storageUsed: 0,
-      storageUsedText: '0.0',
-      storagePercentText: '0.0%',
-      showResetModal: false,
+      resetModalVisible: false,
+      'pressStates.modalConfirm': true,
     })
+
+    setTimeout(() => {
+      this.setData({ 'pressStates.modalConfirm': false })
+    }, 220)
+
+    resetModalTimer = setTimeout(() => {
+      this.setData({
+        storageUsed: 0,
+        storageUsedText: '0.0',
+        storagePercentText: '0.0%',
+        showResetModal: false,
+        resetModalVisible: false,
+      })
+      resetModalTimer = null
+    }, MODAL_EXIT_DURATION)
   },
 })

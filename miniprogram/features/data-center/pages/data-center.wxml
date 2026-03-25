@@ -10,7 +10,7 @@
   </view>
 
   <view class="data-center-main">
-    <pp-section-header title="存储指标" barTone="blue" />
+    <pp-section-header title="瀛樺偍鎸囨爣" barTone="blue" />
 
     <view class="storage-grid">
       <view class="storage-card">
@@ -19,13 +19,13 @@
             <image class="icon-lg" src="{{icons.hardDrive}}" mode="aspectFit" />
           </view>
           <view class="storage-card__number">
-            <text class="storage-card__eyebrow">本地空间</text>
+            <text class="storage-card__eyebrow">鏈湴绌洪棿</text>
             <text class="storage-card__value">{{storageUsedText}} <text class="storage-card__unit">MB</text></text>
           </view>
         </view>
 
         <view class="storage-card__bar-meta">
-          <text>航行数据占比</text>
+          <text>鑸鏁版嵁鍗犳瘮</text>
           <text>{{storagePercentText}}</text>
         </view>
         <view class="storage-card__bar">
@@ -44,15 +44,15 @@
         <view class="sync-card__icon">
           <image class="icon-lg" src="{{icons.cloud}}" mode="aspectFit" />
         </view>
-        <text class="sync-card__title">云端同步中心</text>
-        <text class="sync-card__desc">即将开放跨设备多端航行同步</text>
+        <text class="sync-card__title">浜戠鍚屾涓績</text>
+        <text class="sync-card__desc">鍗冲皢寮€鏀捐法璁惧澶氱鑸鍚屾</text>
         <view class="sync-card__tag">
-          <text class="sync-card__tag-text">敬请期待</text>
+          <text class="sync-card__tag-text">鏁鏈熷緟</text>
         </view>
       </view>
     </view>
 
-    <pp-section-header title="核心操作" barTone="dark" />
+    <pp-section-header title="鏍稿績鎿嶄綔" barTone="dark" />
 
     <view class="action-list">
       <view class="action-item action-item--primary" bind:tap="handleExport">
@@ -61,8 +61,8 @@
             <image class="icon-md" src="{{exportStatus === 'success' ? icons.checkCircle2 : icons.download}}" mode="aspectFit" />
           </view>
           <view class="action-item__copy">
-            <text class="action-item__title">{{exportStatus === 'success' ? '导出成功' : '导出备份数据'}}</text>
-            <text class="action-item__desc">生成 JSON 格式航行日志副本</text>
+            <text class="action-item__title">{{exportStatus === 'success' ? '瀵煎嚭鎴愬姛' : '瀵煎嚭澶囦唤鏁版嵁'}}</text>
+            <text class="action-item__desc">鐢熸垚 JSON 鏍煎紡鑸鏃ュ織鍓湰</text>
           </view>
         </view>
         <view class="action-item__side">
@@ -82,7 +82,7 @@
           </view>
         </view>
         <view class="action-item__danger-tag">
-          <text>危险操作</text>
+          <text>鍗遍櫓鎿嶄綔</text>
         </view>
       </view>
     </view>
@@ -94,19 +94,29 @@
   </view>
 
   <view class="reset-overlay {{showResetModal ? 'reset-overlay--visible' : ''}}" bind:tap="closeResetModal">
-    <view class="reset-modal {{showResetModal ? 'reset-modal--visible' : ''}}" catch:tap="">
-      <view class="reset-modal__icon">
-        <image class="reset-modal__icon-img" src="{{icons.alertTriangle}}" mode="aspectFit" />
-      </view>
-      <text class="reset-modal__title">确定要清空航程吗</text>
-      <text class="reset-modal__desc">此操作将永久删除个人配置、任务进度和薪资记录。</text>
+    <view class="reset-sheet {{resetModalVisible ? 'reset-sheet--visible' : ''}}" catch:tap="">
+      <view class="reset-sheet__handle"></view>
 
-      <view class="reset-modal__actions">
-        <view class="reset-modal__btn reset-modal__btn--ghost" bind:tap="closeResetModal">
-          <text>取消保留</text>
+      <view class="reset-sheet__header">
+        <view class="reset-sheet__titles">
+          <text class="reset-sheet__title">确定要清空航程吗</text>
+          <text class="reset-sheet__subtitle">此操作将永久删除个人配置、任务进度和薪资记录。</text>
         </view>
-        <view class="reset-modal__btn reset-modal__btn--danger" bind:tap="confirmReset">
-          <text>确认清除</text>
+        <view class="reset-sheet__close {{pressStates.modalClose ? 'reset-sheet__close--pressed' : ''}}" bind:tap="closeResetModal">
+          <image class="icon-lg" src="{{icons.x}}" mode="aspectFit" />
+        </view>
+      </view>
+
+      <view class="reset-sheet__alert">
+        <image class="reset-sheet__icon" src="{{icons.alertTriangle}}" mode="aspectFit" />
+      </view>
+
+      <view class="reset-sheet__actions">
+        <view class="reset-sheet__btn reset-sheet__btn--ghost" bind:tap="closeResetModal">
+          <text>鍙栨秷淇濈暀</text>
+        </view>
+        <view class="reset-sheet__btn reset-sheet__btn--danger {{pressStates.modalConfirm ? 'reset-sheet__btn--danger-pressed' : ''}}" bind:tap="confirmReset">
+          <text>纭娓呴櫎</text>
         </view>
       </view>
     </view>
