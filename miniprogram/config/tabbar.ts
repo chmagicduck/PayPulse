@@ -1,7 +1,7 @@
 export const tabbarItems = [
   {
     key: 'home',
-    pagePath: 'features/home/pages/dashboard',
+    pagePath: 'features/home/dashboard',
     text: '领潮中心',
     iconSvg: '/assets/images/tabbar/svg/tab-home.svg',
     activeIconSvg: '/assets/images/tabbar/svg/tab-home-active.svg',
@@ -10,7 +10,7 @@ export const tabbarItems = [
   },
   {
     key: 'report',
-    pagePath: 'features/report/pages/ocean-report',
+    pagePath: 'features/report/ocean-report',
     text: '洋流战报',
     iconSvg: '/assets/images/tabbar/svg/tab-chart.svg',
     activeIconSvg: '/assets/images/tabbar/svg/tab-chart-active.svg',
@@ -19,8 +19,8 @@ export const tabbarItems = [
   },
   {
     key: 'lab',
-    pagePath: 'features/lab/pages/lab',
-    text: '动力室',
+    pagePath: 'features/lab/lab',
+    text: '动力舱',
     iconSvg: '/assets/images/tabbar/svg/tab-lab.svg',
     activeIconSvg: '/assets/images/tabbar/svg/tab-lab-active.svg',
     iconPng: '/assets/images/tabbar/tab-lab.png',
@@ -28,7 +28,7 @@ export const tabbarItems = [
   },
   {
     key: 'profile',
-    pagePath: 'features/profile/pages/home',
+    pagePath: 'features/profile/home',
     text: '个人基地',
     iconSvg: '/assets/images/tabbar/svg/tab-profile.svg',
     activeIconSvg: '/assets/images/tabbar/svg/tab-profile-active.svg',

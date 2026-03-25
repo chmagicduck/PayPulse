@@ -4,13 +4,10 @@
 
 - `README.md`
 - `public.ts`
-- `model/types.ts`
-- `model/schema.ts`
-- `model/state.ts`
-- `model/actions.ts`
-- `model/storage.ts`
+- `model.ts`
 - `components/`
-- `pages/<page-id>.ts`
-- `pages/<page-id>.wxml`
-- `pages/<page-id>.less`
-- `pages/<page-id>.json`
+- `<page-id>.ts`
+- `<page-id>.wxml`
+- `<page-id>.less`
+- `<page-id>.json`
+- `<page-id>.helper.ts`（复杂页面建议提供）

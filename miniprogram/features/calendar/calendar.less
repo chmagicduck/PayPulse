@@ -1,0 +1,289 @@
+@import '../../theme/entries/static-page.less';
+
+.calendar-page {
+  background: @slate50;
+}
+
+.calendar-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16rpx);
+  border-bottom: 1rpx solid @slate100;
+
+  &__content {
+    height: 92rpx;
+    padding: 0 24rpx;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__back,
+  &__placeholder {
+    width: 72rpx;
+    height: 72rpx;
+    min-width: 72rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__title {
+    font-size: 30rpx;
+    color: @slate900;
+    font-weight: 900;
+  }
+}
+
+.calendar-main {
+  padding: 28rpx 24rpx 56rpx;
+}
+
+.calendar-head {
+  padding: 0 8rpx 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &__title {
+    display: block;
+    font-size: 48rpx;
+    color: @slate900;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  &__month {
+    color: @blue600;
+  }
+
+  &__subtitle {
+    display: block;
+    margin-top: 8rpx;
+    font-size: 18rpx;
+    color: @slate400;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 10rpx;
+  }
+
+  &__action {
+    width: 68rpx;
+    height: 68rpx;
+    min-width: 68rpx;
+    border-radius: 22rpx;
+    background: @white;
+    border: 1rpx solid @slate100;
+    box-shadow: @shadow-sm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.calendar-card,
+.detail-card,
+.reminder-card {
+  background: @white;
+  border: 1rpx solid @slate100;
+  box-shadow: @shadow-sm;
+}
+
+.calendar-card {
+  border-radius: @radius-card;
+  padding: 28rpx;
+  margin-bottom: 32rpx;
+}
+
+.weekday-row {
+  display: flex;
+  margin-bottom: 16rpx;
+
+  &__item {
+    width: 14.285%;
+    text-align: center;
+    font-size: 18rpx;
+    color: @slate300;
+    font-weight: 900;
+  }
+}
+
+.days-grid {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 18rpx;
+
+  &__empty,
+  &__cell {
+    width: 14.285%;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.day-chip {
+  position: relative;
+  width: 76rpx;
+  height: 76rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__text {
+    font-size: 24rpx;
+    color: @slate700;
+    font-weight: 800;
+  }
+
+  &__badge {
+    position: absolute;
+    top: -6rpx;
+    right: -6rpx;
+    min-width: 24rpx;
+    height: 24rpx;
+    padding: 0 6rpx;
+    border-radius: 10rpx;
+    background: @slate800;
+    color: @white;
+    font-size: 14rpx;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__dot {
+    position: absolute;
+    bottom: -8rpx;
+    width: 10rpx;
+    height: 10rpx;
+    border-radius: 999rpx;
+    background: @blue600;
+  }
+
+  &--selected {
+    box-shadow: 0 0 0 4rpx rgba(37, 99, 235, 0.18);
+    transform: scale(1.04);
+  }
+
+  &--holiday { background: @rose50; }
+  &--holiday &__text { color: @rose500; }
+  &--holiday &__badge { background: @rose500; }
+
+  &--weekend { background: @emerald50; }
+  &--weekend &__text { color: @emerald500; }
+  &--weekend &__badge { background: @emerald500; }
+
+  &--makeup { background: @slate100; }
+  &--makeup &__badge { background: @slate800; }
+
+  &--payday {
+    background: @amber50;
+    box-shadow: inset 0 0 0 2rpx rgba(245, 158, 11, 0.22);
+  }
+  &--payday &__text { color: @amber600; }
+  &--payday &__badge { background: @amber500; }
+}
+
+.legend-grid {
+  margin-top: 28rpx;
+  padding-top: 24rpx;
+  border-top: 1rpx solid @slate100;
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 16rpx;
+}
+
+.legend-item {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+
+  &__text {
+    font-size: 18rpx;
+    color: @slate500;
+    font-weight: 800;
+  }
+}
+
+.calendar-section {
+  margin-bottom: 28rpx;
+}
+
+.detail-card {
+  border-radius: @radius-card;
+  padding: 26rpx 28rpx;
+
+  &--holiday {
+    background: @rose50;
+    border-color: rgba(244, 63, 94, 0.12);
+  }
+
+  &--payday {
+    background: @amber50;
+    border-color: rgba(245, 158, 11, 0.14);
+  }
+
+  &__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18rpx;
+    margin-bottom: 12rpx;
+  }
+
+  &__eyebrow {
+    display: block;
+    .type-eyebrow();
+    margin-bottom: 6rpx;
+  }
+
+  &__title {
+    display: block;
+    .type-card-title();
+    font-size: 32rpx;
+    color: @slate900;
+    font-weight: 900;
+  }
+
+  &__desc {
+    display: block;
+    .type-text-secondary();
+    font-size: 22rpx;
+    color: @slate500;
+    font-weight: 700;
+    line-height: 1.7;
+  }
+}
+
+.reminder-card {
+  border-radius: @radius-card;
+  padding: 24rpx 26rpx;
+
+  &__title {
+    display: block;
+    font-size: 20rpx;
+    color: @slate400;
+    font-weight: 800;
+    margin-bottom: 8rpx;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  &__desc {
+    display: block;
+    font-size: 24rpx;
+    color: @slate700;
+    font-weight: 700;
+    line-height: 1.6;
+  }
+}

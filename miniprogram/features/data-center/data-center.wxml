@@ -1,0 +1,122 @@
+<view class="page-view data-center-page">
+  <view class="data-center-nav" style="padding-top: {{statusBarHeight}}px;">
+    <view class="data-center-nav__content">
+      <view class="data-center-nav__back" bind:tap="handleBack">
+        <image class="icon-lg" src="{{icons.chevronLeft}}" mode="aspectFit" />
+      </view>
+      <text class="data-center-nav__title">数据管理中心</text>
+      <view class="data-center-nav__placeholder"></view>
+    </view>
+  </view>
+
+  <view class="data-center-main">
+    <pp-section-header title="本地存储概览" barTone="blue" />
+
+    <view class="storage-grid">
+      <view class="storage-card">
+        <view class="storage-card__head">
+          <view class="storage-card__icon">
+            <image class="icon-lg" src="{{icons.hardDrive}}" mode="aspectFit" />
+          </view>
+          <view class="storage-card__number">
+            <text class="storage-card__eyebrow">已使用空间</text>
+            <text class="storage-card__value">{{storageUsedText}} <text class="storage-card__unit">MB</text></text>
+          </view>
+        </view>
+
+        <view class="storage-card__bar-meta">
+          <text>当前容量占比</text>
+          <text>{{storagePercentText}}</text>
+        </view>
+        <view class="storage-card__bar">
+          <view class="storage-card__bar-fill" style="width: {{(storageUsed / storageCapacity) * 100}}%;"></view>
+        </view>
+        <view class="storage-card__foot">
+          <text>总容量上限 {{vm.storage.capacity}} MB</text>
+          <view class="storage-card__secure">
+            <image class="icon-xs" src="{{icons.shieldCheck}}" mode="aspectFit" />
+            <text>安全加密中</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="sync-card">
+        <view class="sync-card__icon">
+          <image class="icon-lg" src="{{icons.cloud}}" mode="aspectFit" />
+        </view>
+        <text class="sync-card__title">云端同步筹备中</text>
+        <text class="sync-card__desc">当前版本优先完成本地数据管理，后续开放多设备同步能力。</text>
+        <view class="sync-card__tag">
+          <text class="sync-card__tag-text">功能规划中</text>
+        </view>
+      </view>
+    </view>
+
+    <pp-section-header title="导出与重置" barTone="dark" />
+
+    <view class="action-list">
+      <view class="action-item action-item--primary" bind:tap="handleExport">
+        <view class="action-item__main">
+          <view class="action-item__icon action-item__icon--blue">
+            <image class="icon-md" src="{{exportStatus === 'success' ? icons.checkCircle2 : icons.download}}" mode="aspectFit" />
+          </view>
+          <view class="action-item__copy">
+            <text class="action-item__title">{{exportStatus === 'success' ? '导出已完成' : '导出完整备份'}}</text>
+            <text class="action-item__desc">生成完整 JSON 备份，并复制到用户剪贴板。</text>
+          </view>
+        </view>
+        <view class="action-item__side">
+          <text class="action-item__state" wx:if="{{exportStatus === 'exporting'}}">处理中</text>
+          <image class="icon-xs" wx:if="{{exportStatus !== 'exporting'}}" src="{{icons.arrowRightLeft}}" mode="aspectFit" />
+        </view>
+      </view>
+
+      <view class="action-item action-item--danger" bind:tap="openResetModal">
+        <view class="action-item__main">
+          <view class="action-item__icon action-item__icon--rose">
+            <image class="icon-md" src="{{icons.trash2}}" mode="aspectFit" />
+          </view>
+          <view class="action-item__copy">
+            <text class="action-item__title action-item__title--rose">重置所有数据</text>
+            <text class="action-item__desc action-item__desc--rose">擦除所有本地缓存与航行记录。</text>
+          </view>
+        </view>
+        <view class="action-item__danger-tag">
+          <text>高风险操作</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="notice-card">
+      <image class="icon-sm" src="{{icons.databasePair.staticSrc}}" mode="aspectFit" />
+      <text class="notice-card__text">所有数据均优先存储在设备本地。重置操作不可撤销，请在清理前确保已完成必要备份。</text>
+    </view>
+  </view>
+
+  <view wx:if="{{showResetModal}}" class="reset-overlay {{resetModalVisible ? 'reset-overlay--visible' : ''}}" bind:tap="closeResetModal">
+    <view class="reset-sheet {{resetModalVisible ? 'reset-sheet--visible' : ''}}" catch:tap="">
+      <view class="reset-sheet__header">
+        <view class="reset-sheet__titles">
+          <text class="reset-sheet__title">确定要清空航程吗</text>
+          <text class="reset-sheet__subtitle">此操作将永久删除个人配置、任务进度和薪资记录。</text>
+        </view>
+        <view class="reset-sheet__close {{pressStates.modalClose ? 'reset-sheet__close--pressed' : ''}}" bind:tap="closeResetModal">
+          <image class="icon-lg" src="{{icons.x}}" mode="aspectFit" />
+        </view>
+      </view>
+
+      <view class="reset-sheet__alert">
+        <image class="reset-sheet__icon" src="{{icons.alertTriangle}}" mode="aspectFit" />
+      </view>
+
+      <view class="reset-sheet__actions">
+        <view class="reset-sheet__btn reset-sheet__btn--ghost" bind:tap="closeResetModal">
+          <text>暂不清理</text>
+        </view>
+        <view class="reset-sheet__btn reset-sheet__btn--danger {{pressStates.modalConfirm ? 'reset-sheet__btn--danger-pressed' : ''}}" bind:tap="confirmReset">
+          <text>继续重置</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

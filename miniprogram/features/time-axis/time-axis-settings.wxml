@@ -1,0 +1,163 @@
+<view class="page-view time-axis-page">
+  <view class="time-axis-nav" style="padding-top: {{statusBarHeight}}px;">
+    <view class="time-axis-nav__content">
+      <view class="time-axis-nav__back" bind:tap="handleBack">
+        <image class="time-axis-nav__back-icon" src="{{icons.chevronLeft}}" mode="aspectFit" />
+      </view>
+      <text class="time-axis-nav__title">航行档案设置</text>
+      <view class="time-axis-nav__spacer"></view>
+    </view>
+  </view>
+
+  <view class="notebook-strip">
+    <block wx:for="{{notebooks}}" wx:key="id">
+      <view
+        class="notebook-card {{selectedNotebookId === item.id ? 'notebook-card--active' : ''}} {{pressStates.notebookId === item.id ? 'notebook-card--pressed' : ''}}"
+        data-id="{{item.id}}"
+        bind:tap="selectNotebook"
+      >
+        <view class="notebook-card__stack"></view>
+        <view class="notebook-card__body notebook-card__body--{{item.tone}}">
+          <view class="notebook-card__bookmark notebook-card__bookmark--{{item.tone}}"></view>
+          <view class="notebook-card__stitch"></view>
+          <view class="notebook-card__icon-shell">
+            <image
+              class="notebook-card__icon"
+              src="{{selectedNotebookId === item.id ? item.iconPair.animatedSrc : item.iconPair.staticSrc}}"
+              mode="aspectFit"
+            />
+          </view>
+          <text class="notebook-card__name">{{item.name}}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <view class="time-axis-main">
+    <view class="entry-list" wx:if="{{visibleEntries.length}}">
+      <block wx:for="{{visibleEntries}}" wx:key="id">
+        <view
+          class="entry-card {{pressStates.entryId === item.id ? 'entry-card--pressed' : ''}}"
+          data-id="{{item.id}}"
+          bind:tap="openEditModal"
+        >
+          <view class="entry-card__main">
+            <view class="entry-card__icon entry-card__icon--{{item.tone}}">
+              <image class="entry-card__icon-image" src="{{item.iconSrc}}" mode="aspectFit" />
+            </view>
+
+            <view class="entry-card__copy">
+              <text class="entry-card__title">{{item.title}}</text>
+              <view class="entry-card__meta">
+                <text class="entry-card__date">{{item.dateText}}</text>
+                <view class="entry-card__badge entry-card__badge--{{item.notebookTone}}">
+                  <text class="entry-card__badge-text">{{item.notebookName}}</text>
+                </view>
+              </view>
+            </view>
+          </view>
+
+          <view class="entry-card__countdown">
+            <text class="entry-card__value entry-card__value--{{item.tone}} {{item.isPast ? 'entry-card__value--past' : ''}}">{{item.valueText}}</text>
+            <text class="entry-card__unit">{{item.unitText}}</text>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <view class="entry-empty" wx:else>
+      <image class="entry-empty__icon" src="{{icons.emptyPair.staticSrc}}" mode="aspectFit" />
+      <text class="entry-empty__title">档案位暂时空缺</text>
+    </view>
+
+    <view class="archive-cta {{pressStates.addCard ? 'archive-cta--pressed' : ''}}" bind:tap="openCreateModal">
+      <view class="archive-cta__icon">
+        <image
+          class="archive-cta__icon-image"
+          src="{{pressStates.addCard ? icons.addPair.animatedSrc : icons.addPair.staticSrc}}"
+          mode="aspectFit"
+        />
+      </view>
+      <text class="archive-cta__text">存入新档案卡片</text>
+    </view>
+  </view>
+
+  <view wx:if="{{showEditModal}}" class="edit-modal {{editModalVisible ? 'edit-modal--visible' : ''}}" bind:tap="closeEditModal">
+    <view class="edit-sheet {{editModalVisible ? 'edit-sheet--visible' : ''}}" catch:tap="">
+      <view class="edit-sheet__header">
+        <text class="edit-sheet__title">{{editingId ? '编辑档案' : '新增档案卡片'}}</text>
+        <view class="edit-sheet__close {{pressStates.closeButton ? 'edit-sheet__close--pressed' : ''}}" bind:tap="closeEditModal">
+          <image class="edit-sheet__close-icon" src="{{icons.close}}" mode="aspectFit" />
+        </view>
+      </view>
+
+      <view class="edit-field">
+        <text class="edit-field__label">档案名称</text>
+        <input
+          class="edit-field__input"
+          value="{{form.title}}"
+          maxlength="20"
+          placeholder="记录此刻的重要意义..."
+          bindinput="updateTitle"
+        />
+      </view>
+
+      <view class="edit-field">
+        <text class="edit-field__label">发生日期</text>
+        <picker mode="date" value="{{form.date}}" bindchange="updateDate">
+          <view class="edit-field__picker {{form.date ? '' : 'edit-field__picker--placeholder'}}">
+            <view class="edit-field__picker-main">
+              <image class="edit-field__picker-icon" src="{{icons.calendar}}" mode="aspectFit" />
+              <text class="edit-field__picker-text">{{form.date || '请选择日期'}}</text>
+            </view>
+          </view>
+        </picker>
+      </view>
+
+      <view class="edit-switch {{pressStates.anniversary ? 'edit-switch--pressed' : ''}}" bind:tap="toggleAnniversary">
+        <view class="edit-switch__copy">
+          <text class="edit-switch__title">周年提醒模式</text>
+          <text class="edit-switch__subtitle">Anniversary Mode</text>
+        </view>
+        <view class="edit-switch__track {{form.isAnniversary ? 'edit-switch__track--active' : ''}}">
+          <view class="edit-switch__thumb"></view>
+        </view>
+      </view>
+
+      <view class="edit-field edit-field--last">
+        <text class="edit-field__label">存入档案本</text>
+        <view class="edit-notebooks">
+          <block wx:for="{{drawerNotebooks}}" wx:key="id">
+            <view
+              class="edit-notebook edit-notebook--{{item.tone}} {{form.notebookId === item.id ? 'edit-notebook--active' : ''}} {{pressStates.modalNotebookId === item.id ? 'edit-notebook--pressed' : ''}}"
+              data-id="{{item.id}}"
+              bind:tap="selectModalNotebook"
+            >
+              <view class="edit-notebook__bookmark edit-notebook__bookmark--{{item.tone}}"></view>
+              <image
+                class="edit-notebook__icon"
+                src="{{form.notebookId === item.id ? item.iconPair.animatedSrc : item.iconPair.staticSrc}}"
+                mode="aspectFit"
+              />
+              <text class="edit-notebook__name">{{item.name}}</text>
+            </view>
+          </block>
+        </view>
+      </view>
+
+      <view class="edit-actions">
+        <view
+          wx:if="{{editingId}}"
+          class="edit-actions__delete {{pressStates.deleteButton ? 'edit-actions__delete--pressed' : ''}}"
+          bind:tap="deleteEntry"
+        >
+          <image class="edit-actions__delete-icon" src="{{icons.trash2}}" mode="aspectFit" />
+        </view>
+
+        <view class="edit-actions__primary {{pressStates.saveButton ? 'edit-actions__primary--pressed' : ''}}" bind:tap="saveEntry">
+          <text class="edit-actions__primary-text">{{editingId ? '保存修改' : '确认录入'}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

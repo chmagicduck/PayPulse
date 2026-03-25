@@ -1,0 +1,343 @@
+<view class="page-view home-page">
+  <view class="nav-bar" style="padding-top: {{statusBarHeight}}px;">
+    <view class="nav-bar__content">
+      <view class="nav-bar__main">
+        <view class="nav-bar__left">
+          <view class="nav-bar__logo" bind:tap="triggerLogoAnimation">
+            <image class="nav-bar__logo-icon" src="{{iconAnimations.logo ? iconPairs.wavesWhite.animatedSrc : iconPairs.wavesWhite.staticSrc}}" mode="aspectFit" />
+          </view>
+          <text class="nav-bar__title">薪潮涌动</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="home-main">
+    <view class="income-card">
+      <view class="income-card__glow"></view>
+      <view class="income-card__body">
+        <view class="income-card__header">
+          <view class="income-card__label-row">
+            <text class="income-card__label">今日累计避风收益</text>
+            <view class="income-card__eye" bind:tap="toggleAmount">
+              <image class="icon-sm" src="{{showAmount ? iconEye : iconEyeOff}}" mode="aspectFit" />
+            </view>
+          </view>
+        </view>
+
+        <view class="income-card__hero">
+          <view class="income-card__amount-wrap">
+            <text class="income-card__value">{{showAmount ? vm.income.value : '***'}}</text>
+            <view class="income-card__meta">
+              <text class="income-card__badge-tag">{{vm.income.rateBadge}}</text>
+              <text class="income-card__rate">{{vm.income.rate}}</text>
+            </view>
+          </view>
+
+          <view class="income-card__control">
+            <view class="income-card__toggle {{isMoYu ? 'income-card__toggle--active' : ''}}" bind:tap="toggleMoYu">
+              <image class="income-card__toggle-icon" src="{{isMoYu ? (iconAnimations.moyu ? iconPairs.coffeeBlue.animatedSrc : iconPairs.coffeeBlue.staticSrc) : (iconAnimations.moyu ? iconPairs.coffeeWhite.animatedSrc : iconPairs.coffeeWhite.staticSrc)}}" mode="aspectFit" />
+              <text class="income-card__toggle-text">{{isMoYu ? '避风中' : '点击避风'}}</text>
+            </view>
+            <view class="income-card__stay">
+              <text class="income-card__stay-text">停留: {{vm.timer.rightValue}}</text>
+              <view class="income-card__stay-action" catch:tap="openEditModal">
+                <image class="income-card__stay-icon" src="{{iconSettingsSlate}}" mode="aspectFit" />
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view class="income-card__progress-panel">
+          <view class="income-card__progress-head">
+            <view class="income-card__progress-copy">
+              <text class="income-card__progress-title">避风收益深度</text>
+              <view class="income-card__progress-metrics">
+                <text class="income-card__progress-value">{{vm.income.idlePercent}}%</text>
+                <text class="income-card__progress-meta">/ 工时 {{vm.income.workPercent}}%</text>
+              </view>
+            </view>
+
+            <view class="income-card__countdown">
+              <view class="income-card__countdown-label">
+                <image class="icon-xs" src="{{iconLogOut}}" mode="aspectFit" />
+                <text>离岗倒计时</text>
+              </view>
+              <text class="income-card__countdown-value">{{vm.timer.leftValue}}</text>
+            </view>
+          </view>
+
+          <view class="income-card__bar">
+            <view class="income-card__bar-work" style="width: {{vm.income.workPercent}}%"></view>
+            <view class="income-card__bar-idle" style="width: {{vm.income.idlePercent}}%"></view>
+          </view>
+
+          <view class="income-card__footer">
+            <view class="income-card__stat income-card__stat--left">
+              <text class="income-card__footer-label">今日入账</text>
+              <text class="income-card__stat-value">{{showAmount ? vm.income.moyuIncome : '***'}}</text>
+            </view>
+            <view class="income-card__stat">
+              <text class="income-card__footer-label">本月已赚</text>
+              <text class="income-card__stat-value">{{showAmount ? vm.income.monthlyIncome : '***'}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section">
+      <pp-section-header
+        title="今日航行目标"
+        barTone="blue"
+        manageText="潮汐任务"
+        manageTone="blue"
+        chevronSrc="{{iconChevronRightBlue}}"
+      />
+      <view class="task-card {{pressStates.task ? 'task-card--pressed' : ''}}" bind:tap="triggerTaskCardFeedback">
+        <view class="task-card__row">
+          <view class="task-card__left">
+            <view class="task-card__icon">
+              <image class="icon-md" src="{{iconListTodo}}" mode="aspectFit" />
+            </view>
+            <view class="task-card__text">
+              <text class="task-card__title">航道任务清理</text>
+            </view>
+          </view>
+          <view class="task-card__count">
+            <text class="task-card__completed">{{vm.taskPreview.completed}}</text>
+            <text class="task-card__total">/ {{vm.taskPreview.total}}</text>
+          </view>
+        </view>
+        <view class="task-card__segments">
+          <block wx:for="{{vm.taskPreview.segments}}" wx:key="index">
+            <view class="task-card__segment {{item.filled ? 'task-card__segment--filled' : ''}}"></view>
+          </block>
+        </view>
+      </view>
+    </view>
+
+    <view class="section">
+      <pp-section-header
+        title="常规波动"
+        barTone="indigo"
+        manageText="查看日历"
+        manageTone="blue"
+        chevronSrc="{{iconChevronRightBlue}}"
+      />
+      <view class="tide-grid">
+        <view class="tide-card tide-card--blue {{pressStates.tideWallet ? 'tide-card--pressed' : ''}}" bind:tap="triggerWalletTideAnimation">
+          <view class="tide-card__glow tide-card__glow--blue"></view>
+          <view class="tide-card__body">
+            <view class="tide-card__head">
+              <view class="tide-card__icon tide-card__icon--blue">
+                <image class="icon-md" src="{{iconAnimations.tideWallet ? iconPairs.walletWhite.animatedSrc : iconPairs.walletWhite.staticSrc}}" mode="aspectFit" />
+              </view>
+              <text class="tide-card__name">{{vm.regularTides[0].title}}</text>
+            </view>
+            <view class="tide-card__number">
+              <text class="tide-card__days">{{vm.regularTides[0].days}}</text>
+              <text class="tide-card__unit tide-card__unit--blue">{{vm.regularTides[0].suffix}}</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="tide-card tide-card--emerald {{pressStates.tideWeekend ? 'tide-card--pressed' : ''}}" bind:tap="triggerWeekendTideAnimation">
+          <view class="tide-card__glow tide-card__glow--emerald"></view>
+          <view class="tide-card__body">
+            <view class="tide-card__head">
+              <view class="tide-card__icon tide-card__icon--emerald">
+                <image class="icon-md" src="{{iconAnimations.tideWeekend ? iconPairs.calendarDaysWhite.animatedSrc : iconPairs.calendarDaysWhite.staticSrc}}" mode="aspectFit" />
+              </view>
+              <text class="tide-card__name">{{vm.regularTides[1].title}}</text>
+            </view>
+            <view class="tide-card__number">
+              <text class="tide-card__days">{{vm.regularTides[1].days}}</text>
+              <text class="tide-card__unit tide-card__unit--emerald">{{vm.regularTides[1].suffix}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section">
+      <pp-section-header
+        title="岁月坐标"
+        barTone="blue"
+        manageText="新增坐标"
+        manageTone="blue"
+        chevronSrc="{{iconChevronRightBlue}}"
+      />
+
+      <view class="dates-list">
+        <view class="date-item {{pressStates.dateHeart ? 'date-item--pressed' : ''}}" bind:tap="triggerDateHeartAnimation">
+          <view class="date-item__row">
+            <view class="date-item__main">
+              <view class="date-item__icon date-item__icon--rose">
+                <image class="icon-md" src="{{iconAnimations.dateHeart ? iconPairs.heartRose.animatedSrc : iconPairs.heartRose.staticSrc}}" mode="aspectFit" />
+              </view>
+              <view class="date-item__info">
+                <text class="date-item__title">{{vm.importantDates[0].title}}</text>
+                <text class="date-item__date">{{vm.importantDates[0].date}}</text>
+              </view>
+            </view>
+            <view class="date-item__remaining">
+              <text class="date-item__days date-item__days--rose">{{vm.importantDates[0].remaining}}</text>
+              <text class="date-item__suffix">{{vm.importantDates[0].suffix}}</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="date-item {{pressStates.dateGift ? 'date-item--pressed' : ''}}" bind:tap="triggerDateGiftAnimation">
+          <view class="date-item__row">
+            <view class="date-item__main">
+              <view class="date-item__icon date-item__icon--amber">
+                <image class="icon-md" src="{{iconAnimations.dateGift ? iconPairs.giftAmber.animatedSrc : iconPairs.giftAmber.staticSrc}}" mode="aspectFit" />
+              </view>
+              <view class="date-item__info">
+                <text class="date-item__title">{{vm.importantDates[1].title}}</text>
+                <text class="date-item__date">{{vm.importantDates[1].date}}</text>
+              </view>
+            </view>
+            <view class="date-item__remaining">
+              <text class="date-item__days date-item__days--amber">{{vm.importantDates[1].remaining}}</text>
+              <text class="date-item__suffix">{{vm.importantDates[1].suffix}}</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="date-item {{pressStates.dateStar ? 'date-item--pressed' : ''}}" bind:tap="triggerDateStarAnimation">
+          <view class="date-item__row">
+            <view class="date-item__main">
+              <view class="date-item__icon date-item__icon--blue">
+                <image class="icon-md" src="{{iconAnimations.dateStar ? iconPairs.starBlue.animatedSrc : iconPairs.starBlue.staticSrc}}" mode="aspectFit" />
+              </view>
+              <view class="date-item__info">
+                <text class="date-item__title">{{vm.importantDates[2].title}}</text>
+                <text class="date-item__date">{{vm.importantDates[2].date}}</text>
+              </view>
+            </view>
+            <view class="date-item__remaining">
+              <text class="date-item__days date-item__days--blue">{{vm.importantDates[2].remaining}}</text>
+              <text class="date-item__suffix">{{vm.importantDates[2].suffix}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section section--last">
+      <pp-section-header
+        title="人生航程看板"
+        barTone="dark"
+        tagText="Voyage Ledger"
+      />
+
+      <view class="journey-list">
+        <view class="journey-card journey-card--white {{pressStates.journeyLife ? 'journey-card--pressed' : ''}}" bind:tap="triggerJourneyLifeAnimation">
+          <image class="journey-card__ghost journey-card__ghost--indigo" src="{{iconAnimations.journeyLife ? iconPairs.babyIndigo.animatedSrc : iconPairs.babyIndigo.staticSrc}}" mode="aspectFit" />
+          <view class="journey-card__head">
+            <view class="journey-card__icon journey-card__icon--indigo">
+              <image class="icon-md" src="{{iconAnimations.journeyLife ? iconPairs.babyWhite.animatedSrc : iconPairs.babyWhite.staticSrc}}" mode="aspectFit" />
+            </view>
+            <text class="journey-card__eyebrow journey-card__eyebrow--indigo">{{journeyDisplayItems[0].eyebrow}}</text>
+          </view>
+          <view class="journey-card__number">
+            <text class="journey-card__status">{{journeyDisplayItems[0].statusLabel}}</text>
+            <text class="journey-card__value journey-card__value--slate">{{journeyDisplayItems[0].displayValue}}</text>
+          </view>
+          <text class="journey-card__desc">{{journeyDisplayItems[0].descriptionPrefix}}<text class="journey-card__desc-strong">{{journeyDisplayItems[0].descriptionHighlight}}</text>{{journeyDisplayItems[0].descriptionSuffix}}</text>
+        </view>
+
+        <view class="journey-card journey-card--white {{pressStates.journeyCareer ? 'journey-card--pressed' : ''}}" bind:tap="triggerJourneyCareerAnimation">
+          <image class="journey-card__ghost journey-card__ghost--blue" src="{{iconAnimations.journeyCareer ? iconPairs.briefcaseBlue.animatedSrc : iconPairs.briefcaseBlue.staticSrc}}" mode="aspectFit" />
+          <view class="journey-card__head">
+            <view class="journey-card__icon journey-card__icon--blue">
+              <image class="icon-md" src="{{iconAnimations.journeyCareer ? iconPairs.briefcaseWhite.animatedSrc : iconPairs.briefcaseWhite.staticSrc}}" mode="aspectFit" />
+            </view>
+            <text class="journey-card__eyebrow journey-card__eyebrow--blue">{{journeyDisplayItems[1].eyebrow}}</text>
+          </view>
+          <view class="journey-card__number">
+            <text class="journey-card__status">{{journeyDisplayItems[1].statusLabel}}</text>
+            <text class="journey-card__value journey-card__value--slate">{{journeyDisplayItems[1].displayValue}}</text>
+          </view>
+          <text class="journey-card__desc">{{journeyDisplayItems[1].descriptionPrefix}}<text class="journey-card__desc-strong journey-card__desc-strong--blue">{{journeyDisplayItems[1].descriptionHighlight}}</text>{{journeyDisplayItems[1].descriptionSuffix}}</text>
+        </view>
+
+        <view class="journey-card journey-card--emerald {{pressStates.journeyRetire ? 'journey-card--pressed' : ''}}" bind:tap="triggerJourneyRetireAnimation">
+          <image class="journey-card__ghost journey-card__ghost--emerald" src="{{iconAnimations.journeyRetire ? iconPairs.flagEmerald.animatedSrc : iconPairs.flagEmerald.staticSrc}}" mode="aspectFit" />
+          <view class="journey-card__head">
+            <view class="journey-card__icon journey-card__icon--emerald">
+              <image class="icon-md" src="{{iconAnimations.journeyRetire ? iconPairs.flagWhite.animatedSrc : iconPairs.flagWhite.staticSrc}}" mode="aspectFit" />
+            </view>
+            <text class="journey-card__eyebrow journey-card__eyebrow--emerald">{{journeyDisplayItems[2].eyebrow}}</text>
+          </view>
+          <view class="journey-card__number">
+            <text class="journey-card__status journey-card__status--emerald">{{journeyDisplayItems[2].statusLabel}}</text>
+            <text class="journey-card__value journey-card__value--emerald">{{journeyDisplayItems[2].displayValue}}</text>
+          </view>
+          <text class="journey-card__desc journey-card__desc--emerald">{{journeyDisplayItems[2].descriptionPrefix}}<text class="journey-card__desc-strong journey-card__desc-strong--emerald">{{journeyDisplayItems[2].descriptionHighlight}}</text>{{journeyDisplayItems[2].descriptionSuffix}}</text>
+          <view class="journey-card__progress">
+            <view class="journey-card__progress-fill" style="width: {{journeyDisplayItems[2].progress}}%"></view>
+          </view>
+        </view>
+
+        <view class="journey-card journey-card--rose {{pressStates.journeyFinal ? 'journey-card--pressed' : ''}}" bind:tap="triggerJourneyFinalAnimation">
+          <image class="journey-card__ghost journey-card__ghost--rose" src="{{iconAnimations.journeyFinal ? iconPairs.skullRose.animatedSrc : iconPairs.skullRose.staticSrc}}" mode="aspectFit" />
+          <view class="journey-card__head">
+            <view class="journey-card__icon journey-card__icon--rose">
+              <image class="icon-md" src="{{iconAnimations.journeyFinal ? iconPairs.skullWhite.animatedSrc : iconPairs.skullWhite.staticSrc}}" mode="aspectFit" />
+            </view>
+            <text class="journey-card__eyebrow journey-card__eyebrow--rose">{{journeyDisplayItems[3].eyebrow}}</text>
+          </view>
+          <view class="journey-card__number">
+            <text class="journey-card__status journey-card__status--rose">{{journeyDisplayItems[3].statusLabel}}</text>
+            <text class="journey-card__value journey-card__value--rose">{{journeyDisplayItems[3].displayValue}}</text>
+          </view>
+          <text class="journey-card__quote">{{journeyDisplayItems[3].quote}}</text>
+          <view class="journey-card__note">
+            <text class="journey-card__note-text">{{journeyDisplayItems[3].note}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{showEditModal}}" class="modal-overlay {{editModalVisible ? 'modal-overlay--visible' : ''}}" bind:tap="closeEditModal">
+    <view class="modal-sheet {{editModalVisible ? 'modal-sheet--visible' : ''}}" catch:tap="">
+      <view class="modal-sheet__header">
+        <view class="modal-sheet__titles">
+          <text class="modal-sheet__title">{{vm.editModal.title}}</text>
+          <text class="modal-sheet__subtitle">{{vm.editModal.subtitle}}</text>
+        </view>
+        <view class="modal-sheet__close {{pressStates.modalClose ? 'modal-sheet__close--pressed' : ''}}" bind:tap="closeEditModal">
+          <image class="icon-lg" src="{{iconX}}" mode="aspectFit" />
+        </view>
+      </view>
+      <view class="modal-sheet__inputs">
+        <view class="time-input">
+          <input class="time-input__field" type="number" value="{{editH}}" data-field="editH" data-max="23" bindinput="updateTimeField" maxlength="2" />
+          <text class="time-input__label">时</text>
+        </view>
+        <text class="time-input__sep">:</text>
+        <view class="time-input">
+          <input class="time-input__field" type="number" value="{{editM}}" data-field="editM" data-max="59" bindinput="updateTimeField" maxlength="2" />
+          <text class="time-input__label">分</text>
+        </view>
+        <text class="time-input__sep">:</text>
+        <view class="time-input">
+          <input class="time-input__field" type="number" value="{{editS}}" data-field="editS" data-max="59" bindinput="updateTimeField" maxlength="2" />
+          <text class="time-input__label">秒</text>
+        </view>
+      </view>
+      <view class="modal-sheet__actions">
+        <view class="modal-sheet__btn modal-sheet__btn--cancel" bind:tap="closeEditModal">
+          <text>取消</text>
+        </view>
+        <view class="modal-sheet__btn modal-sheet__btn--confirm {{pressStates.modalConfirm ? 'modal-sheet__btn--confirm-pressed' : ''}}" bind:tap="saveEditTime">
+          <text>确认保存</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
