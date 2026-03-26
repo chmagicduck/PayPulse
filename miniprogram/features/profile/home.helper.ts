@@ -16,49 +16,62 @@ function getProfileIconAnimation(name: IconName): SvgAnimationPreset {
       return 'bounce'
     case 'map-pin':
       return 'drift'
+    case 'target':
+      return 'pulse'
     case 'users':
       return 'wave'
     case 'info':
       return 'pulse'
+    case 'ship':
+      return 'float'
     default:
       return 'float'
   }
 }
 
+function buildProfileMenuItems<
+  T extends ReadonlyArray<{
+    iconName: IconName
+    iconColor: string
+    navMethod?: string
+    badge?: string
+    highlight?: boolean
+  }>
+>(group: string, items: T, size: number = 18, durationMs: number = 2200) {
+  return items.map((item, index) =>
+    Object.assign({}, item, {
+      cardKey: `${group}-${index}`,
+      navMethod: item.navMethod || 'navigateTo',
+      badge: item.badge || '',
+      highlight: Boolean(item.highlight),
+      iconPair: animatedIconPair(item.iconName, {
+        color: item.iconColor,
+        size,
+        animation: getProfileIconAnimation(item.iconName),
+        durationMs,
+      }),
+    }),
+  )
+}
+
 export function buildProfilePageState() {
   const currentAvatar = String(profileHomeModel.avatarPresets[0].src)
+  const currentRank = profileHomeModel.user.rank
 
   return {
     currentAvatar,
     draftAvatar: currentAvatar,
-    consoleItems: profileHomeModel.consoleItems.map(item =>
-      Object.assign({}, item, {
-        iconPair: animatedIconPair(item.iconName, {
-          color: item.iconColor,
-          size: 18,
-          animation: getProfileIconAnimation(item.iconName),
-          durationMs: 2200,
-        }),
-      }),
-    ),
-    aboutItems: profileHomeModel.aboutItems.map(item =>
-      Object.assign({}, item, {
-        iconPair: animatedIconPair(item.iconName, {
-          color: item.iconColor,
-          size: 18,
-          animation: getProfileIconAnimation(item.iconName),
-          durationMs: 2200,
-        }),
-      }),
-    ),
-    storageCard: Object.assign({}, profileHomeModel.storageCard, {
-      iconPair: animatedIconPair(profileHomeModel.storageCard.iconName, {
-        color: profileHomeModel.storageCard.iconColor,
-        size: 20,
-        animation: getProfileIconAnimation(profileHomeModel.storageCard.iconName),
-        durationMs: 2400,
+    currentRank: Object.assign({}, currentRank, {
+      iconPair: animatedIconPair(currentRank.iconName, {
+        color: currentRank.iconColor,
+        size: 12,
+        animation: getProfileIconAnimation(currentRank.iconName),
+        durationMs: 2200,
       }),
     }),
+    consoleItems: buildProfileMenuItems('console', profileHomeModel.consoleItems),
+    aboutItems: buildProfileMenuItems('about', profileHomeModel.aboutItems),
+    storageItems: buildProfileMenuItems('storage', profileHomeModel.storageItems),
     icons: {
       headerPair: animatedIconPair('user', {
         color: '#ffffff',
@@ -67,20 +80,17 @@ export function buildProfilePageState() {
         durationMs: 2400,
       }),
       chevronRight: icon('chevron-right', '#cbd5e1', 18),
+      camera: icon('camera', '#ffffff', 14),
+      cameraBlue: icon('camera', '#2563eb', 18),
+      messageSquare: icon('message-square', '#059669', 18),
       x: icon('x', '#94a3b8', 20),
-      checkCircle2: icon('check-circle-2', '#2563eb', 24),
-      badgeSpark: animatedIconPair('sparkles', {
-        color: '#2563eb',
-        size: 12,
-        animation: 'twinkle',
-        durationMs: 2200,
-      }),
     } as {
       headerPair: IconImagePair
       chevronRight: string
+      camera: string
+      cameraBlue: string
+      messageSquare: string
       x: string
-      checkCircle2: string
-      badgeSpark: IconImagePair
     },
   }
 }

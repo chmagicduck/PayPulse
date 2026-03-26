@@ -85,13 +85,13 @@ const App = () => {
       const years = Math.floor(absDays / 365);
       const months = Math.floor((absDays % 365) / 30);
       const days = (absDays % 365) % 30;
-      return `${years}年${months}个月${days}天`;
+      return `${years}年${months}月${days}天`;
     }
     
     if (mode === 2) { // 月天
       const months = Math.floor(absDays / 30);
       const days = absDays % 30;
-      return `${months}个月${days}天`;
+      return `${months}月${days}天`;
     }
     
     if (mode === 3) { // 周天
@@ -374,7 +374,7 @@ const App = () => {
           </div>
         </section>
 
-        {/* 常规波动 */}
+        {/* 常规波动 - 改为1行展示2张卡片 */}
         <section className="space-y-4">
           <div className="flex justify-between items-center px-1">
             <div className="flex items-center gap-2">
@@ -383,35 +383,54 @@ const App = () => {
             </div>
             <HeaderAction label="查看日历" />
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="relative p-5 rounded-[2.5rem] bg-gradient-to-br from-white to-blue-50/30 border border-slate-100 shadow-sm overflow-hidden group">
-              <div className="flex items-center gap-2.5 mb-5 relative z-10">
-                <div className="p-2.5 bg-blue-600 rounded-2xl text-white shadow-lg">
-                  <Wallet size={18} />
+          <div className="grid grid-cols-2 gap-3">
+            {/* 1. 发薪大潮 */}
+            <div className="relative overflow-hidden bg-white border border-slate-100 rounded-[1.5rem] p-4 shadow-sm group active:scale-[0.98] transition-all cursor-default">
+                <div className="absolute top-0 right-0 p-2 opacity-[0.03] group-hover:scale-110 transition-transform text-blue-600">
+                   <Wallet size={48} />
                 </div>
-                <span className="text-sm font-extrabold text-slate-800">发薪大潮</span>
-              </div>
-              <div className="flex items-baseline gap-2 relative z-10">
-                <span className="text-4xl font-black text-slate-900 tracking-tighter tabular-nums">12</span>
-                <span className="text-xs font-bold text-blue-600/80 uppercase">天后</span>
-              </div>
+                <div className="flex items-center mb-2 relative z-10">
+                   <div className="p-1.5 bg-blue-600 rounded-lg text-white shadow-sm">
+                      <Wallet size={12} />
+                   </div>
+                   <span className="ml-2 text-[9px] font-black text-blue-500 uppercase tracking-widest">发薪 (PAY)</span>
+                </div>
+                <div className="relative z-10">
+                   <div className="flex items-baseline gap-1">
+                      <span className="text-[11px] font-black text-slate-400">距</span>
+                      <span className="text-xl font-black text-slate-900 tracking-tighter tabular-nums">12天</span>
+                   </div>
+                   <p className="text-[10px] text-slate-500 mt-1 font-medium leading-tight">
+                      下一波<span className="text-blue-600 font-bold">资金补给</span>正在加速。
+                   </p>
+                </div>
             </div>
-            <div className="relative p-5 rounded-[2.5rem] bg-gradient-to-br from-white to-emerald-50/30 border border-slate-100 shadow-sm overflow-hidden group">
-              <div className="flex items-center gap-2.5 mb-5 relative z-10">
-                <div className="p-2.5 bg-emerald-500 rounded-2xl text-white shadow-lg">
-                  <CalendarDays size={18} />
+
+            {/* 2. 双休倒数 */}
+            <div className="relative overflow-hidden bg-white border border-slate-100 rounded-[1.5rem] p-4 shadow-sm group active:scale-[0.98] transition-all cursor-default">
+                <div className="absolute top-0 right-0 p-2 opacity-[0.03] group-hover:rotate-12 transition-transform text-emerald-600">
+                   <CalendarDays size={48} />
                 </div>
-                <span className="text-sm font-extrabold text-slate-800">双休倒数</span>
-              </div>
-              <div className="flex items-baseline gap-2 relative z-10">
-                <span className="text-4xl font-black text-slate-900 tracking-tighter tabular-nums">4</span>
-                <span className="text-xs font-bold text-emerald-600/80 uppercase">天后</span>
-              </div>
+                <div className="flex items-center mb-2 relative z-10">
+                   <div className="p-1.5 bg-emerald-500 rounded-lg text-white shadow-sm">
+                      <CalendarDays size={12} />
+                   </div>
+                   <span className="ml-2 text-[9px] font-black text-emerald-600 uppercase tracking-widest">双休 (WKD)</span>
+                </div>
+                <div className="relative z-10">
+                   <div className="flex items-baseline gap-1">
+                      <span className="text-[11px] font-black text-slate-400">剩</span>
+                      <span className="text-xl font-black text-slate-900 tracking-tighter tabular-nums">4天</span>
+                   </div>
+                   <p className="text-[10px] text-slate-500 mt-1 font-medium leading-tight">
+                      距离下个<span className="text-emerald-500 font-bold">港口休整</span>不远。
+                   </p>
+                </div>
             </div>
           </div>
         </section>
 
-        {/* 岁月坐标 - 适度调大比例的横向版 */}
+        {/* 岁月坐标 */}
         <section className="space-y-4">
            <div className="flex justify-between items-center px-1">
              <div className="flex items-center gap-2">

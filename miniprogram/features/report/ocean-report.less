@@ -85,6 +85,12 @@
   gap: 20rpx;
   margin-bottom: 24rpx;
 
+  &--toolbar {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
   > pp-section-header {
     min-width: 0;
     flex: 1;
@@ -193,9 +199,10 @@
     padding-top: 24rpx;
     border-top: 1rpx solid @slate50;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
     gap: 20rpx;
+    flex-wrap: nowrap;
   }
 
   &__summary-copy {
@@ -203,20 +210,21 @@
     flex: 1;
   }
 
+  &__summary-inline {
+    display: flex;
+    align-items: flex-end;
+    gap: 10rpx;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+  }
+
   &__eyebrow {
     display: block;
-    margin-bottom: 8rpx;
     .type-eyebrow();
     font-weight: 900;
     letter-spacing: 0.1em;
-  }
-
-  &__value-row {
-    display: flex;
-    align-items: flex-end;
-    gap: 6rpx;
-    flex-wrap: nowrap;
-    white-space: nowrap;
+    flex-shrink: 0;
+    margin-bottom: 4rpx;
   }
 
   &__value {
@@ -224,18 +232,19 @@
     line-height: 1;
     font-weight: 900;
     letter-spacing: -0.04em;
+    flex-shrink: 0;
 
     &--indigo { color: @indigo500; }
     &--amber { color: @amber600; }
   }
 
   &__unit {
-    display: block;
     font-size: 18rpx;
     font-weight: 800;
     line-height: 1;
     color: @slate400;
     margin-bottom: 4rpx;
+    flex-shrink: 0;
   }
 
   &__rise {
@@ -246,6 +255,7 @@
     align-items: center;
     gap: 8rpx;
     background: @emerald50;
+    flex-shrink: 0;
   }
 
   &__rise-text {

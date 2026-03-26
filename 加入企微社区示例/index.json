@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "加入社群",
+  "usingComponents": {
+    "cell": "plugin://materialPlugin/cell"
+  }
+}

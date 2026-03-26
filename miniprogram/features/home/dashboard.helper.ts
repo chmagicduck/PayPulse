@@ -31,8 +31,10 @@ export function buildDashboardIcons() {
     iconEye: icon('eye', '#bfdbfe', 14),
     iconEyeOff: icon('eye-off', '#bfdbfe', 14),
     iconLogOut: icon('log-out', '#bfdbfe', 12),
-    iconSettingsSlate: icon('settings-2', '#bfdbfe', 12),
+    iconSettingsSlate: icon('settings2', '#dbeafe', 16),
     iconListTodo: icon('list-todo', '#2563eb', 16),
+    iconRadar: icon('target', '#3b82f6', 20),
+    iconZapAmber: icon('zap', '#f59e0b', 12),
     iconChevronRightBlue: icon('chevron-right', '#2563eb', 12),
     iconX: icon('x', '#94a3b8', 18),
     iconPairs: {
@@ -56,8 +58,18 @@ export function buildDashboardIcons() {
         animation: 'float',
         durationMs: 2200,
       }),
+      walletBlue: animatedIconPair('wallet', {
+        color: '#2563eb',
+        animation: 'float',
+        durationMs: 2200,
+      }),
       calendarDaysWhite: animatedIconPair('calendar-days', {
         color: '#ffffff',
+        animation: 'float',
+        durationMs: 2200,
+      }),
+      calendarDaysEmerald: animatedIconPair('calendar-days', {
+        color: '#10b981',
         animation: 'float',
         durationMs: 2200,
       }),

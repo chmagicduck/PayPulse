@@ -4,7 +4,7 @@
       <view class="time-axis-nav__back" bind:tap="handleBack">
         <image class="time-axis-nav__back-icon" src="{{icons.chevronLeft}}" mode="aspectFit" />
       </view>
-      <text class="time-axis-nav__title">航行档案设置</text>
+      <text class="time-axis-nav__title">岁月坐标设置</text>
       <view class="time-axis-nav__spacer"></view>
     </view>
   </view>

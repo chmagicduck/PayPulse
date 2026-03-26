@@ -18,16 +18,14 @@ Page({
     iconAnimations: {
       header: false,
       avatarBadge: false,
-      consoleIndex: -1,
-      aboutIndex: -1,
-      storage: false,
+      cardKey: '',
     },
     pressStates: {
       avatar: false,
-      consoleIndex: -1,
-      aboutIndex: -1,
-      storage: false,
+      cardKey: '',
       avatarOptionIndex: -1,
+      wechatAvatar: false,
+      uploadAvatar: false,
       modalConfirm: false,
       modalClose: false,
     },
@@ -108,47 +106,51 @@ Page({
     this.setData({ draftAvatar: String(src) })
   },
 
+  useWechatAvatar() {
+    pulseState(this, timers, 'avatar-wechat', 'pressStates.wechatAvatar', true, false)
+    const nextAvatar = String(this.data.vm.avatarPresets[0]?.src || this.data.draftAvatar)
+    this.setData({ draftAvatar: nextAvatar })
+    wx.showToast({
+      title: '已切换微信头像演示',
+      icon: 'none',
+    })
+  },
+
+  useUploadedAvatar() {
+    pulseState(this, timers, 'avatar-upload', 'pressStates.uploadAvatar', true, false)
+    const nextAvatar = String(this.data.vm.avatarPresets[1]?.src || this.data.draftAvatar)
+    this.setData({ draftAvatar: nextAvatar })
+    wx.showToast({
+      title: '已切换上传头像演示',
+      icon: 'none',
+    })
+  },
+
   confirmAvatar() {
     pulseState(this, timers, 'avatar-modal-confirm', 'pressStates.modalConfirm', true, false)
     writeProfileAvatar(String(this.data.draftAvatar))
     this.hideAvatarModal(true)
   },
 
-  pressConsoleCard(e: WechatMiniprogram.TouchEvent) {
-    const cardIndex = Number(e.currentTarget.dataset.index)
-    const target = this.data.consoleItems[cardIndex]
+  pressMenuCard(e: WechatMiniprogram.TouchEvent) {
+    const { cardKey, url, navMethod } = e.currentTarget.dataset
+    if (!cardKey) return
 
-    pulseState(this, timers, 'console-press', 'pressStates.consoleIndex', cardIndex, -1)
-    replayState(this, timers, 'console-icon', 'iconAnimations.consoleIndex', cardIndex, -1, 2200)
+    pulseState(this, timers, 'menu-card-press', 'pressStates.cardKey', String(cardKey), '')
+    replayState(this, timers, 'menu-card-icon', 'iconAnimations.cardKey', String(cardKey), '', 2200)
 
-    if (target?.url) {
-      this.navigateTo(target.url)
+    if (url) {
+      this.openPage(String(url), String(navMethod || 'navigateTo'))
     }
   },
 
-  pressStorageCard() {
-    pulseState(this, timers, 'storage-press', 'pressStates.storage', true, false)
-    replayState(this, timers, 'storage-icon', 'iconAnimations.storage', true, false, 2400)
-
-    if (this.data.storageCard.url) {
-      this.navigateTo(this.data.storageCard.url)
-    }
-  },
-
-  pressAboutCard(e: WechatMiniprogram.TouchEvent) {
-    const cardIndex = Number(e.currentTarget.dataset.index)
-    const target = this.data.aboutItems[cardIndex]
-
-    pulseState(this, timers, 'about-press', 'pressStates.aboutIndex', cardIndex, -1)
-    replayState(this, timers, 'about-icon', 'iconAnimations.aboutIndex', cardIndex, -1, 2200)
-
-    if (target?.url) {
-      this.navigateTo(target.url)
-    }
-  },
-
-  navigateTo(url: string) {
+  openPage(url: string, navMethod: string = 'navigateTo') {
     setTimeout(() => {
+      if (navMethod === 'switchTab') {
+        wx.switchTab({ url })
+        return
+      }
+
       wx.navigateTo({ url })
     }, 110)
   },

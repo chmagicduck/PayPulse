@@ -2,6 +2,13 @@ export const profileHomeModel = {
   user: {
     name: '摸鱼小队长',
     checkInDays: 10,
+    rank: {
+      level: 9,
+      name: '深海霸主',
+      tone: 'rose',
+      iconName: 'ship',
+      iconColor: '#e11d48',
+    },
   },
   avatarPresets: [
     { id: 'preset-1', label: 'Felix', src: '/assets/images/profile/avatar-felix.svg' },
@@ -14,7 +21,7 @@ export const profileHomeModel = {
   consoleItems: [
     {
       title: '基本信息设置',
-      desc: '修改航行昵称、薪资基数与工时安排',
+      desc: '修改航行昵称、薪资基数及工时',
       tone: 'blue',
       iconName: 'user',
       iconColor: '#3b82f6',
@@ -22,7 +29,7 @@ export const profileHomeModel = {
     },
     {
       title: '岁月坐标设置',
-      desc: '管理重要时间节点与纪念坐标',
+      desc: '管理重要的时间节点与纪念日',
       tone: 'emerald',
       iconName: 'map-pin',
       iconColor: '#10b981',
@@ -36,28 +43,44 @@ export const profileHomeModel = {
       iconColor: '#4f46e5',
       url: '/features/calendar/calendar',
     },
+    {
+      title: '任务中心设置',
+      desc: '配置你的每日航行目标与奖励',
+      tone: 'rose',
+      iconName: 'target',
+      iconColor: '#f43f5e',
+      badge: '3',
+      url: '/features/lab/lab',
+      navMethod: 'switchTab',
+    },
   ],
   aboutItems: [
     {
-      title: '加入社区',
+      title: '加入社群',
       desc: '与万千舵手交流摸鱼心得',
+      tone: 'indigo',
       iconName: 'users',
-      iconColor: '#64748b',
+      iconColor: '#6366f1',
       url: '/features/community/join',
     },
     {
       title: '关于软件',
-      desc: '版本 v1.0.0',
+      desc: '版本 v1.0.0 (Build 2026)',
+      tone: 'slate',
       iconName: 'info',
       iconColor: '#64748b',
       url: '/features/about/about',
     },
   ],
-  storageCard: {
-    title: '数据管理中心',
-    desc: '本地备份、同步与隐私清理',
-    iconName: 'database',
-    iconColor: '#60a5fa',
-    url: '/features/data-center/data-center',
-  },
+  storageItems: [
+    {
+      title: '数据同步中心',
+      desc: '管理本地备份、云端同步与隐私',
+      tone: 'amber',
+      iconName: 'database',
+      iconColor: '#f59e0b',
+      highlight: true,
+      url: '/features/data-center/data-center',
+    },
+  ],
 } as const

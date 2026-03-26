@@ -18,7 +18,7 @@
       <view class="income-card__body">
         <view class="income-card__header">
           <view class="income-card__label-row">
-            <text class="income-card__label">今日累计避风收益</text>
+            <text class="income-card__label">今日避风收益</text>
             <view class="income-card__eye" bind:tap="toggleAmount">
               <image class="icon-sm" src="{{showAmount ? iconEye : iconEyeOff}}" mode="aspectFit" />
             </view>
@@ -30,17 +30,17 @@
             <text class="income-card__value">{{showAmount ? vm.income.value : '***'}}</text>
             <view class="income-card__meta">
               <text class="income-card__badge-tag">{{vm.income.rateBadge}}</text>
-              <text class="income-card__rate">{{vm.income.rate}}</text>
+              <text class="income-card__rate">单位航速 {{vm.income.rate}}/s</text>
             </view>
           </view>
 
           <view class="income-card__control">
             <view class="income-card__toggle {{isMoYu ? 'income-card__toggle--active' : ''}}" bind:tap="toggleMoYu">
               <image class="income-card__toggle-icon" src="{{isMoYu ? (iconAnimations.moyu ? iconPairs.coffeeBlue.animatedSrc : iconPairs.coffeeBlue.staticSrc) : (iconAnimations.moyu ? iconPairs.coffeeWhite.animatedSrc : iconPairs.coffeeWhite.staticSrc)}}" mode="aspectFit" />
-              <text class="income-card__toggle-text">{{isMoYu ? '避风中' : '点击避风'}}</text>
+              <text class="income-card__toggle-text">{{isMoYu ? '避风中' : '开启避风'}}</text>
             </view>
             <view class="income-card__stay">
-              <text class="income-card__stay-text">停留: {{vm.timer.rightValue}}</text>
+              <text class="income-card__stay-text">避风时长: {{vm.timer.rightValue}}</text>
               <view class="income-card__stay-action" catch:tap="openEditModal">
                 <image class="income-card__stay-icon" src="{{iconSettingsSlate}}" mode="aspectFit" />
               </view>
@@ -51,17 +51,17 @@
         <view class="income-card__progress-panel">
           <view class="income-card__progress-head">
             <view class="income-card__progress-copy">
-              <text class="income-card__progress-title">避风收益深度</text>
+              <text class="income-card__progress-title">避风占比</text>
               <view class="income-card__progress-metrics">
                 <text class="income-card__progress-value">{{vm.income.idlePercent}}%</text>
-                <text class="income-card__progress-meta">/ 工时 {{vm.income.workPercent}}%</text>
+                <text class="income-card__progress-meta">/ 今日航程 {{vm.income.workPercent}}%</text>
               </view>
             </view>
 
             <view class="income-card__countdown">
               <view class="income-card__countdown-label">
                 <image class="icon-xs" src="{{iconLogOut}}" mode="aspectFit" />
-                <text>离岗倒计时</text>
+                <text>离港倒计时</text>
               </view>
               <text class="income-card__countdown-value">{{vm.timer.leftValue}}</text>
             </view>
@@ -74,11 +74,11 @@
 
           <view class="income-card__footer">
             <view class="income-card__stat income-card__stat--left">
-              <text class="income-card__footer-label">今日入账</text>
+              <text class="income-card__footer-label">今日航行收益</text>
               <text class="income-card__stat-value">{{showAmount ? vm.income.moyuIncome : '***'}}</text>
             </view>
             <view class="income-card__stat">
-              <text class="income-card__footer-label">本月已赚</text>
+              <text class="income-card__footer-label">本月累计航行收益</text>
               <text class="income-card__stat-value">{{showAmount ? vm.income.monthlyIncome : '***'}}</text>
             </view>
           </view>
@@ -88,9 +88,9 @@
 
     <view class="section">
       <pp-section-header
-        title="今日航行目标"
+        title="日常巡航任务"
         barTone="blue"
-        manageText="潮汐任务"
+        manageText="任务中心"
         manageTone="blue"
         chevronSrc="{{iconChevronRightBlue}}"
         bind:manage="openLabPage"
@@ -99,21 +99,20 @@
         <view class="task-card__row">
           <view class="task-card__left">
             <view class="task-card__icon">
-              <image class="icon-md" src="{{iconListTodo}}" mode="aspectFit" />
+              <image class="task-card__icon-image" src="{{iconRadar}}" mode="aspectFit" />
             </view>
             <view class="task-card__text">
               <text class="task-card__title">航道任务清理</text>
+              <text class="task-card__desc">{{vm.taskPreview.description}}</text>
             </view>
           </view>
-          <view class="task-card__count">
-            <text class="task-card__completed">{{vm.taskPreview.completed}}</text>
-            <text class="task-card__total">/ {{vm.taskPreview.total}}</text>
+          <view class="task-card__summary">
+            <view class="task-card__reward">
+              <image class="task-card__reward-icon" src="{{iconZapAmber}}" mode="aspectFit" />
+              <text class="task-card__reward-text">{{vm.taskPreview.rewardText}}</text>
+            </view>
+            <text class="task-card__progress-text">完成度 {{vm.taskPreview.completed}}/{{vm.taskPreview.total}}</text>
           </view>
-        </view>
-        <view class="task-card__segments">
-          <block wx:for="{{vm.taskPreview.segments}}" wx:key="index">
-            <view class="task-card__segment {{item.filled ? 'task-card__segment--filled' : ''}}"></view>
-          </block>
         </view>
       </view>
     </view>
@@ -129,33 +128,39 @@
       />
       <view class="tide-grid">
         <view class="tide-card tide-card--blue {{pressStates.tideWallet ? 'tide-card--pressed' : ''}}" bind:tap="triggerWalletTideAnimation">
-          <view class="tide-card__glow tide-card__glow--blue"></view>
+          <image class="tide-card__ghost tide-card__ghost--blue" src="{{iconAnimations.tideWallet ? iconPairs.walletBlue.animatedSrc : iconPairs.walletBlue.staticSrc}}" mode="aspectFit" />
           <view class="tide-card__body">
             <view class="tide-card__head">
               <view class="tide-card__icon tide-card__icon--blue">
                 <image class="icon-md" src="{{iconAnimations.tideWallet ? iconPairs.walletWhite.animatedSrc : iconPairs.walletWhite.staticSrc}}" mode="aspectFit" />
               </view>
-              <text class="tide-card__name">{{vm.regularTides[0].title}}</text>
+              <text class="tide-card__badge tide-card__badge--blue">{{vm.regularTides[0].badge}}</text>
             </view>
-            <view class="tide-card__number">
-              <text class="tide-card__days">{{vm.regularTides[0].days}}</text>
-              <text class="tide-card__unit tide-card__unit--blue">{{vm.regularTides[0].suffix}}</text>
+            <view class="tide-card__content">
+              <view class="tide-card__number">
+                <text class="tide-card__leading">{{vm.regularTides[0].leadingText}}</text>
+                <text class="tide-card__value">{{vm.regularTides[0].days}}{{vm.regularTides[0].suffix}}</text>
+              </view>
+              <text class="tide-card__desc">{{vm.regularTides[0].descriptionPrefix}}<text class="tide-card__desc-strong tide-card__desc-strong--blue">{{vm.regularTides[0].descriptionHighlight}}</text>{{vm.regularTides[0].descriptionSuffix}}</text>
             </view>
           </view>
         </view>
 
         <view class="tide-card tide-card--emerald {{pressStates.tideWeekend ? 'tide-card--pressed' : ''}}" bind:tap="triggerWeekendTideAnimation">
-          <view class="tide-card__glow tide-card__glow--emerald"></view>
+          <image class="tide-card__ghost tide-card__ghost--emerald" src="{{iconAnimations.tideWeekend ? iconPairs.calendarDaysEmerald.animatedSrc : iconPairs.calendarDaysEmerald.staticSrc}}" mode="aspectFit" />
           <view class="tide-card__body">
             <view class="tide-card__head">
               <view class="tide-card__icon tide-card__icon--emerald">
                 <image class="icon-md" src="{{iconAnimations.tideWeekend ? iconPairs.calendarDaysWhite.animatedSrc : iconPairs.calendarDaysWhite.staticSrc}}" mode="aspectFit" />
               </view>
-              <text class="tide-card__name">{{vm.regularTides[1].title}}</text>
+              <text class="tide-card__badge tide-card__badge--emerald">{{vm.regularTides[1].badge}}</text>
             </view>
-            <view class="tide-card__number">
-              <text class="tide-card__days">{{vm.regularTides[1].days}}</text>
-              <text class="tide-card__unit tide-card__unit--emerald">{{vm.regularTides[1].suffix}}</text>
+            <view class="tide-card__content">
+              <view class="tide-card__number">
+                <text class="tide-card__leading">{{vm.regularTides[1].leadingText}}</text>
+                <text class="tide-card__value">{{vm.regularTides[1].days}}{{vm.regularTides[1].suffix}}</text>
+              </view>
+              <text class="tide-card__desc">{{vm.regularTides[1].descriptionPrefix}}<text class="tide-card__desc-strong tide-card__desc-strong--emerald">{{vm.regularTides[1].descriptionHighlight}}</text>{{vm.regularTides[1].descriptionSuffix}}</text>
             </view>
           </view>
         </view>
@@ -174,61 +179,70 @@
 
       <view class="dates-list" wx:if="{{vm.importantDates.length}}">
         <view wx:if="{{vm.importantDates[0]}}" class="date-item {{pressStates.dateHeart ? 'date-item--pressed' : ''}}" bind:tap="triggerDateHeartAnimation">
-          <view class="date-item__row">
-            <view class="date-item__main">
-              <view class="date-item__icon date-item__icon--rose">
-                <image class="icon-md" src="{{iconAnimations.dateHeart ? iconPairs.heartRose.animatedSrc : iconPairs.heartRose.staticSrc}}" mode="aspectFit" />
-              </view>
-              <view class="date-item__info">
-                <text class="date-item__title">{{vm.importantDates[0].title}}</text>
+          <view class="date-item__main">
+            <view class="date-item__icon date-item__icon--rose">
+              <image class="date-item__icon-image" src="{{iconAnimations.dateHeart ? iconPairs.heartRose.animatedSrc : iconPairs.heartRose.staticSrc}}" mode="aspectFit" />
+            </view>
+            <view class="date-item__copy">
+              <text class="date-item__title">{{vm.importantDates[0].title}}</text>
+              <view class="date-item__meta">
                 <text class="date-item__date">{{vm.importantDates[0].date}}</text>
+                <view class="date-item__badge date-item__badge--rose">
+                  <text class="date-item__badge-text">{{vm.importantDates[0].notebookLabel}}</text>
+                </view>
               </view>
             </view>
-            <view class="date-item__remaining">
-              <text class="date-item__days date-item__days--rose">{{vm.importantDates[0].remaining}}</text>
-              <text class="date-item__suffix">{{vm.importantDates[0].suffix}}</text>
-            </view>
+          </view>
+          <view class="date-item__countdown">
+            <text class="date-item__days date-item__days--rose">{{vm.importantDates[0].remaining}}</text>
+            <text class="date-item__suffix">{{vm.importantDates[0].suffix}}</text>
           </view>
         </view>
 
         <view wx:if="{{vm.importantDates[1]}}" class="date-item {{pressStates.dateGift ? 'date-item--pressed' : ''}}" bind:tap="triggerDateGiftAnimation">
-          <view class="date-item__row">
-            <view class="date-item__main">
-              <view class="date-item__icon date-item__icon--amber">
-                <image class="icon-md" src="{{iconAnimations.dateGift ? iconPairs.giftAmber.animatedSrc : iconPairs.giftAmber.staticSrc}}" mode="aspectFit" />
-              </view>
-              <view class="date-item__info">
-                <text class="date-item__title">{{vm.importantDates[1].title}}</text>
+          <view class="date-item__main">
+            <view class="date-item__icon date-item__icon--amber">
+              <image class="date-item__icon-image" src="{{iconAnimations.dateGift ? iconPairs.giftAmber.animatedSrc : iconPairs.giftAmber.staticSrc}}" mode="aspectFit" />
+            </view>
+            <view class="date-item__copy">
+              <text class="date-item__title">{{vm.importantDates[1].title}}</text>
+              <view class="date-item__meta">
                 <text class="date-item__date">{{vm.importantDates[1].date}}</text>
+                <view class="date-item__badge date-item__badge--amber">
+                  <text class="date-item__badge-text">{{vm.importantDates[1].notebookLabel}}</text>
+                </view>
               </view>
             </view>
-            <view class="date-item__remaining">
-              <text class="date-item__days date-item__days--amber">{{vm.importantDates[1].remaining}}</text>
-              <text class="date-item__suffix">{{vm.importantDates[1].suffix}}</text>
-            </view>
+          </view>
+          <view class="date-item__countdown">
+            <text class="date-item__days date-item__days--amber">{{vm.importantDates[1].remaining}}</text>
+            <text class="date-item__suffix">{{vm.importantDates[1].suffix}}</text>
           </view>
         </view>
 
         <view wx:if="{{vm.importantDates[2]}}" class="date-item {{pressStates.dateStar ? 'date-item--pressed' : ''}}" bind:tap="triggerDateStarAnimation">
-          <view class="date-item__row">
-            <view class="date-item__main">
-              <view class="date-item__icon date-item__icon--blue">
-                <image class="icon-md" src="{{iconAnimations.dateStar ? iconPairs.starBlue.animatedSrc : iconPairs.starBlue.staticSrc}}" mode="aspectFit" />
-              </view>
-              <view class="date-item__info">
-                <text class="date-item__title">{{vm.importantDates[2].title}}</text>
+          <view class="date-item__main">
+            <view class="date-item__icon date-item__icon--blue">
+              <image class="date-item__icon-image" src="{{iconAnimations.dateStar ? iconPairs.starBlue.animatedSrc : iconPairs.starBlue.staticSrc}}" mode="aspectFit" />
+            </view>
+            <view class="date-item__copy">
+              <text class="date-item__title">{{vm.importantDates[2].title}}</text>
+              <view class="date-item__meta">
                 <text class="date-item__date">{{vm.importantDates[2].date}}</text>
+                <view class="date-item__badge date-item__badge--blue">
+                  <text class="date-item__badge-text">{{vm.importantDates[2].notebookLabel}}</text>
+                </view>
               </view>
             </view>
-            <view class="date-item__remaining">
-              <text class="date-item__days date-item__days--blue">{{vm.importantDates[2].remaining}}</text>
-              <text class="date-item__suffix">{{vm.importantDates[2].suffix}}</text>
-            </view>
+          </view>
+          <view class="date-item__countdown">
+            <text class="date-item__days date-item__days--blue">{{vm.importantDates[2].remaining}}</text>
+            <text class="date-item__suffix">{{vm.importantDates[2].suffix}}</text>
           </view>
         </view>
       </view>
       <view wx:else class="date-empty" bind:tap="openTimeAxisPage">
-        <text class="date-empty__text">No milestones yet. Tap to add one.</text>
+        <text class="date-empty__text">还没有坐标卡片，点击新增一张。</text>
       </view>
     </view>
 
@@ -338,10 +352,10 @@
       </view>
       <view class="modal-sheet__actions">
         <view class="modal-sheet__btn modal-sheet__btn--cancel" bind:tap="closeEditModal">
-          <text>取消</text>
+          <text>{{vm.editModal.cancelText}}</text>
         </view>
         <view class="modal-sheet__btn modal-sheet__btn--confirm {{pressStates.modalConfirm ? 'modal-sheet__btn--confirm-pressed' : ''}}" bind:tap="saveEditTime">
-          <text>确认保存</text>
+          <text>{{vm.editModal.confirmText}}</text>
         </view>
       </view>
     </view>

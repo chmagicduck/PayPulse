@@ -39,8 +39,8 @@ export function writeHomeScaffoldFlag(value: string) {
 export const homeDashboardModel = {
   income: {
     value: '¥128.632',
-    rate: '航速 0.024/s',
-    rateBadge: '自动结算',
+    rate: '0.024',
+    rateBadge: '自动折算',
     workPercent: 68,
     idlePercent: 32,
     moyuIncome: '¥46.125',
@@ -53,6 +53,8 @@ export const homeDashboardModel = {
   taskPreview: {
     completed: 2,
     total: 6,
+    rewardText: '待获取 200',
+    description: '保持航道通畅，领取额外动力补给',
     segments: [
       { filled: true },
       { filled: true },
@@ -67,15 +69,25 @@ export const homeDashboardModel = {
       id: 'salary',
       title: '发薪大潮',
       days: '12',
-      suffix: '天后',
+      suffix: '天',
       tone: 'blue',
+      badge: '发薪 (PAY)',
+      leadingText: '距',
+      descriptionPrefix: '下一波',
+      descriptionHighlight: '资金补给',
+      descriptionSuffix: '正在加速。',
     },
     {
       id: 'weekend',
       title: '双休倒计时',
       days: '4',
-      suffix: '天后',
+      suffix: '天',
       tone: 'emerald',
+      badge: '双休 (WKD)',
+      leadingText: '剩',
+      descriptionPrefix: '距离下个',
+      descriptionHighlight: '港口休整',
+      descriptionSuffix: '不远了。',
     },
   ],
   importantDates: [
@@ -86,14 +98,16 @@ export const homeDashboardModel = {
       remaining: '28',
       suffix: '天后',
       tone: 'rose',
+      notebookLabel: '纪念本',
     },
     {
       id: 'birthday',
       title: '我的生日',
-      date: '12月25日',
+      date: '12月15日',
       remaining: '74',
       suffix: '天后',
       tone: 'amber',
+      notebookLabel: '旅行本',
     },
     {
       id: 'bonus',
@@ -102,6 +116,7 @@ export const homeDashboardModel = {
       remaining: '8',
       suffix: '天后',
       tone: 'blue',
+      notebookLabel: '人生本',
     },
   ],
   lifeJourney: [
@@ -125,12 +140,12 @@ export const homeDashboardModel = {
     },
     {
       id: 'retire',
-      eyebrow: '退休倒计时 (RETIRE)',
+      eyebrow: '退役倒计时 (RETIRE)',
       statusLabel: '还剩',
       valueModes: ['10,675天', '29年 3个月 10天', '355个月 25天', '1525周 0天'],
       descriptionPrefix: '距离你可以',
       descriptionHighlight: '正式卸甲',
-      descriptionSuffix: '，还有这些定额任务。',
+      descriptionSuffix: '，还有这些既定航程。',
       progress: 45,
     },
     {

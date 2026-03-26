@@ -1,0 +1,19 @@
+<view class="pp-menu-card {{pressed ? 'pp-menu-card--pressed' : ''}} {{highlight ? 'pp-menu-card--highlight' : ''}}" bind:tap="handleTap">
+  <view class="pp-menu-card__main">
+    <view class="pp-menu-card__icon pp-menu-card__icon--{{tone}}">
+      <image class="pp-menu-card__icon-image" src="{{iconSrc}}" mode="aspectFit" />
+    </view>
+
+    <view class="pp-menu-card__copy">
+      <view class="pp-menu-card__title-row">
+        <text class="pp-menu-card__title">{{title}}</text>
+        <view class="pp-menu-card__badge" wx:if="{{badge}}">
+          <text class="pp-menu-card__badge-text">{{badge}}</text>
+        </view>
+      </view>
+      <text class="pp-menu-card__desc">{{desc}}</text>
+    </view>
+  </view>
+
+  <image class="pp-menu-card__arrow" src="{{arrowSrc}}" mode="aspectFit" />
+</view>

@@ -5,7 +5,7 @@
         <view class="report-nav__logo">
           <image class="report-nav__logo-icon" src="{{iconAnimations.chart ? icons.chartPair.animatedSrc : icons.chartPair.staticSrc}}" mode="aspectFit" />
         </view>
-        <text class="report-nav__title">Ocean Report</text>
+        <text class="report-nav__title">航行报告</text>
       </view>
 
       <view class="report-nav__filter {{pressStates.filter ? 'report-nav__filter--pressed' : ''}}" bind:tap="pressFilter">
@@ -16,11 +16,10 @@
 
   <view class="report-main">
     <view class="report-section">
-      <view class="report-section-head">
+      <view class="report-section-head report-section-head--toolbar">
         <pp-section-header
-          title="Income Trend"
+          title="收入趋势"
           subtitle="{{vm.trend.subtitle}}"
-          subtitlePlacement="right"
           barTone="indigo"
           trimBottom="{{true}}"
         />
@@ -31,14 +30,14 @@
             data-key="income"
             bind:tap="switchTab"
           >
-            <text class="tab-switch__text">Income</text>
+            <text class="tab-switch__text">收入</text>
           </view>
           <view
             class="tab-switch__item tab-switch__item--amber {{activeTab === 'duration' ? 'tab-switch__item--active' : ''}} {{pressStates.tabKey === 'duration' ? 'tab-switch__item--pressed' : ''}}"
             data-key="duration"
             bind:tap="switchTab"
           >
-            <text class="tab-switch__text">Duration</text>
+            <text class="tab-switch__text">时长</text>
           </view>
         </view>
       </view>
@@ -63,12 +62,12 @@
 
         <view class="chart-card__summary">
           <view class="chart-card__summary-copy">
-            <text class="chart-card__eyebrow">{{vm.trend.summaryLabel}}</text>
-            <view class="chart-card__value-row">
+            <view class="chart-card__summary-inline">
+              <text class="chart-card__eyebrow">{{vm.trend.summaryLabel}}</text>
               <text class="chart-card__value chart-card__value--{{activeTab === 'income' ? 'indigo' : 'amber'}}">
                 {{activeTab === 'income' ? vm.trend.summary.incomeTotal : vm.trend.summary.durationTotal}}
               </text>
-              <text class="chart-card__unit">{{activeTab === 'income' ? 'RMB' : 'Hours'}}</text>
+              <text class="chart-card__unit">{{activeTab === 'income' ? 'RMB' : '小时'}}</text>
             </view>
           </view>
 
@@ -82,7 +81,7 @@
 
     <view class="report-section">
       <view class="report-section-head">
-        <pp-section-header title="Annual Highlights" barTone="amber" trimBottom="{{true}}" />
+        <pp-section-header title="年度航行成就" barTone="amber" trimBottom="{{true}}" />
       </view>
 
       <view class="annual-grid">
@@ -99,21 +98,21 @@
     </view>
 
     <view class="report-section">
-      <view class="report-section-head">
-        <pp-section-header title="Duration Ratio" barTone="blue" trimBottom="{{true}}" />
+      <view class="report-section-head report-section-head--toolbar">
+        <pp-section-header title="时长占比统计" barTone="blue" trimBottom="{{true}}" />
 
         <view class="range-switch">
           <view class="range-switch__item {{timeRange === 'day' ? 'range-switch__item--active' : ''}} {{pressStates.rangeKey === 'day' ? 'range-switch__item--pressed' : ''}}" data-key="day" bind:tap="switchRange">
-            <text class="range-switch__text">Day</text>
+            <text class="range-switch__text">日</text>
           </view>
           <view class="range-switch__item {{timeRange === 'week' ? 'range-switch__item--active' : ''}} {{pressStates.rangeKey === 'week' ? 'range-switch__item--pressed' : ''}}" data-key="week" bind:tap="switchRange">
-            <text class="range-switch__text">Week</text>
+            <text class="range-switch__text">周</text>
           </view>
           <view class="range-switch__item {{timeRange === 'month' ? 'range-switch__item--active' : ''}} {{pressStates.rangeKey === 'month' ? 'range-switch__item--pressed' : ''}}" data-key="month" bind:tap="switchRange">
-            <text class="range-switch__text">Month</text>
+            <text class="range-switch__text">月</text>
           </view>
           <view class="range-switch__item {{timeRange === 'year' ? 'range-switch__item--active' : ''}} {{pressStates.rangeKey === 'year' ? 'range-switch__item--pressed' : ''}}" data-key="year" bind:tap="switchRange">
-            <text class="range-switch__text">Year</text>
+            <text class="range-switch__text">年</text>
           </view>
         </view>
       </view>
@@ -123,14 +122,14 @@
           <image class="ratio-card__ring-image" src="{{ratioRingSrc}}" mode="aspectFit" />
           <view class="ratio-card__ring-copy">
             <text class="ratio-card__ring-value">{{currentRatio.moyu}}%</text>
-            <text class="ratio-card__ring-label">Idle Ratio</text>
+            <text class="ratio-card__ring-label">摸鱼占比</text>
           </view>
         </view>
 
         <view class="ratio-card__stats">
           <view class="ratio-stat">
             <view class="ratio-stat__head">
-              <text class="ratio-stat__label">Work Time</text>
+              <text class="ratio-stat__label">工作时长</text>
               <text class="ratio-stat__value">{{currentRatio.work}}%</text>
             </view>
             <view class="ratio-stat__track">
@@ -140,7 +139,7 @@
 
           <view class="ratio-stat">
             <view class="ratio-stat__head">
-              <text class="ratio-stat__label ratio-stat__label--blue">Idle Time</text>
+              <text class="ratio-stat__label ratio-stat__label--blue">摸鱼时长</text>
               <text class="ratio-stat__value ratio-stat__value--blue">{{currentRatio.moyu}}%</text>
             </view>
             <view class="ratio-stat__track ratio-stat__track--blue">
@@ -153,7 +152,7 @@
 
     <view class="report-section report-section--last">
       <view class="report-section-head">
-        <pp-section-header title="Recent History" barTone="slate" trimBottom="{{true}}" />
+        <pp-section-header title="最近记录" barTone="slate" trimBottom="{{true}}" />
       </view>
 
       <view class="history-list">
@@ -171,14 +170,14 @@
                     <image class="history-card__clock" src="{{icons.clock}}" mode="aspectFit" />
                     <text class="history-card__duration">{{item.duration}}</text>
                   </view>
-                  <text class="history-card__hint">Tap to adjust duration</text>
+                  <text class="history-card__hint">点击修改时长</text>
                 </view>
               </view>
 
               <view class="history-card__right">
                 <view class="history-card__income-copy">
                   <text class="history-card__income">+{{item.income}}</text>
-                  <text class="history-card__income-label">Income</text>
+                  <text class="history-card__income-label">收入</text>
                 </view>
                 <image class="history-card__arrow" src="{{icons.chevronLeft}}" mode="aspectFit" />
               </view>
@@ -193,8 +192,8 @@
     <view class="edit-sheet {{editModalVisible ? 'edit-sheet--visible' : ''}}" catch:tap="">
       <view class="edit-sheet__header">
         <view class="edit-sheet__titles">
-          <text class="edit-sheet__title">Adjust Duration</text>
-          <text class="edit-sheet__subtitle">Manually correct the idle duration for this record.</text>
+          <text class="edit-sheet__title">调整时长</text>
+          <text class="edit-sheet__subtitle">手动修正当前记录的摸鱼时长。</text>
         </view>
         <view class="edit-sheet__close {{pressStates.modalClose ? 'edit-sheet__close--pressed' : ''}}" bind:tap="closeEditModal">
           <image class="icon-md" src="{{icons.x}}" mode="aspectFit" />
@@ -204,26 +203,26 @@
       <view class="time-editor">
         <view class="time-editor__group">
           <input class="time-editor__field" type="number" maxlength="2" value="{{editH}}" data-field="editH" data-max="23" bindinput="updateTimeField" />
-          <text class="time-editor__label">H</text>
+          <text class="time-editor__label">时</text>
         </view>
         <text class="time-editor__sep">:</text>
         <view class="time-editor__group">
           <input class="time-editor__field" type="number" maxlength="2" value="{{editM}}" data-field="editM" data-max="59" bindinput="updateTimeField" />
-          <text class="time-editor__label">M</text>
+          <text class="time-editor__label">分</text>
         </view>
         <text class="time-editor__sep">:</text>
         <view class="time-editor__group">
           <input class="time-editor__field" type="number" maxlength="2" value="{{editS}}" data-field="editS" data-max="59" bindinput="updateTimeField" />
-          <text class="time-editor__label">S</text>
+          <text class="time-editor__label">秒</text>
         </view>
       </view>
 
       <view class="edit-sheet__actions">
         <view class="edit-sheet__btn edit-sheet__btn--ghost" bind:tap="closeEditModal">
-          <text>Cancel</text>
+          <text>取消</text>
         </view>
         <view class="edit-sheet__btn edit-sheet__btn--primary {{pressStates.modalConfirm ? 'edit-sheet__btn--primary-pressed' : ''}}" bind:tap="saveEditTime">
-          <text>Save</text>
+          <text>保存</text>
         </view>
       </view>
     </view>

@@ -1,26 +1,36 @@
 import { clearTimerBag, createTimerBag, replayState } from '../../lib/wx/page'
-import { ensureBootstrapReady } from '../../store/bootstrap'
-import { buildLabPageState, buildRankDisplay } from './lab.helper'
-import { adjustTaskCount } from './model/actions'
-import { buildLabRuntimeState } from './model/state'
+import {
+  buildLabPageState,
+  type AchievementRuntimeItem,
+  type TaskRuntimeItem,
+} from './lab.helper'
 
 const timers = createTimerBag()
+const initialPageState = buildLabPageState()
+
+function buildTaskCountMap(tasks: TaskRuntimeItem[]) {
+  const nextCounts: Record<string, number> = {}
+
+  tasks.forEach(task => {
+    nextCounts[task.id] = task.count
+  })
+
+  return nextCounts
+}
+
+function buildAchievementProgressMap(achievements: AchievementRuntimeItem[]) {
+  const nextProgress: Record<string, number> = {}
+
+  achievements.forEach(item => {
+    nextProgress[item.id] = item.progress
+  })
+
+  return nextProgress
+}
 
 Page({
-  data: {
-    vm: null,
+  data: Object.assign({}, initialPageState, {
     statusBarHeight: 0,
-    totalHappiness: 0,
-    todayHappiness: 0,
-    rankIndex: 0,
-    ranks: [] as any[],
-    tasks: [] as any[],
-    achievements: [] as any[],
-    currentRank: null as any,
-    nextRank: null as any,
-    pointsToNext: 0,
-    progressPercent: 0,
-    icons: null as any,
     iconAnimations: {
       header: false,
       activeRankIndex: -1,
@@ -30,26 +40,15 @@ Page({
       rankIndex: -1,
       taskActionKey: '',
     },
-  },
+  }),
 
   onLoad() {
     const { statusBarHeight } = wx.getSystemInfoSync()
     this.setData({ statusBarHeight: statusBarHeight || 0 })
   },
 
-  onShow() {
-    if (!ensureBootstrapReady()) {
-      return
-    }
-    this.reloadRuntimeState()
-  },
-
   onUnload() {
     clearTimerBag(timers)
-  },
-
-  reloadRuntimeState() {
-    this.setData(buildLabRuntimeState())
   },
 
   triggerHeaderAnimation() {
@@ -58,30 +57,22 @@ Page({
 
   selectRank(e: WechatMiniprogram.TouchEvent) {
     const rankIndex = Number(e.currentTarget.dataset.index)
-    const nextPageState = buildLabPageState({
-      totalPoints: this.data.totalHappiness,
-      todayPoints: this.data.todayHappiness,
-      selectedRankIndex: rankIndex,
-      lastDailyResetDate: '',
-      lastWeeklyResetDate: '',
-      tasks: this.data.tasks.map((task: any) => ({
-        taskId: task.id,
-        count: task.count,
-        limit: task.limit,
-        rewardPoints: task.reward,
-        updatedAt: '',
-      })),
-      achievements: this.data.achievements.map((item: any) => ({
-        achievementId: item.id,
-        progress: item.progress,
-        target: item.target,
-        completed: item.progress >= item.target,
-        rewarded: false,
-      })),
-    })
-    const nextDisplay = buildRankDisplay(nextPageState.ranks, rankIndex, this.data.totalHappiness)
+    const tasks = this.data.tasks as TaskRuntimeItem[]
+    const achievements = this.data.achievements as AchievementRuntimeItem[]
 
-    this.setData(Object.assign({}, nextDisplay, { rankIndex }))
+    if (Number.isNaN(rankIndex) || rankIndex < 0 || rankIndex >= this.data.ranks.length) {
+      return
+    }
+
+    const nextPageState = buildLabPageState({
+      totalHappiness: this.data.totalHappiness,
+      todayHappiness: this.data.todayHappiness,
+      rankIndex,
+      taskCounts: buildTaskCountMap(tasks),
+      achievementProgress: buildAchievementProgressMap(achievements),
+    })
+
+    this.setData(nextPageState)
     replayState(this, timers, 'rank-press', 'pressStates.rankIndex', rankIndex, -1, 220)
     replayState(this, timers, 'rank-icon', 'iconAnimations.activeRankIndex', rankIndex, -1, 1800)
   },
@@ -89,19 +80,32 @@ Page({
   adjustTask(e: WechatMiniprogram.TouchEvent) {
     const { id, delta } = e.currentTarget.dataset
     const step = Number(delta)
-    if (!id || !step) return
+    const taskId = String(id || '')
+    if (!taskId || Number.isNaN(step) || step === 0) return
 
-    const progress = adjustTaskCount(String(id), step)
-    const nextDisplay = buildLabRuntimeState()
-    const actionKey = `${id}:${step > 0 ? 'plus' : 'minus'}`
+    const tasks = this.data.tasks as TaskRuntimeItem[]
+    const achievements = this.data.achievements as AchievementRuntimeItem[]
+    const currentTask = tasks.find(task => task.id === taskId)
+    if (!currentTask) return
 
-    this.setData(Object.assign({}, nextDisplay, {
-      totalHappiness: progress.totalPoints,
-      todayHappiness: progress.todayPoints,
-      rankIndex: progress.selectedRankIndex,
-    }))
+    const nextCount = Math.max(0, Math.min(currentTask.limit, currentTask.count + step))
+    if (nextCount === currentTask.count) return
 
+    const nextTaskCounts = buildTaskCountMap(tasks)
+    nextTaskCounts[taskId] = nextCount
+
+    const pointsDelta = currentTask.reward * (nextCount - currentTask.count)
+    const nextPageState = buildLabPageState({
+      totalHappiness: Math.max(0, this.data.totalHappiness + pointsDelta),
+      todayHappiness: Math.max(0, this.data.todayHappiness + pointsDelta),
+      rankIndex: this.data.rankIndex,
+      taskCounts: nextTaskCounts,
+      achievementProgress: buildAchievementProgressMap(achievements),
+    })
+    const actionKey = `${taskId}:${step > 0 ? 'plus' : 'minus'}`
+
+    this.setData(nextPageState)
     replayState(this, timers, 'task-action', 'pressStates.taskActionKey', actionKey, '', 220)
-    replayState(this, timers, 'task-icon', 'iconAnimations.activeTaskId', String(id), '', 1800)
+    replayState(this, timers, 'task-icon', 'iconAnimations.activeTaskId', taskId, '', 1800)
   },
 })

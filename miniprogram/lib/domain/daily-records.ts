@@ -177,11 +177,11 @@ export function getTodayRecord(settings: ProfileSettings) {
 function formatRate(settings: ProfileSettings, targetDate: Date) {
   const monthWorkSeconds = getMonthWorkSeconds(targetDate, settings)
   if (monthWorkSeconds <= 0) {
-    return '闂佺厧澹婃禍顏堝焵?0.000/s'
+    return '0.000'
   }
 
   const rate = settings.monthlySalaryCents / monthWorkSeconds / 100
-  return `闂佺厧澹婃禍顏堝焵?${rate.toFixed(3)}/s`
+  return rate.toFixed(3)
 }
 
 function getTimeLeftText(settings: ProfileSettings, targetDate: Date) {
@@ -212,17 +212,27 @@ function buildRegularTides(settings: ProfileSettings) {
   return [
     {
       id: 'salary',
-      title: 'Payday Tide',
+      title: '发薪大潮',
       days: String(Math.max(0, diffDays(today, nextPayDate))),
-      suffix: 'days',
+      suffix: '天',
       tone: 'blue',
+      badge: '发薪 (PAY)',
+      leadingText: '距',
+      descriptionPrefix: '下一波',
+      descriptionHighlight: '资金补给',
+      descriptionSuffix: '正在加速。',
     },
     {
       id: 'weekend',
-      title: 'Break Countdown',
+      title: '双休倒计时',
       days: String(Math.max(0, diffDays(today, nextBreakDate))),
-      suffix: 'days',
+      suffix: '天',
       tone: 'emerald',
+      badge: '双休 (WKD)',
+      leadingText: '剩',
+      descriptionPrefix: '距离下个',
+      descriptionHighlight: '港口休整',
+      descriptionSuffix: '不远了。',
     },
   ]
 }
@@ -239,10 +249,10 @@ function buildLifeJourney(settings: ProfileSettings) {
     const years = Math.floor(days / 365)
     const weeks = Math.floor(days / 7)
     return [
-      `${days}d`,
-      `${years}y ${Math.floor((days % 365) / 30)}m ${days % 30}d`,
-      `${months}m ${days % 30}d`,
-      `${weeks}w ${days % 7}d`,
+      `${days.toLocaleString('en-US')}天`,
+      `${years}年 ${Math.floor((days % 365) / 30)}个月 ${days % 30}天`,
+      `${months}个月 ${days % 30}天`,
+      `${weeks}周 ${days % 7}天`,
     ]
   }
 
@@ -255,39 +265,39 @@ function buildLifeJourney(settings: ProfileSettings) {
   return [
     {
       id: 'life',
-      eyebrow: 'Life Voyage (LIFE)',
-      statusLabel: 'Elapsed',
+      eyebrow: '生命航程 (LIFE)',
+      statusLabel: '已过',
       valueModes: buildValueModes(lifeDays),
-      descriptionPrefix: 'Since ',
-      descriptionHighlight: 'birth',
-      descriptionSuffix: 'to today.',
+      descriptionPrefix: '这是你从',
+      descriptionHighlight: '诞生启航',
+      descriptionSuffix: '至今走过的日夜。',
     },
     {
       id: 'career',
-      eyebrow: 'Career Voyage (CAREER)',
-      statusLabel: 'Elapsed',
+      eyebrow: '职场航程 (CAREER)',
+      statusLabel: '已过',
       valueModes: buildValueModes(careerDays),
-      descriptionPrefix: 'Since entering ',
-      descriptionHighlight: 'work life',
-      descriptionSuffix: 'until now.',
+      descriptionPrefix: '自从步入',
+      descriptionHighlight: '社会熔炉',
+      descriptionSuffix: '起，你已交付的岁月。',
     },
     {
       id: 'retire',
-      eyebrow: 'Retirement Countdown (RETIRE)',
-      statusLabel: 'Remain',
+      eyebrow: '退役倒计时 (RETIRE)',
+      statusLabel: '还剩',
       valueModes: buildValueModes(retireDays),
-      descriptionPrefix: 'Before you can ',
-      descriptionHighlight: 'retire',
-      descriptionSuffix: ', this much time remains.',
+      descriptionPrefix: '距离你可以',
+      descriptionHighlight: '正式卸甲',
+      descriptionSuffix: '，还有这些既定航程。',
       progress: Math.min(100, Math.round((lifeDays / lifeTotal) * 100)),
     },
     {
       id: 'final',
-      eyebrow: 'Final Countdown (FINAL)',
-      statusLabel: 'Remain',
+      eyebrow: '终点倒计时 (FINAL)',
+      statusLabel: '还剩',
       valueModes: buildValueModes(finalDays),
-      quote: '"Warning: the route is finite."',
-      note: '* Estimated from expected lifespan. Time is finite.',
+      quote: '"警告：航线即将耗尽，此数据不可逆转。"',
+      note: '* 基于预计 85 岁自然终点计算。每一秒都是该生命周期中不可再生的珍贵样本。',
     },
   ] as const
 }
@@ -305,17 +315,23 @@ export function buildTodayDashboardState(settings: ProfileSettings, entries: rea
         remaining: relative.valueText,
         suffix: relative.unitText,
         tone: entry.notebookId === 'commemorative' ? 'rose' : entry.notebookId === 'travel' ? 'amber' : entry.notebookId === 'career' ? 'blue' : 'indigo',
+        notebookLabel: entry.notebookId === 'commemorative'
+          ? '纪念本'
+          : entry.notebookId === 'travel'
+            ? '旅行本'
+            : entry.notebookId === 'career'
+              ? '职场本'
+              : '人生本',
       }
     })
     .sort((left, right) => Number(left.remaining) - Number(right.remaining))
     .slice(0, 3)
 
-
   return {
     income: {
       value: formatCurrency(todayRecord.derivedIncomeCents, 2),
       rate: formatRate(settings, now()),
-      rateBadge: 'Auto', 
+      rateBadge: '自动折算',
       workPercent: todayRecord.scheduledWorkDurationSec > 0
         ? Math.round(((todayRecord.scheduledWorkDurationSec - todayRecord.moyuDurationSec) / todayRecord.scheduledWorkDurationSec) * 100)
         : 0,
@@ -332,6 +348,8 @@ export function buildTodayDashboardState(settings: ProfileSettings, entries: rea
     taskPreview: {
       completed: taskCompleted,
       total: taskTotal,
+      rewardText: '待获取 200',
+      description: '保持航道通畅，领取额外动力补给',
       segments: Array.from({ length: taskTotal }, (_, index) => ({ filled: index < taskCompleted })),
     },
     regularTides: buildRegularTides(settings),
@@ -396,10 +414,10 @@ export function buildReportViewState(settings: ProfileSettings) {
       },
     },
     annualCards: [
-      { title: 'Annual Income', value: formatCurrency(yearIncomeTotal, 2), tone: 'indigo', iconName: 'coins' },
-      { title: 'Check-in Days', value: `${allRecords.filter(item => item.moyuDurationSec > 0).length} d`, tone: 'amber', iconName: 'calendar-days' },
-      { title: 'Monthly Avg', value: formatCurrency(Math.round(yearIncomeTotal / Math.max(1, new Set(allRecords.map(item => item.date.slice(0, 7))).size)), 2), tone: 'blue', iconName: 'trending-up' },
-      { title: 'National Rank', value: `${Math.min(99.9, 45 + yearDurationTotal / 3600 / 6).toFixed(1)}%`, tone: 'rose', iconName: 'trophy' },
+      { title: '年度摸鱼收入', value: formatCurrency(yearIncomeTotal, 2), tone: 'indigo', iconName: 'coins' },
+      { title: '摸鱼打卡天数', value: `${allRecords.filter(item => item.moyuDurationSec > 0).length} 天`, tone: 'amber', iconName: 'calendar-days' },
+      { title: '月均摸鱼收益', value: formatCurrency(Math.round(yearIncomeTotal / Math.max(1, new Set(allRecords.map(item => item.date.slice(0, 7))).size)), 2), tone: 'blue', iconName: 'trending-up' },
+      { title: '年度航行收入', value: `${Math.min(99.9, 45 + yearDurationTotal / 3600 / 6).toFixed(1)}%`, tone: 'rose', iconName: 'trophy' },
     ],
     ratio: {
       stats: {

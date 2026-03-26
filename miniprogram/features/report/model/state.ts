@@ -10,11 +10,11 @@ export function buildReportRuntimeState() {
   return Object.assign({}, state, {
     trend: Object.assign({}, state.trend, {
       subtitle: monthRecords.length
-        ? `M${now().getMonth() + 1} Daily Voyage`
-        : `Recent ${state.trend.bars.length} Days`,
+        ? `${now().getMonth() + 1}月每日航行概览`
+        : `近 ${state.trend.bars.length} 日航行概览`,
       summaryLabel: monthRecords.length
-        ? 'Month Total'
-        : `Recent ${state.trend.bars.length}d Total`,
+        ? '本月总计'
+        : `近 ${state.trend.bars.length} 日总计`,
     }),
   })
 }

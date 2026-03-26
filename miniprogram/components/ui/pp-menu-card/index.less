@@ -1,0 +1,140 @@
+@import '../../../theme/entries/static-page.less';
+
+.pp-menu-card {
+  .card-shell(@radius-card, @card-pad-sm @card-pad-md);
+  .card-press-scale();
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
+  transition: transform @duration-fast ease, box-shadow @duration-normal ease, border-color @duration-normal ease, background-color @duration-normal ease;
+
+  &--pressed {
+    transform: scale(0.992);
+  }
+
+  &--highlight {
+    background: @slate900;
+    border-color: @slate800;
+    box-shadow: 0 20rpx 48rpx rgba(148, 163, 184, 0.28);
+
+    .pp-menu-card__icon {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: transparent;
+    }
+
+    .pp-menu-card__title {
+      color: @white;
+    }
+
+    .pp-menu-card__desc {
+      color: rgba(148, 163, 184, 0.92);
+    }
+
+    .pp-menu-card__arrow {
+      opacity: 0.5;
+    }
+  }
+
+  &__main {
+    display: flex;
+    align-items: center;
+    gap: 24rpx;
+    min-width: 0;
+    flex: 1;
+  }
+
+  &__icon {
+    width: 72rpx;
+    height: 72rpx;
+    min-width: 72rpx;
+    border-radius: 24rpx;
+    border: 1rpx solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform @duration-fast ease, border-color @duration-normal ease, background-color @duration-normal ease;
+
+    &--slate {
+      background: @slate50;
+    }
+
+    &--blue {
+      background: @blue50;
+    }
+
+    &--emerald {
+      background: @emerald50;
+    }
+
+    &--indigo {
+      background: rgba(99, 102, 241, 0.08);
+    }
+
+    &--rose {
+      background: @rose50;
+    }
+
+    &--amber {
+      background: rgba(245, 158, 11, 0.12);
+    }
+  }
+
+  &__icon-image {
+    width: 36rpx;
+    height: 36rpx;
+    min-width: 36rpx;
+    display: block;
+  }
+
+  &__copy {
+    min-width: 0;
+    flex: 1;
+  }
+
+  &__title-row {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+    margin-bottom: 8rpx;
+  }
+
+  &__title {
+    .type-card-title();
+  }
+
+  &__desc {
+    display: block;
+    .type-text-secondary();
+    font-size: 20rpx;
+    font-weight: 500;
+    line-height: 1.35;
+  }
+
+  &__badge {
+    min-width: 28rpx;
+    height: 28rpx;
+    padding: 0 8rpx;
+    border-radius: @radius-pill;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: @rose500;
+    box-shadow: 0 6rpx 16rpx rgba(244, 63, 94, 0.18);
+  }
+
+  &__badge-text {
+    font-size: 14rpx;
+    font-weight: 900;
+    line-height: 1;
+    color: @white;
+  }
+
+  &__arrow {
+    width: 32rpx;
+    height: 32rpx;
+    min-width: 32rpx;
+    opacity: 0.82;
+    transition: transform @duration-fast ease, opacity @duration-fast ease;
+  }
+}

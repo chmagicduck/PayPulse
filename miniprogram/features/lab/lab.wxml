@@ -5,89 +5,123 @@
         <view class="lab-nav__logo" bind:tap="triggerHeaderAnimation">
           <image class="lab-nav__logo-icon" src="{{iconAnimations.header ? icons.labPair.animatedSrc : icons.labPair.staticSrc}}" mode="aspectFit" />
         </view>
-        <text class="lab-nav__title">动力舱</text>
+        <text class="lab-nav__title">{{copy.header.title}}</text>
       </view>
     </view>
   </view>
 
-  <view class="lab-main">
-    <view class="rank-card">
-      <view class="rank-card__glow"></view>
+  <view class="lab-main" wx:if="{{currentRank}}">
+    <view class="rank-card rank-card--theme-{{currentRank.theme}} rank-card--level-{{currentRank.level}}">
+      <view class="rank-card__orb rank-card__orb--top"></view>
+      <view class="rank-card__orb rank-card__orb--bottom"></view>
 
-      <view class="rank-card__head">
-        <view class="rank-card__copy">
-          <text class="rank-card__eyebrow">当前航行等级</text>
-          <text class="rank-card__title rank-card__title--{{currentRank.tone}}">Lv.{{currentRank.level}} {{currentRank.name}}</text>
-        </view>
-
-        <view class="rank-card__today">
-          <text class="rank-card__today-label">今日进度</text>
-          <view class="rank-card__today-value-row">
-            <text class="rank-card__today-value">{{todayHappiness}}</text>
-            <text class="rank-card__today-unit">PTS</text>
-          </view>
-        </view>
+      <view class="rank-card__ultra" wx:if="{{currentRank.theme === 'ultra'}}">
+        <image class="rank-card__ultra-star" src="{{icons.starPair.animatedSrc}}" mode="aspectFit" />
+        <image class="rank-card__ultra-sparkle" src="{{icons.sparklesPair.animatedSrc}}" mode="aspectFit" />
+        <view class="rank-card__shine"></view>
       </view>
 
-      <view class="rank-card__progress">
-        <view class="rank-card__progress-bar">
-          <view class="rank-card__progress-fill rank-card__progress-fill--{{currentRank.tone}}" style="width: {{progressPercent}}%;"></view>
-        </view>
-        <view class="rank-card__progress-meta">
-          <text class="rank-card__meta-text">累计 {{totalHappiness}}</text>
-          <text class="rank-card__meta-text" wx:if="{{nextRank}}">下级还需 <text class="rank-card__meta-strong">{{pointsToNext}}</text></text>
-          <text class="rank-card__meta-text rank-card__meta-text--max" wx:else>最高等级</text>
-        </view>
-      </view>
+      <view class="rank-card__body">
+        <view class="rank-card__head">
+          <view class="rank-card__head-main">
+            <view class="rank-card__icon-shell">
+              <image class="rank-card__icon" src="{{iconAnimations.activeRankIndex === rankIndex ? currentRank.cardIconPair.animatedSrc : currentRank.cardIconPair.staticSrc}}" mode="aspectFit" />
+            </view>
 
-      <view class="rank-axis">
-        <view class="rank-axis__line"></view>
-        <block wx:for="{{ranks}}" wx:key="level">
-          <view
-            class="rank-axis__item {{rankIndex === index ? 'rank-axis__item--active' : 'rank-axis__item--inactive'}} {{pressStates.rankIndex === index ? 'rank-axis__item--pressed' : ''}}"
-            data-index="{{index}}"
-            bind:tap="selectRank"
-          >
-            <view class="rank-axis__badge rank-axis__badge--{{item.tone}}">
-              <image class="rank-axis__icon" src="{{iconAnimations.activeRankIndex === index ? item.axisIconPair.animatedSrc : item.axisIconPair.staticSrc}}" mode="aspectFit" />
+            <view class="rank-card__copy">
+              <text class="rank-card__eyebrow">{{copy.rankPanel.eyebrow}}</text>
+              <text class="rank-card__title">{{currentRank.name}}</text>
+              <view class="rank-card__tag">
+                <text class="rank-card__tag-text">{{copy.rankPanel.stagePrefix}} {{currentRank.level}} {{copy.rankPanel.stageSuffix}}</text>
+              </view>
             </view>
           </view>
-        </block>
+
+          <view class="rank-card__today">
+            <text class="rank-card__today-value">{{todayHappiness}}</text>
+            <text class="rank-card__today-label">{{copy.rankPanel.todayLabel}}</text>
+          </view>
+        </view>
+
+        <view class="rank-card__progress">
+          <view class="rank-card__progress-head">
+            <text class="rank-card__progress-text">{{copy.rankPanel.totalLabel}}: <text class="rank-card__progress-strong">{{totalHappiness}}</text></text>
+            <text class="rank-card__progress-text" wx:if="{{nextRank}}">{{copy.rankPanel.targetLabel}}: <text class="rank-card__progress-strong">{{nextRank.exp}}</text></text>
+            <text class="rank-card__progress-text rank-card__progress-text--max" wx:else>{{copy.rankPanel.maxLabel}}</text>
+          </view>
+
+          <view class="rank-card__progress-track">
+            <view class="rank-card__progress-fill" style="width: {{progressPercent}}%;">
+              <view class="rank-card__progress-sheen"></view>
+            </view>
+          </view>
+        </view>
+
+        <view class="rank-axis">
+          <view class="rank-axis__line"></view>
+          <block wx:for="{{ranks}}" wx:key="level">
+            <view
+              class="rank-axis__item {{rankIndex === index ? 'rank-axis__item--active' : 'rank-axis__item--inactive'}} {{pressStates.rankIndex === index ? 'rank-axis__item--pressed' : ''}}"
+              data-index="{{index}}"
+              bind:tap="selectRank"
+            >
+              <view class="rank-axis__badge {{rankIndex === index ? 'rank-axis__badge--active' : 'rank-axis__badge--inactive'}}">
+                <image
+                  wx:if="{{rankIndex === index}}"
+                  class="rank-axis__icon"
+                  src="{{iconAnimations.activeRankIndex === index ? item.axisActiveIconPair.animatedSrc : item.axisActiveIconPair.staticSrc}}"
+                  mode="aspectFit"
+                />
+                <image
+                  wx:else
+                  class="rank-axis__icon"
+                  src="{{iconAnimations.activeRankIndex === index ? item.axisInactiveIconPair.animatedSrc : item.axisInactiveIconPair.staticSrc}}"
+                  mode="aspectFit"
+                />
+              </view>
+            </view>
+          </block>
+        </view>
       </view>
     </view>
 
     <view class="lab-section">
-      <pp-section-header title="日常巡航任务" subtitle="每日 00:00 重置" subtitlePlacement="right" barTone="blue" />
+      <pp-section-header
+        title="{{copy.sections.tasks.title}}"
+        subtitle="{{copy.sections.tasks.subtitle}}"
+        subtitlePlacement="right"
+        barTone="blue"
+        trimBottom="{{true}}"
+      />
 
       <view class="task-list">
         <block wx:for="{{tasks}}" wx:key="id">
           <view class="task-card">
-            <view class="task-card__top">
+            <view class="task-card__head">
               <view class="task-card__main">
                 <view class="task-card__icon-shell">
-                  <view class="task-card__icon task-card__icon--{{item.tone}}">
-                    <image class="task-card__icon-image {{item.rotate ? 'task-card__icon-image--rotate' : ''}}" src="{{iconAnimations.activeTaskId === item.id ? item.iconPair.animatedSrc : item.iconPair.staticSrc}}" mode="aspectFit" />
-                  </view>
-                  <view class="task-card__copy">
-                    <text class="task-card__title">{{item.title}}</text>
-                    <text class="task-card__desc">{{item.desc}}</text>
-                  </view>
+                  <image class="task-card__icon {{item.rotate ? 'task-card__icon--rotate' : ''}}" src="{{iconAnimations.activeTaskId === item.id ? item.iconPair.animatedSrc : item.iconPair.staticSrc}}" mode="aspectFit" />
                 </view>
 
-                <view class="task-card__badge {{item.done ? 'task-card__badge--done' : 'task-card__badge--active'}}">
-                  <text class="task-card__badge-text">{{item.badgeText}}</text>
+                <view class="task-card__copy">
+                  <text class="task-card__title">{{item.title}}</text>
+                  <text class="task-card__desc">{{item.desc}}</text>
                 </view>
+              </view>
+
+              <view class="task-card__badge {{item.done ? 'task-card__badge--done' : 'task-card__badge--active'}}">
+                <text class="task-card__badge-text">{{item.badgeText}}</text>
               </view>
             </view>
 
             <view class="task-card__bottom">
               <view class="task-card__progress">
                 <view class="task-card__progress-head">
-                  <text class="task-card__progress-label">Progress</text>
+                  <text class="task-card__progress-label">{{copy.sections.tasks.progressLabel}}</text>
                   <text class="task-card__count">{{item.countText}}</text>
                 </view>
                 <view class="task-card__progress-track">
-                  <view class="task-card__progress-fill task-card__progress-fill--{{item.done ? 'done' : item.tone}}" style="width: {{item.progressPercent}}%;"></view>
+                  <view class="task-card__progress-fill {{item.done ? 'task-card__progress-fill--done' : ''}}" style="width: {{item.progressPercent}}%;"></view>
                 </view>
               </view>
 
@@ -116,7 +150,11 @@
     </view>
 
     <view class="lab-section lab-section--last">
-      <pp-section-header title="荣誉勋章" barTone="amber" />
+      <pp-section-header
+        title="{{copy.sections.achievements.title}}"
+        barTone="amber"
+        trimBottom="{{true}}"
+      />
 
       <view class="achievement-list">
         <block wx:for="{{achievements}}" wx:key="id">
@@ -124,23 +162,19 @@
             <image class="achievement-card__ghost" src="{{icons.medalGhost}}" mode="aspectFit" />
 
             <view class="achievement-card__content">
-              <view class="achievement-card__head">
-                <view class="achievement-card__icon">
-                  <image class="icon-md" src="{{icons.trophyAmber}}" mode="aspectFit" />
-                </view>
-
-                <view class="achievement-card__copy">
-                  <view class="achievement-card__title-row">
-                    <view class="achievement-card__titles">
-                      <text class="achievement-card__title">{{item.title}}</text>
-                      <text class="achievement-card__desc">{{item.desc}}</text>
-                    </view>
-                    <text class="achievement-card__reward">+{{item.reward}}</text>
-                  </view>
-                </view>
+              <view class="achievement-card__icon">
+                <image class="icon-md" src="{{icons.trophyAmber}}" mode="aspectFit" />
               </view>
 
-              <view class="achievement-card__progress">
+              <view class="achievement-card__copy">
+                <view class="achievement-card__title-row">
+                  <view class="achievement-card__titles">
+                    <text class="achievement-card__title">{{item.title}}</text>
+                    <text class="achievement-card__desc">{{item.desc}}</text>
+                  </view>
+                  <text class="achievement-card__reward">{{copy.sections.achievements.rewardPrefix}}{{item.reward}}</text>
+                </view>
+
                 <view class="achievement-card__track">
                   <view class="achievement-card__fill" style="width: {{item.progressPercent}}%;"></view>
                 </view>

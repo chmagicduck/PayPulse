@@ -42,7 +42,7 @@ export const reportModel = {
     { title: '年度摸鱼收入', value: '¥12,480.50', tone: 'indigo', iconName: 'coins' },
     { title: '摸鱼打卡天数', value: '248 天', tone: 'amber', iconName: 'calendar-days' },
     { title: '月均摸鱼收益', value: '¥1,040.00', tone: 'blue', iconName: 'trending-up' },
-    { title: '击败全国社畜', value: '98.5%', tone: 'rose', iconName: 'trophy' },
+    { title: '年度航行收入', value: '98.5%', tone: 'rose', iconName: 'trophy' },
   ],
   ratio: {
     stats: {
