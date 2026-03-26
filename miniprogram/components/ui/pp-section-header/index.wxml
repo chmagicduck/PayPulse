@@ -9,7 +9,7 @@
 
   <text class="pp-section-header__subtitle pp-section-header__subtitle--right" wx:if="{{showRightSubtitle}}">{{subtitle}}</text>
 
-  <view class="pp-section-header__manage" wx:if="{{showManage}}">
+  <view class="pp-section-header__manage" wx:if="{{showManage}}" bind:tap="handleManageTap">
     <text class="{{manageClassName}}">{{manageText}}</text>
     <image class="pp-section-header__chevron" wx:if="{{showChevron}}" src="{{chevronSrc}}" mode="aspectFit" />
   </view>

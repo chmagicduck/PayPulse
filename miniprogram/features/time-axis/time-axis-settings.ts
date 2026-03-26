@@ -1,14 +1,12 @@
-import { timeAxisModel } from './model'
-import {
-  buildTimeAxisIcons,
-  buildTimeAxisNotebooks,
-  decorateEntries,
-  decorateEntry,
-  getDefaultNotebookId,
-} from './time-axis-settings.helper'
 import { clearTimerBag, createTimerBag, handlePageBack, openModal, pulseState } from '../../lib/wx/page'
+import { ensureBootstrapReady } from '../../store/bootstrap'
+import { saveTimeAxisEntry, deleteTimeAxisEntry } from './model/actions'
+import { readTimeAxisEntries } from './model/storage'
+import { timeAxisModel } from './model'
+import { buildTimeAxisIcons, buildTimeAxisNotebooks, decorateEntries, getDefaultNotebookId } from './time-axis-settings.helper'
 
 const timers = createTimerBag()
+
 type FormState = {
   title: string
   date: string
@@ -47,19 +45,30 @@ Page({
   onLoad() {
     const { statusBarHeight } = wx.getSystemInfoSync()
     const notebooks = buildTimeAxisNotebooks()
-    const entries = decorateEntries(timeAxisModel.entries, notebooks)
-
     this.setData({
       statusBarHeight: statusBarHeight || 0,
       notebooks,
       drawerNotebooks: notebooks.filter(item => item.id !== 'all'),
-      entries,
-      visibleEntries: entries,
     })
+  },
+
+  onShow() {
+    if (!ensureBootstrapReady()) {
+      return
+    }
+    this.reloadEntries()
   },
 
   onUnload() {
     clearTimerBag(timers)
+  },
+
+  reloadEntries() {
+    const entries = decorateEntries(readTimeAxisEntries(), this.data.notebooks)
+    const visibleEntries = this.data.selectedNotebookId === 'all'
+      ? entries
+      : entries.filter(item => item.notebookId === this.data.selectedNotebookId)
+    this.setData({ entries, visibleEntries })
   },
 
   handleBack() {
@@ -165,36 +174,25 @@ Page({
 
   saveEntry() {
     pulseState(this, timers, 'modal-save-press', 'pressStates.saveButton', true, false, 260)
-    if (!this.data.form.title || !this.data.form.date) return
-
-    const entry = {
-      id: this.data.editingId || `time-axis-${Date.now()}`,
-      title: String(this.data.form.title),
-      date: String(this.data.form.date),
-      notebookId: String(this.data.form.notebookId),
-      isAnniversary: Boolean(this.data.form.isAnniversary),
+    if (!this.data.form.title.trim() || !this.data.form.date) {
+      wx.showToast({
+        title: 'Fill title and date',
+        icon: 'none',
+      })
+      return
     }
 
-    const nextEntry = decorateEntry(entry, this.data.notebooks)
-    const entries = this.data.editingId
-      ? this.data.entries.map(item => (item.id === this.data.editingId ? nextEntry : item))
-      : [nextEntry, ...this.data.entries]
-
-    this.setData({ entries }, () => {
-      this.refreshVisibleEntries()
-      this.closeEditModal()
-    })
+    saveTimeAxisEntry(this.data.form, this.data.editingId)
+    this.closeEditModal()
+    this.reloadEntries()
   },
 
   deleteEntry() {
     if (!this.data.editingId) return
 
     pulseState(this, timers, 'modal-delete-press', 'pressStates.deleteButton', true, false, 260)
-    this.setData({
-      entries: this.data.entries.filter(item => item.id !== this.data.editingId),
-    }, () => {
-      this.refreshVisibleEntries()
-      this.closeEditModal()
-    })
+    deleteTimeAxisEntry(this.data.editingId)
+    this.closeEditModal()
+    this.reloadEntries()
   },
 })

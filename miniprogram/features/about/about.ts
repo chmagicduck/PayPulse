@@ -1,6 +1,7 @@
 import { aboutStaticViewModel } from './model'
 import { buildAboutIcons } from './about.helper'
 import { handlePageBack } from '../../lib/wx/page'
+import { ensureBootstrapReady } from '../../store/bootstrap'
 
 Page({
   data: {
@@ -13,6 +14,10 @@ Page({
   onLoad() {
     const { statusBarHeight } = wx.getSystemInfoSync()
     this.setData({ statusBarHeight: statusBarHeight || 0 })
+  },
+
+  onShow() {
+    ensureBootstrapReady()
   },
 
   handleBack() {

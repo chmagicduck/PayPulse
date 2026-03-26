@@ -1,21 +1,19 @@
-import { homeDashboardModel } from './model'
-import {
-  buildDashboardIcons,
-  buildJourneyDisplayItems,
-  INITIAL_JOURNEY_TIME_MODES,
-  type JourneyId,
-  type JourneyTimeModes,
-} from './dashboard.helper'
+import { adjustDailyRecordDuration, readAmountVisibility, writeAmountVisibility } from '../../lib/domain/daily-records'
+import { now, toDateKey } from '../../lib/domain/date'
 import { clearTimerBag, createTimerBag, openModal, replayState } from '../../lib/wx/page'
+import { ensureBootstrapReady } from '../../store/bootstrap'
+import { readProfileSettings } from '../profile-settings/model/storage'
+import { buildDashboardIcons, buildJourneyDisplayItems, INITIAL_JOURNEY_TIME_MODES, type JourneyId, type JourneyTimeModes } from './dashboard.helper'
+import { homeDashboardModel } from './model'
+import { buildHomeDashboardRuntimeState } from './model/state'
 
-const vm = homeDashboardModel
 const timers = createTimerBag()
 const ICON_ANIMATION_DURATION = 2200
 const CARD_FEEDBACK_DURATION = 260
 
 Page({
   data: {
-    vm,
+    vm: homeDashboardModel as any,
     statusBarHeight: 0,
     showAmount: true,
     isMoYu: false,
@@ -25,7 +23,7 @@ Page({
     editM: '00',
     editS: '00',
     journeyTimeModes: INITIAL_JOURNEY_TIME_MODES,
-    journeyDisplayItems: buildJourneyDisplayItems(vm.lifeJourney, INITIAL_JOURNEY_TIME_MODES),
+    journeyDisplayItems: buildJourneyDisplayItems(homeDashboardModel.lifeJourney as any, INITIAL_JOURNEY_TIME_MODES) as any[],
     ...buildDashboardIcons(),
     iconAnimations: {
       logo: false,
@@ -60,11 +58,31 @@ Page({
     const { statusBarHeight } = wx.getSystemInfoSync()
     this.setData({
       statusBarHeight: statusBarHeight || 0,
+      showAmount: readAmountVisibility(),
     })
+  },
+
+  onShow() {
+    if (!ensureBootstrapReady()) {
+      return
+    }
+    this.reloadRuntimeState()
   },
 
   onUnload() {
     clearTimerBag(timers)
+  },
+
+  reloadRuntimeState() {
+    const runtimeState = buildHomeDashboardRuntimeState() as unknown as typeof homeDashboardModel
+    const vm = Object.assign({}, homeDashboardModel, runtimeState, {
+      importantDates: runtimeState.importantDates.filter(item => !String(item.id).startsWith('placeholder-')),
+    })
+    this.setData({
+      vm,
+      journeyDisplayItems: buildJourneyDisplayItems(vm.lifeJourney, this.data.journeyTimeModes as JourneyTimeModes),
+      showAmount: readAmountVisibility(),
+    })
   },
 
   playIconAnimation(key: string, duration: number = ICON_ANIMATION_DURATION) {
@@ -86,26 +104,32 @@ Page({
 
   triggerTaskCardFeedback() {
     this.playPressState('task')
+    this.openLabPage()
   },
 
   triggerWalletTideAnimation() {
     this.triggerCardFeedback('tideWallet', 'tideWallet', 2000)
+    this.openCalendarPage()
   },
 
   triggerWeekendTideAnimation() {
     this.triggerCardFeedback('tideWeekend', 'tideWeekend', 2000)
+    this.openCalendarPage()
   },
 
   triggerDateHeartAnimation() {
     this.triggerCardFeedback('dateHeart', 'dateHeart', 1800)
+    this.openTimeAxisPage()
   },
 
   triggerDateGiftAnimation() {
     this.triggerCardFeedback('dateGift', 'dateGift', 2000)
+    this.openTimeAxisPage()
   },
 
   triggerDateStarAnimation() {
     this.triggerCardFeedback('dateStar', 'dateStar', 2000)
+    this.openTimeAxisPage()
   },
 
   triggerJourneyLifeAnimation() {
@@ -136,17 +160,18 @@ Page({
       retire: currentModes.retire,
       final: currentModes.final,
     }
-
     nextModes[id] = (currentModes[id] + 1) % 4
 
     this.setData({
       journeyTimeModes: nextModes,
-      journeyDisplayItems: buildJourneyDisplayItems(vm.lifeJourney, nextModes),
+      journeyDisplayItems: buildJourneyDisplayItems(this.data.vm.lifeJourney, nextModes),
     })
   },
 
   toggleAmount() {
-    this.setData({ showAmount: !this.data.showAmount })
+    const nextValue = !this.data.showAmount
+    writeAmountVisibility(nextValue)
+    this.setData({ showAmount: nextValue })
   },
 
   toggleMoYu() {
@@ -155,6 +180,7 @@ Page({
   },
 
   openEditModal() {
+    const [editH = '00', editM = '00', editS = '00'] = String(this.data.vm.timer.rightValue || '00:00:00').split(':')
     openModal(
       this,
       timers,
@@ -164,9 +190,9 @@ Page({
         visible: 'editModalVisible',
       },
       {
-        editH: '01',
-        editM: '24',
-        editS: '16',
+        editH,
+        editM,
+        editS,
       },
     )
   },
@@ -185,12 +211,15 @@ Page({
 
   saveEditTime() {
     this.playPressState('modalConfirm')
+    const durationSec = Number(this.data.editH) * 3600 + Number(this.data.editM) * 60 + Number(this.data.editS)
+    adjustDailyRecordDuration(toDateKey(now()), durationSec, 'home', readProfileSettings())
     this.setData({ editModalVisible: false })
     timers['edit-modal'] = setTimeout(() => {
       this.setData({
         showEditModal: false,
         editModalVisible: false,
       })
+      this.reloadRuntimeState()
       timers['edit-modal'] = null
     }, 280)
   },
@@ -203,5 +232,23 @@ Page({
     this.setData({
       [String(field)]: parsed.toString().padStart(2, '0'),
     })
+  },
+
+  openLabPage() {
+    setTimeout(() => {
+      wx.switchTab({ url: '/features/lab/lab' })
+    }, 120)
+  },
+
+  openCalendarPage() {
+    setTimeout(() => {
+      wx.navigateTo({ url: '/features/calendar/calendar' })
+    }, 120)
+  },
+
+  openTimeAxisPage() {
+    setTimeout(() => {
+      wx.navigateTo({ url: '/features/time-axis/time-axis-settings' })
+    }, 120)
   },
 })

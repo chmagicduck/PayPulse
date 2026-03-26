@@ -1,12 +1,9 @@
-import { profileHomeModel } from './model'
+import { clearTimerBag, createTimerBag, openModal, pulseState, replayState } from '../../lib/wx/page'
+import { ensureBootstrapReady } from '../../store/bootstrap'
 import { buildProfilePageState } from './home.helper'
-import {
-  clearTimerBag,
-  createTimerBag,
-  openModal,
-  pulseState,
-  replayState,
-} from '../../lib/wx/page'
+import { profileHomeModel } from './model'
+import { buildProfileSummaryState } from './model/state'
+import { writeProfileAvatar } from './model/storage'
 
 const timers = createTimerBag()
 const pageState = buildProfilePageState()
@@ -41,8 +38,26 @@ Page({
     this.setData({ statusBarHeight: statusBarHeight || 0 })
   },
 
+  onShow() {
+    if (!ensureBootstrapReady()) {
+      return
+    }
+    this.reloadRuntimeState()
+  },
+
   onUnload() {
     clearTimerBag(timers)
+  },
+
+  reloadRuntimeState() {
+    const summary = buildProfileSummaryState()
+    this.setData({
+      vm: Object.assign({}, this.data.vm, {
+        user: summary.user,
+      }),
+      currentAvatar: summary.currentAvatar,
+      draftAvatar: summary.currentAvatar,
+    })
   },
 
   triggerHeaderAnimation() {
@@ -95,6 +110,7 @@ Page({
 
   confirmAvatar() {
     pulseState(this, timers, 'avatar-modal-confirm', 'pressStates.modalConfirm', true, false)
+    writeProfileAvatar(String(this.data.draftAvatar))
     this.hideAvatarModal(true)
   },
 

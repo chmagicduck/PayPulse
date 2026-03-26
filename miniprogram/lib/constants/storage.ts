@@ -1,4 +1,6 @@
 export const storageKeys = {
+  appBootstrapState: 'app.bootstrap.state',
+  // Deprecated compatibility key from the static scaffold phase.
   homeScaffold: 'home.scaffold',
   profileSettings: 'profile.settings',
   profileAvatar: 'profile.avatar',

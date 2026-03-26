@@ -1,12 +1,10 @@
-import { reportModel } from './model'
-import {
-  buildAnnualCards,
-  buildHistoryItems,
-  buildRatioRing,
-  buildReportIcons,
-  formatHistoryDate,
-} from './ocean-report.helper'
+import { adjustDailyRecordDuration } from '../../lib/domain/daily-records'
 import { clearTimerBag, createTimerBag, openModal, pulseState, replayState } from '../../lib/wx/page'
+import { ensureBootstrapReady } from '../../store/bootstrap'
+import { readProfileSettings } from '../profile-settings/model/storage'
+import { buildAnnualCards, buildHistoryItems, buildRatioRing, buildReportIcons } from './ocean-report.helper'
+import { reportModel } from './model'
+import { buildReportRuntimeState } from './model/state'
 
 type TrendTabKey = 'income' | 'duration'
 type RangeKey = 'day' | 'week' | 'month' | 'year'
@@ -18,14 +16,14 @@ const DEFAULT_RANGE_KEY: RangeKey = 'week'
 
 Page({
   data: {
-    vm: reportModel,
+    vm: reportModel as any,
     statusBarHeight: 0,
     activeTab: DEFAULT_TAB_KEY as TrendTabKey,
     timeRange: DEFAULT_RANGE_KEY as RangeKey,
     currentRatio: Object.assign({}, reportModel.ratio.stats[DEFAULT_RANGE_KEY]) as RatioItem,
     ratioRingSrc: buildRatioRing(reportModel.ratio.stats[DEFAULT_RANGE_KEY].moyu),
-    annualCards: buildAnnualCards(),
-    historyItems: buildHistoryItems(),
+    annualCards: buildAnnualCards() as any[],
+    historyItems: buildHistoryItems() as any[],
     showEditModal: false,
     editModalVisible: false,
     editingIndex: -1,
@@ -53,8 +51,28 @@ Page({
     this.setData({ statusBarHeight: statusBarHeight || 0 })
   },
 
+  onShow() {
+    if (!ensureBootstrapReady()) {
+      return
+    }
+    this.reloadRuntimeState()
+  },
+
   onUnload() {
     clearTimerBag(timers)
+  },
+
+  reloadRuntimeState() {
+    const vm = buildReportRuntimeState()
+    const range = this.data.timeRange as RangeKey
+    const currentRatio = Object.assign({}, vm.ratio.stats[range]) as RatioItem
+    this.setData({
+      vm,
+      currentRatio,
+      ratioRingSrc: buildRatioRing(currentRatio.moyu),
+      annualCards: buildAnnualCards(vm.annualCards as any) as any[],
+      historyItems: buildHistoryItems(vm.historyItems as any) as any[],
+    })
   },
 
   playChartAnimation() {
@@ -86,7 +104,7 @@ Page({
     const key = String(e.currentTarget.dataset.key || '') as RangeKey
     if (!key) return
 
-    const nextRatio = Object.assign({}, reportModel.ratio.stats[key]) as RatioItem
+    const nextRatio = Object.assign({}, this.data.vm.ratio.stats[key]) as RatioItem
     this.setData({
       timeRange: key,
       currentRatio: nextRatio,
@@ -151,17 +169,13 @@ Page({
     const index = this.data.editingIndex
     if (index < 0) return
 
-    const nextHistory = this.data.historyItems.map((item, currentIndex) => {
-      if (currentIndex !== index) return item
+    const item = this.data.historyItems[index]
+    if (!item?.fullDate) return
 
-      return Object.assign({}, item, {
-        displayDate: formatHistoryDate(item.date),
-        duration: `${this.data.editH}:${this.data.editM}:${this.data.editS}`,
-      })
-    })
-
+    const durationSec = Number(this.data.editH) * 3600 + Number(this.data.editM) * 60 + Number(this.data.editS)
+    adjustDailyRecordDuration(item.fullDate, durationSec, 'report', readProfileSettings())
     pulseState(this, timers, 'report-modal-confirm', 'pressStates.modalConfirm', true, false)
-    this.setData({ historyItems: nextHistory })
     this.hideEditModal()
+    this.reloadRuntimeState()
   },
 })

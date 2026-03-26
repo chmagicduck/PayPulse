@@ -603,6 +603,21 @@
   gap: 24rpx;
 }
 
+.date-empty {
+  .card-shell(@radius-card-sm, @card-pad-md @card-pad-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__text {
+    font-size: 24rpx;
+    line-height: 1.5;
+    text-align: center;
+    color: @slate500;
+    font-weight: 600;
+  }
+}
+
 .date-item {
   .card-shell(@radius-card-sm, @card-pad-md @card-pad-lg);
   .card-press-scale();

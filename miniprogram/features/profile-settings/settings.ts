@@ -1,15 +1,18 @@
-import { profileSettingsModel } from './model'
+import { clearTimerBag, createTimerBag, replayState, pulseState } from '../../lib/wx/page'
+import { isBootstrapReady, finishInitialSetup } from '../../store/bootstrap'
 import { buildSettingsIcons } from './settings.helper'
-import { clearTimerBag, createTimerBag, handlePageBack, pulseState, replayState } from '../../lib/wx/page'
+import { validateProfileSettings } from './model/actions'
+import { saveProfileSettings } from './model/save'
+import { defaultProfileSettingsForm, toProfileSettingsForm } from './model/state'
+import { readProfileSettings } from './model/storage'
 
 const timers = createTimerBag()
 
 Page({
   data: {
-    vm: profileSettingsModel,
     statusBarHeight: 0,
     form: {
-      ...profileSettingsModel.form,
+      ...defaultProfileSettingsForm,
     },
     icons: buildSettingsIcons(),
     iconAnimations: {
@@ -25,12 +28,27 @@ Page({
     this.setData({ statusBarHeight: statusBarHeight || 0 })
   },
 
+  onShow() {
+    if (isBootstrapReady()) {
+      this.setData({
+        form: toProfileSettingsForm(readProfileSettings()),
+      })
+    }
+  },
+
   onUnload() {
     clearTimerBag(timers)
   },
 
   handleBack() {
-    handlePageBack('/features/profile/home')
+    if (!isBootstrapReady()) {
+      return
+    }
+    if (getCurrentPages().length > 1) {
+      wx.navigateBack({ delta: 1 })
+      return
+    }
+    wx.switchTab({ url: '/features/home/dashboard' })
   },
 
   updateField(e: WechatMiniprogram.Input | WechatMiniprogram.CustomEvent) {
@@ -69,5 +87,25 @@ Page({
 
   pressSave() {
     pulseState(this, timers, 'settings-save', 'pressStates.save', true, false)
+    const result = validateProfileSettings(this.data.form)
+    if (!result.ok) {
+      wx.showToast({
+        title: result.message,
+        icon: 'none',
+      })
+      return
+    }
+
+    const saveResult = saveProfileSettings(result.settings)
+    wx.showToast({
+      title: saveResult.initialized ? '初始化完成' : '保存成功',
+      icon: 'success',
+    })
+
+    if (saveResult.initialized) {
+      setTimeout(() => {
+        finishInitialSetup()
+      }, 180)
+    }
   },
 })

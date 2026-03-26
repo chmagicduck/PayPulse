@@ -1,4 +1,6 @@
 import { animatedIconPair, icon, type IconImagePair, type IconName } from '../../lib/icons'
+import type { LabProgress } from '../../lib/domain/types'
+import { createDefaultLabProgress } from './model/storage'
 import { labStaticViewModel } from './model'
 
 type RankStaticItem = (typeof labStaticViewModel.ranks)[number]
@@ -58,8 +60,9 @@ export function buildRankDisplay(ranks: RankRuntimeItem[], rankIndex: number, to
   const currentRank = ranks[rankIndex]
   const nextRank = ranks[rankIndex + 1] || null
   const pointsToNext = nextRank ? Math.max(nextRank.exp - totalHappiness, 0) : 0
+  const currentBase = rankIndex > 0 ? ranks[rankIndex].exp : 0
   const progressPercent = nextRank
-    ? Math.min(100, Math.max(0, (totalHappiness / nextRank.exp) * 100))
+    ? Math.min(100, Math.max(0, ((totalHappiness - currentBase) / Math.max(1, nextRank.exp - currentBase)) * 100))
     : 100
 
   return {
@@ -70,7 +73,7 @@ export function buildRankDisplay(ranks: RankRuntimeItem[], rankIndex: number, to
   }
 }
 
-export function buildLabPageState() {
+export function buildLabPageState(progress: LabProgress = createDefaultLabProgress()) {
   const ranks = labStaticViewModel.ranks.map(rank =>
     Object.assign({}, rank, {
       axisIconPair: animatedIconPair(rank.iconName as IconName, {
@@ -83,11 +86,14 @@ export function buildLabPageState() {
   )
 
   const tasks = labStaticViewModel.tasks.map(task => {
-    const done = task.count >= task.limit
+    const currentTask = progress.tasks.find(item => item.taskId === task.id)
+    const count = currentTask?.count || 0
+    const done = count >= task.limit
     return Object.assign({}, task, {
+      count,
       done,
-      countText: `${task.count}/${task.limit}`,
-      progressPercent: Math.round((task.count / task.limit) * 100),
+      countText: `${count}/${task.limit}`,
+      progressPercent: Math.round((count / task.limit) * 100),
       badgeText: buildTaskBadgeText(task.reward, done),
       minusActionKey: `${task.id}:minus`,
       plusActionKey: `${task.id}:plus`,
@@ -99,11 +105,14 @@ export function buildLabPageState() {
     })
   })
 
-  const achievements = labStaticViewModel.achievements.map(item =>
-    Object.assign({}, item, {
-      progressPercent: Math.round((item.progress / item.target) * 100),
-    }),
-  )
+  const achievements = labStaticViewModel.achievements.map(item => {
+    const current = progress.achievements.find(achievement => achievement.achievementId === item.id)
+    const progressValue = current?.progress || 0
+    return Object.assign({}, item, {
+      progress: progressValue,
+      progressPercent: Math.round((progressValue / item.target) * 100),
+    })
+  })
 
   return {
     ranks,

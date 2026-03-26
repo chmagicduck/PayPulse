@@ -3,7 +3,18 @@ import { reportModel } from './model'
 
 type AnnualTone = 'indigo' | 'amber' | 'blue' | 'rose'
 
-type HistoryItem = (typeof reportModel.historyItems)[number]
+type HistoryItem = {
+  date: string
+  duration: string
+  income: string
+}
+
+type AnnualCard = {
+  title: string
+  value: string
+  tone: AnnualTone
+  iconName: string
+}
 
 function strToArrayBuffer(str: string): ArrayBuffer {
   const buffer = new ArrayBuffer(str.length)
@@ -46,8 +57,8 @@ export function buildRatioRing(moyuPercent: number): string {
   return svgToDataUri(svg)
 }
 
-export function buildAnnualCards() {
-  return reportModel.annualCards.map(item =>
+export function buildAnnualCards(cards: readonly AnnualCard[] = reportModel.annualCards) {
+  return cards.map(item =>
     Object.assign({}, item, {
       iconSrc: icon(item.iconName as IconName, getAnnualToneColor(item.tone as AnnualTone), 18),
     }),
@@ -59,8 +70,8 @@ export function formatHistoryDate(date: string) {
   return `${Number(month)}月${Number(day)}日`
 }
 
-export function buildHistoryItems() {
-  return reportModel.historyItems.map((item: HistoryItem) =>
+export function buildHistoryItems(items: readonly HistoryItem[] = reportModel.historyItems) {
+  return items.map(item =>
     Object.assign({}, item, {
       displayDate: formatHistoryDate(item.date),
     }),

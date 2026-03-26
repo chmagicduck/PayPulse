@@ -95,4 +95,10 @@ Component({
       })
     },
   },
+
+  methods: {
+    handleManageTap() {
+      this.triggerEvent('manage')
+    },
+  },
 })

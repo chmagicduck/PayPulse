@@ -93,6 +93,7 @@
         manageText="潮汐任务"
         manageTone="blue"
         chevronSrc="{{iconChevronRightBlue}}"
+        bind:manage="openLabPage"
       />
       <view class="task-card {{pressStates.task ? 'task-card--pressed' : ''}}" bind:tap="triggerTaskCardFeedback">
         <view class="task-card__row">
@@ -124,6 +125,7 @@
         manageText="查看日历"
         manageTone="blue"
         chevronSrc="{{iconChevronRightBlue}}"
+        bind:manage="openCalendarPage"
       />
       <view class="tide-grid">
         <view class="tide-card tide-card--blue {{pressStates.tideWallet ? 'tide-card--pressed' : ''}}" bind:tap="triggerWalletTideAnimation">
@@ -167,10 +169,11 @@
         manageText="新增坐标"
         manageTone="blue"
         chevronSrc="{{iconChevronRightBlue}}"
+        bind:manage="openTimeAxisPage"
       />
 
-      <view class="dates-list">
-        <view class="date-item {{pressStates.dateHeart ? 'date-item--pressed' : ''}}" bind:tap="triggerDateHeartAnimation">
+      <view class="dates-list" wx:if="{{vm.importantDates.length}}">
+        <view wx:if="{{vm.importantDates[0]}}" class="date-item {{pressStates.dateHeart ? 'date-item--pressed' : ''}}" bind:tap="triggerDateHeartAnimation">
           <view class="date-item__row">
             <view class="date-item__main">
               <view class="date-item__icon date-item__icon--rose">
@@ -188,7 +191,7 @@
           </view>
         </view>
 
-        <view class="date-item {{pressStates.dateGift ? 'date-item--pressed' : ''}}" bind:tap="triggerDateGiftAnimation">
+        <view wx:if="{{vm.importantDates[1]}}" class="date-item {{pressStates.dateGift ? 'date-item--pressed' : ''}}" bind:tap="triggerDateGiftAnimation">
           <view class="date-item__row">
             <view class="date-item__main">
               <view class="date-item__icon date-item__icon--amber">
@@ -206,7 +209,7 @@
           </view>
         </view>
 
-        <view class="date-item {{pressStates.dateStar ? 'date-item--pressed' : ''}}" bind:tap="triggerDateStarAnimation">
+        <view wx:if="{{vm.importantDates[2]}}" class="date-item {{pressStates.dateStar ? 'date-item--pressed' : ''}}" bind:tap="triggerDateStarAnimation">
           <view class="date-item__row">
             <view class="date-item__main">
               <view class="date-item__icon date-item__icon--blue">
@@ -223,6 +226,9 @@
             </view>
           </view>
         </view>
+      </view>
+      <view wx:else class="date-empty" bind:tap="openTimeAxisPage">
+        <text class="date-empty__text">No milestones yet. Tap to add one.</text>
       </view>
     </view>
 
