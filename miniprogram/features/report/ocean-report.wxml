@@ -157,7 +157,7 @@
 
       <view class="history-list">
         <block wx:for="{{historyItems}}" wx:key="date">
-          <view class="history-card {{pressStates.historyIndex === index ? 'history-card--pressed' : ''}}" data-index="{{index}}" bind:tap="openEditModal">
+          <view class="history-card {{pressStates.historyIndex === index ? 'history-card--pressed' : ''}}" data-index="{{index}}" bind:tap="pressHistoryCard">
             <view class="history-card__main">
               <view class="history-card__left">
                 <view class="history-card__date-pill">
@@ -170,7 +170,7 @@
                     <image class="history-card__clock" src="{{icons.clock}}" mode="aspectFit" />
                     <text class="history-card__duration">{{item.duration}}</text>
                   </view>
-                  <text class="history-card__hint">点击修改时长</text>
+                  <text class="history-card__hint">仅支持在领潮中心修正今日避风时长</text>
                 </view>
               </view>
 
@@ -179,51 +179,10 @@
                   <text class="history-card__income">+{{item.income}}</text>
                   <text class="history-card__income-label">收入</text>
                 </view>
-                <image class="history-card__arrow" src="{{icons.chevronLeft}}" mode="aspectFit" />
               </view>
             </view>
           </view>
         </block>
-      </view>
-    </view>
-  </view>
-
-  <view wx:if="{{showEditModal}}" class="edit-modal {{editModalVisible ? 'edit-modal--visible' : ''}}" bind:tap="closeEditModal">
-    <view class="edit-sheet {{editModalVisible ? 'edit-sheet--visible' : ''}}" catch:tap="">
-      <view class="edit-sheet__header">
-        <view class="edit-sheet__titles">
-          <text class="edit-sheet__title">调整时长</text>
-          <text class="edit-sheet__subtitle">手动修正当前记录的摸鱼时长。</text>
-        </view>
-        <view class="edit-sheet__close {{pressStates.modalClose ? 'edit-sheet__close--pressed' : ''}}" bind:tap="closeEditModal">
-          <image class="icon-md" src="{{icons.x}}" mode="aspectFit" />
-        </view>
-      </view>
-
-      <view class="time-editor">
-        <view class="time-editor__group">
-          <input class="time-editor__field" type="number" maxlength="2" value="{{editH}}" data-field="editH" data-max="23" bindinput="updateTimeField" />
-          <text class="time-editor__label">时</text>
-        </view>
-        <text class="time-editor__sep">:</text>
-        <view class="time-editor__group">
-          <input class="time-editor__field" type="number" maxlength="2" value="{{editM}}" data-field="editM" data-max="59" bindinput="updateTimeField" />
-          <text class="time-editor__label">分</text>
-        </view>
-        <text class="time-editor__sep">:</text>
-        <view class="time-editor__group">
-          <input class="time-editor__field" type="number" maxlength="2" value="{{editS}}" data-field="editS" data-max="59" bindinput="updateTimeField" />
-          <text class="time-editor__label">秒</text>
-        </view>
-      </view>
-
-      <view class="edit-sheet__actions">
-        <view class="edit-sheet__btn edit-sheet__btn--ghost" bind:tap="closeEditModal">
-          <text>取消</text>
-        </view>
-        <view class="edit-sheet__btn edit-sheet__btn--primary {{pressStates.modalConfirm ? 'edit-sheet__btn--primary-pressed' : ''}}" bind:tap="saveEditTime">
-          <text>保存</text>
-        </view>
       </view>
     </view>
   </view>

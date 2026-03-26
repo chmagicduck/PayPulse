@@ -1,5 +1,7 @@
 import { adjustDailyRecordDuration, readAmountVisibility, writeAmountVisibility } from '../../lib/domain/daily-records'
 import { now, toDateKey } from '../../lib/domain/date'
+import { startMoyuSession, stopMoyuSession, syncMoyuSession } from '../../lib/domain/moyu-session'
+import { formatTimeFieldValue, sanitizeTimeFieldInput } from '../../lib/domain/time-fields'
 import { clearTimerBag, createTimerBag, openModal, replayState } from '../../lib/wx/page'
 import { ensureBootstrapReady } from '../../store/bootstrap'
 import { readProfileSettings } from '../profile-settings/model/storage'
@@ -69,6 +71,13 @@ Page({
     this.reloadRuntimeState()
   },
 
+  onHide() {
+    if (!ensureBootstrapReady()) {
+      return
+    }
+    syncMoyuSession(readProfileSettings(), now())
+  },
+
   onUnload() {
     clearTimerBag(timers)
   },
@@ -80,6 +89,7 @@ Page({
     })
     this.setData({
       vm,
+      isMoYu: Boolean((runtimeState as any).isMoYu),
       journeyDisplayItems: buildJourneyDisplayItems(vm.lifeJourney, this.data.journeyTimeModes as JourneyTimeModes),
       showAmount: readAmountVisibility(),
     })
@@ -175,8 +185,29 @@ Page({
   },
 
   toggleMoYu() {
-    this.setData({ isMoYu: !this.data.isMoYu })
+    const settings = readProfileSettings()
+    const runtimeState = this.data.vm as typeof homeDashboardModel & {
+      homeStatus?: {
+        allowStart: boolean
+      }
+    }
+
+    if (!this.data.isMoYu && !runtimeState.homeStatus?.allowStart) {
+      wx.showToast({
+        title: '当前状态不能开启避风',
+        icon: 'none',
+      })
+      return
+    }
+
+    if (this.data.isMoYu) {
+      stopMoyuSession(settings, 'manual', now())
+    } else {
+      startMoyuSession(now())
+    }
+
     this.playIconAnimation('moyu', 1800)
+    this.reloadRuntimeState()
   },
 
   openEditModal() {
@@ -209,11 +240,23 @@ Page({
     }, 280)
   },
 
+  stopModalTap() {},
+
   saveEditTime() {
     this.playPressState('modalConfirm')
-    const durationSec = Number(this.data.editH) * 3600 + Number(this.data.editM) * 60 + Number(this.data.editS)
-    adjustDailyRecordDuration(toDateKey(now()), durationSec, 'home', readProfileSettings())
-    this.setData({ editModalVisible: false })
+    const editH = formatTimeFieldValue(this.data.editH, 23)
+    const editM = formatTimeFieldValue(this.data.editM, 59)
+    const editS = formatTimeFieldValue(this.data.editS, 59)
+    const durationSec = Number(editH) * 3600 + Number(editM) * 60 + Number(editS)
+    const settings = readProfileSettings()
+    stopMoyuSession(settings, 'manual', now())
+    adjustDailyRecordDuration(toDateKey(now()), durationSec, 'home', settings)
+    this.setData({
+      editModalVisible: false,
+      editH,
+      editM,
+      editS,
+    })
     timers['edit-modal'] = setTimeout(() => {
       this.setData({
         showEditModal: false,
@@ -228,9 +271,17 @@ Page({
     const { field, max } = e.currentTarget.dataset
     if (!field) return
 
-    const parsed = Math.max(0, Math.min(Number(max) || 59, parseInt(e.detail.value, 10) || 0))
     this.setData({
-      [String(field)]: parsed.toString().padStart(2, '0'),
+      [String(field)]: sanitizeTimeFieldInput(String(e.detail.value || ''), Number(max) || 59),
+    })
+  },
+
+  normalizeTimeField(e: WechatMiniprogram.Input) {
+    const { field, max } = e.currentTarget.dataset
+    if (!field) return
+
+    this.setData({
+      [String(field)]: formatTimeFieldValue(String(this.data[String(field) as 'editH' | 'editM' | 'editS'] || ''), Number(max) || 59),
     })
   },
 

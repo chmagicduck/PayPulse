@@ -55,6 +55,7 @@ Page({
       }),
       currentAvatar: summary.currentAvatar,
       draftAvatar: summary.currentAvatar,
+      currentRank: summary.currentRank,
     })
   },
 
@@ -97,6 +98,8 @@ Page({
     pulseState(this, timers, 'avatar-modal-close', 'pressStates.modalClose', true, false)
     this.hideAvatarModal(false)
   },
+
+  stopModalTap() {},
 
   selectAvatar(e: WechatMiniprogram.TouchEvent) {
     const { src, index } = e.currentTarget.dataset

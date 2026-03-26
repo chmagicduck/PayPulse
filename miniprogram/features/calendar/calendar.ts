@@ -3,11 +3,10 @@ import { now } from '../../lib/domain/date'
 import { ensureBootstrapReady } from '../../store/bootstrap'
 import { buildCalendarIcons } from './calendar.helper'
 import { calendarStaticViewModel } from './model'
-import { buildCalendarMonthState, CALENDAR_MONTHS_2026 } from './model/state'
+import { buildCalendarMonthState } from './model/state'
 
 const today = now()
-const initialMonthIndex = today.getFullYear() === 2026 ? Math.max(0, Math.min(11, today.getMonth())) : 0
-const initialMonthState = buildCalendarMonthState(initialMonthIndex, String(today.getDate()))
+const initialMonthState = buildCalendarMonthState(today.getFullYear(), today.getMonth(), String(today.getDate()))
 
 Page({
   data: {
@@ -16,8 +15,8 @@ Page({
       weekLabels: calendarStaticViewModel.weekLabels,
     },
     statusBarHeight: 0,
-    monthIndex: initialMonthIndex,
-    months: CALENDAR_MONTHS_2026,
+    displayYear: today.getFullYear(),
+    displayMonthIndex: today.getMonth(),
     icons: buildCalendarIcons(),
     ...initialMonthState,
   },
@@ -39,19 +38,27 @@ Page({
   },
 
   refreshMonthState() {
-    this.setData(buildCalendarMonthState(this.data.monthIndex, this.data.selectedDay))
+    this.setData(buildCalendarMonthState(this.data.displayYear, this.data.displayMonthIndex, this.data.selectedDay))
   },
 
   prevMonth() {
-    if (this.data.monthIndex === 0) return
-    this.setData({ monthIndex: this.data.monthIndex - 1 }, () => {
+    const nextMonthIndex = this.data.displayMonthIndex === 0 ? 11 : this.data.displayMonthIndex - 1
+    const nextYear = this.data.displayMonthIndex === 0 ? this.data.displayYear - 1 : this.data.displayYear
+    this.setData({
+      displayYear: nextYear,
+      displayMonthIndex: nextMonthIndex,
+    }, () => {
       this.refreshMonthState()
     })
   },
 
   nextMonth() {
-    if (this.data.monthIndex >= this.data.months.length - 1) return
-    this.setData({ monthIndex: this.data.monthIndex + 1 }, () => {
+    const nextMonthIndex = this.data.displayMonthIndex === 11 ? 0 : this.data.displayMonthIndex + 1
+    const nextYear = this.data.displayMonthIndex === 11 ? this.data.displayYear + 1 : this.data.displayYear
+    this.setData({
+      displayYear: nextYear,
+      displayMonthIndex: nextMonthIndex,
+    }, () => {
       this.refreshMonthState()
     })
   },
@@ -59,6 +66,6 @@ Page({
   selectDay(e: WechatMiniprogram.TouchEvent) {
     const day = String(e.currentTarget.dataset.day || '')
     if (!day) return
-    this.setData(buildCalendarMonthState(this.data.monthIndex, day))
+    this.setData(buildCalendarMonthState(this.data.displayYear, this.data.displayMonthIndex, day))
   },
 })

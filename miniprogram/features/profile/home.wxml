@@ -65,7 +65,7 @@
     </view>
 
     <view class="profile-section">
-      <pp-section-header title="关于与社群" barTone="indigo" />
+      <pp-section-header title="甲板议事台" barTone="indigo" />
 
       <view class="profile-card-list">
         <block wx:for="{{aboutItems}}" wx:key="cardKey">
@@ -88,7 +88,7 @@
     </view>
 
     <view class="profile-section profile-section--last">
-      <pp-section-header title="存储管理" barTone="dark" />
+      <pp-section-header title="灯塔同步站" barTone="dark" />
 
       <view class="profile-card-list">
         <block wx:for="{{storageItems}}" wx:key="cardKey">
@@ -112,7 +112,7 @@
   </view>
 
   <view wx:if="{{showAvatarModal}}" class="avatar-modal {{avatarModalVisible ? 'avatar-modal--visible' : ''}}" bind:tap="closeAvatarModal">
-    <view class="avatar-sheet {{avatarModalVisible ? 'avatar-sheet--visible' : ''}}" catch:tap="">
+    <view class="avatar-sheet {{avatarModalVisible ? 'avatar-sheet--visible' : ''}}" catch:tap="stopModalTap">
       <view class="avatar-sheet__header">
         <view class="avatar-sheet__titles">
           <text class="avatar-sheet__title">修改头像</text>

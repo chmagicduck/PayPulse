@@ -5,6 +5,11 @@ import { readTimeAxisEntries, writeTimeAxisEntries } from './storage'
 
 export function saveTimeAxisEntry(form: TimeAxisEntryForm, editingId: string = '') {
   const entries = readTimeAxisEntries()
+  const currentEntry = editingId ? entries.find(item => item.id === editingId) : null
+  if (currentEntry?.locked) {
+    return entries
+  }
+
   const stamp = formatDateTimeIso(now())
   const entry: TimeAxisEntry = {
     id: editingId || `time-axis-${Date.now()}`,
@@ -12,8 +17,11 @@ export function saveTimeAxisEntry(form: TimeAxisEntryForm, editingId: string = '
     date: String(form.date),
     notebookId: form.notebookId as TimeAxisEntry['notebookId'],
     isAnniversary: Boolean(form.isAnniversary),
+    sourceType: currentEntry?.sourceType || 'user',
+    systemType: currentEntry?.systemType || null,
+    locked: currentEntry?.locked || false,
     createdAt: editingId
-      ? entries.find(item => item.id === editingId)?.createdAt || stamp
+      ? currentEntry?.createdAt || stamp
       : stamp,
     updatedAt: stamp,
   }
@@ -27,7 +35,12 @@ export function saveTimeAxisEntry(form: TimeAxisEntryForm, editingId: string = '
 }
 
 export function deleteTimeAxisEntry(id: string) {
-  const nextEntries = readTimeAxisEntries().filter(item => item.id !== id)
+  const entries = readTimeAxisEntries()
+  if (entries.find(item => item.id === id)?.locked) {
+    return entries
+  }
+
+  const nextEntries = entries.filter(item => item.id !== id)
   writeTimeAxisEntries(nextEntries)
   return nextEntries
 }

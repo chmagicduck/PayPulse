@@ -1,6 +1,6 @@
 import { formatDateTimeIso, now, toDateKey, toWeekKey } from '../../../lib/domain/date'
+import { getLabRankIndexByPoints } from '../../../lib/domain/lab-progress'
 import type { LabProgress } from '../../../lib/domain/types'
-import { getCheckInDays } from '../../../lib/domain/daily-records'
 import { labStaticViewModel } from '../model'
 import { createDefaultLabProgress, readLabProgress, writeLabProgress } from './storage'
 
@@ -12,12 +12,75 @@ function findTaskLimit(taskId: string) {
   return labStaticViewModel.tasks.find(item => item.id === taskId)?.limit || 0
 }
 
-function getRankIndex(totalPoints: number) {
-  const nextIndex = labStaticViewModel.ranks.findIndex(rank => totalPoints < rank.exp)
-  if (nextIndex <= 0) {
-    return nextIndex === -1 ? labStaticViewModel.ranks.length - 1 : 0
+function getCurrentWeekDates() {
+  const monday = toWeekKey(now())
+  const mondayDate = new Date(monday)
+  return Array.from({ length: 7 }, (_, index) => toDateKey(new Date(mondayDate.getFullYear(), mondayDate.getMonth(), mondayDate.getDate() + index)))
+}
+
+function sumLedgerCount(progress: LabProgress, taskId: string) {
+  const weekDates = new Set(getCurrentWeekDates())
+  return progress.taskDailyLedger
+    .filter(item => weekDates.has(item.date))
+    .reduce((sum, item) => sum + Math.max(0, item.counts[taskId] || 0), 0)
+}
+
+function getCurrentWeekLeaveStreak(progress: LabProgress) {
+  const weekDates = getCurrentWeekDates()
+  let streak = 0
+  for (const date of weekDates) {
+    const ledger = progress.taskDailyLedger.find(item => item.date === date)
+    if ((ledger?.counts.leave || 0) > 0) {
+      streak += 1
+      continue
+    }
+
+    if (date > toDateKey(now())) {
+      break
+    }
+
+    streak = 0
   }
-  return nextIndex - 1
+
+  return streak
+}
+
+export function recalculateAchievements(progress: LabProgress) {
+  const achievements = progress.achievements.map(item => {
+    if (item.achievementId === 'discipline') {
+      const progressValue = Math.min(item.target, getCurrentWeekLeaveStreak(progress))
+      return {
+        ...item,
+        progress: progressValue,
+        completed: progressValue >= item.target,
+      }
+    }
+
+    if (item.achievementId === 'idle-master') {
+      const progressValue = Math.min(item.target, sumLedgerCount(progress, 'toilet') * 10)
+      return {
+        ...item,
+        progress: progressValue,
+        completed: progressValue >= item.target,
+      }
+    }
+
+    if (item.achievementId === 'whale') {
+      const progressValue = Math.min(item.target, sumLedgerCount(progress, 'water'))
+      return {
+        ...item,
+        progress: progressValue,
+        completed: progressValue >= item.target,
+      }
+    }
+
+    return item
+  })
+
+  return {
+    ...progress,
+    achievements,
+  }
 }
 
 export function resetLabIfNeeded(progress: LabProgress) {
@@ -26,29 +89,30 @@ export function resetLabIfNeeded(progress: LabProgress) {
   let next = progress
 
   if (progress.lastDailyResetDate !== todayKey) {
-    next = Object.assign({}, next, {
+    next = {
+      ...next,
       todayPoints: 0,
       lastDailyResetDate: todayKey,
-      tasks: next.tasks.map(task => Object.assign({}, task, {
+      tasks: next.tasks.map(task => ({
+        ...task,
         count: 0,
         updatedAt: formatDateTimeIso(now()),
       })),
-    })
+    }
   }
 
   if (next.lastWeeklyResetDate !== weekKey) {
-    next = Object.assign({}, next, {
+    next = {
+      ...next,
       lastWeeklyResetDate: weekKey,
-      achievements: next.achievements.map(item =>
-        item.achievementId === 'whale'
-          ? Object.assign({}, item, {
-              progress: 0,
-              completed: false,
-              rewarded: false,
-            })
-          : item,
-      ),
-    })
+      achievements: next.achievements.map(item => ({
+        ...item,
+        progress: 0,
+        completed: false,
+        rewarded: false,
+      })),
+      taskDailyLedger: next.taskDailyLedger.filter(item => item.date >= weekKey),
+    }
   }
 
   next = recalculateAchievements(next)
@@ -60,40 +124,27 @@ export function readCurrentLabProgress() {
   return resetLabIfNeeded(readLabProgress())
 }
 
-export function recalculateAchievements(progress: LabProgress) {
-  const leaveTask = progress.tasks.find(item => item.taskId === 'leave')
-  const waterTask = progress.tasks.find(item => item.taskId === 'water')
-  const checkInDays = getCheckInDays()
+function updateTaskLedger(progress: LabProgress, taskId: string, count: number) {
+  const todayKey = toDateKey(now())
+  const existing = progress.taskDailyLedger.find(item => item.date === todayKey)
+  const nextEntry = existing
+    ? {
+        ...existing,
+        counts: {
+          ...existing.counts,
+          [taskId]: count,
+        },
+      }
+    : {
+        date: todayKey,
+        counts: {
+          [taskId]: count,
+        },
+      }
 
-  const achievements = progress.achievements.map(item => {
-    if (item.achievementId === 'discipline') {
-      const progressValue = Math.min(item.target, leaveTask?.count ? checkInDays : Math.min(checkInDays, item.progress))
-      return Object.assign({}, item, {
-        progress: progressValue,
-        completed: progressValue >= item.target,
-      })
-    }
-
-    if (item.achievementId === 'idle-master') {
-      const progressValue = Math.min(item.target, Math.round((progress.totalPoints / 2)))
-      return Object.assign({}, item, {
-        progress: progressValue,
-        completed: progressValue >= item.target,
-      })
-    }
-
-    if (item.achievementId === 'whale') {
-      const progressValue = Math.min(item.target, waterTask?.count || 0)
-      return Object.assign({}, item, {
-        progress: progressValue,
-        completed: progressValue >= item.target,
-      })
-    }
-
-    return item
-  })
-
-  return Object.assign({}, progress, { achievements })
+  return progress.taskDailyLedger.some(item => item.date === todayKey)
+    ? progress.taskDailyLedger.map(item => (item.date === todayKey ? nextEntry : item))
+    : [...progress.taskDailyLedger, nextEntry]
 }
 
 export function adjustTaskCount(taskId: string, delta: number) {
@@ -110,24 +161,39 @@ export function adjustTaskCount(taskId: string, delta: number) {
   }
 
   const reward = findTaskReward(taskId) * (nextCount - targetTask.count)
-  const next = Object.assign({}, progress, {
+  const next = {
+    ...progress,
     totalPoints: Math.max(0, progress.totalPoints + reward),
     todayPoints: Math.max(0, progress.todayPoints + reward),
     tasks: progress.tasks.map(item =>
       item.taskId === taskId
-        ? Object.assign({}, item, {
+        ? {
+            ...item,
             count: nextCount,
             updatedAt: formatDateTimeIso(now()),
-          })
+          }
         : item,
     ),
-  })
+    taskDailyLedger: updateTaskLedger(progress, taskId, nextCount),
+  }
 
-  const recalculated = recalculateAchievements(Object.assign({}, next, {
-    selectedRankIndex: getRankIndex(next.totalPoints),
-  }))
+  const recalculated = recalculateAchievements({
+    ...next,
+    selectedRankIndex: getLabRankIndexByPoints(next.totalPoints),
+  })
   writeLabProgress(recalculated)
   return recalculated
+}
+
+export function updateSelectedRankIndex(rankIndex: number) {
+  const progress = readCurrentLabProgress()
+  const safeIndex = Math.max(0, Math.min(rankIndex, labStaticViewModel.ranks.length - 1))
+  const next = {
+    ...progress,
+    selectedRankIndex: safeIndex,
+  }
+  writeLabProgress(next)
+  return next
 }
 
 export function ensureLabProgressInitialized() {

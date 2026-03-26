@@ -38,15 +38,25 @@
       <view class="join-card__head">
         <image class="join-card__anchor" src="{{icons.anchorPair.staticSrc}}" mode="aspectFit" />
         <text class="join-card__title">深海避风港</text>
-        <text class="join-card__subtitle">官方群入口</text>
+        <text class="join-card__subtitle">官方社群入口</text>
       </view>
 
-      <view class="join-card__button">
-        <text class="join-card__button-text">立即加入微信群聊</text>
+      <view wx:if="{{!joinUnavailable}}" class="join-card__button">
+        <cell
+          class="join-card__cell"
+          url="{{vm.groupUrl}}"
+          bind:startmessage="onStartMessage"
+          bind:completemessage="onCompleteMessage"
+          contactText="立即加入微信社群"
+          contactTextBlod="{{true}}"
+        />
+      </view>
+      <view wx:else class="join-card__button" bind:tap="handleJoinFallback">
+        <text class="join-card__button-text">复制群链接</text>
         <image class="icon-sm" src="{{icons.chevronRight}}" mode="aspectFit" />
       </view>
 
-      <text class="join-card__note">点击主按钮仅保留静态查阅视觉，不接入真实入群流程。</text>
+      <text class="join-card__note">{{joinHint || '点击主按钮后会拉起真实企微入群流程，若失败会提供明确提示与降级路径。'}}</text>
     </view>
 
     <pp-section-header title="社群专属权益" barTone="blue" />

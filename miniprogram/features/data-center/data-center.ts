@@ -104,6 +104,8 @@ Page({
     }, 280)
   },
 
+  stopModalTap() {},
+
   confirmReset() {
     pulseState(this, timers, 'reset-modal-confirm', 'pressStates.modalConfirm', true, false)
     this.setData({ resetModalVisible: false })

@@ -5,16 +5,14 @@ import {
   type IconName,
   type SvgAnimationPreset,
 } from '../../lib/icons'
+import type { TimeAxisEntry } from '../../lib/domain/types'
 import { timeAxisModel } from './model'
 
 type NotebookItem = (typeof timeAxisModel.notebooks)[number]
-type StaticEntry = {
-  id: string
-  title: string
-  date: string
-  notebookId: string
-  isAnniversary: boolean
-}
+type StaticEntry = Pick<
+  TimeAxisEntry,
+  'id' | 'title' | 'date' | 'notebookId' | 'isAnniversary' | 'sourceType' | 'systemType' | 'locked'
+>
 
 type RuntimeNotebook = NotebookItem & {
   iconPair: IconImagePair

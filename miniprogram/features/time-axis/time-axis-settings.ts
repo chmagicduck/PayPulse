@@ -106,6 +106,14 @@ Page({
     const target = this.data.entries.find(item => item.id === entryId)
     if (!target) return
 
+    if (target.locked) {
+      wx.showToast({
+        title: '系统卡请在航行档案设置中修改',
+        icon: 'none',
+      })
+      return
+    }
+
     pulseState(this, timers, 'entry-press', 'pressStates.entryId', entryId, '')
     this.openEditState(
       {
@@ -151,6 +159,8 @@ Page({
     }, 280)
   },
 
+  stopModalTap() {},
+
   updateTitle(e: WechatMiniprogram.Input) {
     this.setData({ 'form.title': e.detail.value })
   },
@@ -189,6 +199,14 @@ Page({
 
   deleteEntry() {
     if (!this.data.editingId) return
+    const target = this.data.entries.find(item => item.id === this.data.editingId)
+    if (target?.locked) {
+      wx.showToast({
+        title: '系统卡不可删除',
+        icon: 'none',
+      })
+      return
+    }
 
     pulseState(this, timers, 'modal-delete-press', 'pressStates.deleteButton', true, false, 260)
     deleteTimeAxisEntry(this.data.editingId)

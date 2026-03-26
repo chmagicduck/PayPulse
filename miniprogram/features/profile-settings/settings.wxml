@@ -1,7 +1,7 @@
 <view class="page-view settings-page">
   <view class="settings-nav" style="padding-top: {{statusBarHeight}}px;">
     <view class="settings-nav__content">
-      <view class="settings-nav__back" bind:tap="handleBack">
+      <view class="settings-nav__back {{!bootstrapReady ? 'settings-nav__back--disabled' : ''}}" bind:tap="handleBack">
         <image class="icon-lg" src="{{icons.chevronLeft}}" mode="aspectFit" />
       </view>
       <text class="settings-nav__title">航行档案设置</text>
@@ -58,6 +58,21 @@
           </view>
         </view>
       </view>
+
+      <view class="field" wx:if="{{form.gender === 'female'}}">
+        <view class="field__label">
+          <image class="icon-xs" src="{{icons.user}}" mode="aspectFit" />
+          <text>女性退休口径</text>
+        </view>
+        <view class="segmented">
+          <view class="segmented__item {{form.retirementProfile === 'female-50' ? 'segmented__item--active' : ''}}" data-value="female-50" bind:tap="chooseRetirementProfile">
+            <text class="segmented__text">原法定 50 岁</text>
+          </view>
+          <view class="segmented__item {{form.retirementProfile === 'female-55' ? 'segmented__item--active' : ''}}" data-value="female-55" bind:tap="chooseRetirementProfile">
+            <text class="segmented__text">原法定 55 岁</text>
+          </view>
+        </view>
+      </view>
     </view>
 
     <view class="settings-section">
@@ -79,7 +94,7 @@
             <image class="icon-xs" src="{{icons.moon}}" mode="aspectFit" />
             <text>预计退休（退休年龄）</text>
           </view>
-          <input class="field__input" type="number" value="{{form.retirementAge}}" data-field="retirementAge" bindinput="updateField" />
+          <input class="field__input" type="number" value="{{form.retirementAge}}" bindinput="updateRetirementAge" />
         </view>
 
         <view class="field">

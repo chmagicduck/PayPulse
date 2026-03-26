@@ -324,7 +324,7 @@
   </view>
 
   <view wx:if="{{showEditModal}}" class="modal-overlay {{editModalVisible ? 'modal-overlay--visible' : ''}}" bind:tap="closeEditModal">
-    <view class="modal-sheet {{editModalVisible ? 'modal-sheet--visible' : ''}}" catch:tap="">
+    <view class="modal-sheet {{editModalVisible ? 'modal-sheet--visible' : ''}}" catch:tap="stopModalTap">
       <view class="modal-sheet__header">
         <view class="modal-sheet__titles">
           <text class="modal-sheet__title">{{vm.editModal.title}}</text>
@@ -336,17 +336,17 @@
       </view>
       <view class="modal-sheet__inputs">
         <view class="time-input">
-          <input class="time-input__field" type="number" value="{{editH}}" data-field="editH" data-max="23" bindinput="updateTimeField" maxlength="2" />
+          <input class="time-input__field" type="number" value="{{editH}}" data-field="editH" data-max="23" bindinput="updateTimeField" bindblur="normalizeTimeField" maxlength="2" />
           <text class="time-input__label">时</text>
         </view>
         <text class="time-input__sep">:</text>
         <view class="time-input">
-          <input class="time-input__field" type="number" value="{{editM}}" data-field="editM" data-max="59" bindinput="updateTimeField" maxlength="2" />
+          <input class="time-input__field" type="number" value="{{editM}}" data-field="editM" data-max="59" bindinput="updateTimeField" bindblur="normalizeTimeField" maxlength="2" />
           <text class="time-input__label">分</text>
         </view>
         <text class="time-input__sep">:</text>
         <view class="time-input">
-          <input class="time-input__field" type="number" value="{{editS}}" data-field="editS" data-max="59" bindinput="updateTimeField" maxlength="2" />
+          <input class="time-input__field" type="number" value="{{editS}}" data-field="editS" data-max="59" bindinput="updateTimeField" bindblur="normalizeTimeField" maxlength="2" />
           <text class="time-input__label">秒</text>
         </view>
       </view>

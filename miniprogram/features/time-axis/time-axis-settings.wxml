@@ -83,7 +83,7 @@
   </view>
 
   <view wx:if="{{showEditModal}}" class="edit-modal {{editModalVisible ? 'edit-modal--visible' : ''}}" bind:tap="closeEditModal">
-    <view class="edit-sheet {{editModalVisible ? 'edit-sheet--visible' : ''}}" catch:tap="">
+    <view class="edit-sheet {{editModalVisible ? 'edit-sheet--visible' : ''}}" catch:tap="stopModalTap">
       <view class="edit-sheet__header">
         <text class="edit-sheet__title">{{editingId ? '编辑档案' : '新增档案卡片'}}</text>
         <view class="edit-sheet__close {{pressStates.closeButton ? 'edit-sheet__close--pressed' : ''}}" bind:tap="closeEditModal">

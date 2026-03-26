@@ -10,14 +10,21 @@ export interface AppBootstrapState {
 export type Gender = 'male' | 'female'
 export type WorkMode = 'double' | 'single-sat' | 'single-sun' | 'big-small'
 export type CalendarStatus = 'workday' | 'weekend' | 'holiday' | 'makeup'
-export type AdjustmentSource = 'none' | 'home' | 'report'
+export type AdjustmentSource = 'none' | 'home'
+export type TimeAxisEntrySourceType = 'system' | 'user'
+export type TimeAxisSystemType = 'birthday' | 'career-anniversary' | 'retirement-day' | null
+export type RetirementProfile = 'male-60' | 'female-55' | 'female-50'
+export type MoyuSessionStatus = 'idle' | 'active' | 'auto-stopped'
+export type MoyuStopReason = 'manual' | 'cross-lunch' | 'off-duty' | 'holiday' | 'cold-start-recover' | null
 
 export interface ProfileSettings {
   nickname: string
   birthday: string
   gender: Gender
+  retirementProfile: RetirementProfile
   careerStartDate: string
   retirementAge: number
+  retirementAgeEditedByUser: boolean
   expectedLifespan: number
   monthlySalaryCents: number
   payDay: number
@@ -36,9 +43,16 @@ export interface DailyVoyageRecord {
   moyuDurationSec: number
   manualAdjustmentDurationSec: number
   adjustmentSource: AdjustmentSource
-  derivedIncomeCents: number
   calendarStatus: CalendarStatus
   updatedAt: string
+}
+
+export interface DailyVoyageDerivedRecord {
+  record: DailyVoyageRecord
+  actualWorkDurationSec: number
+  moyuIncomeCents: number
+  voyageIncomeCents: number
+  moyuRatio: number
 }
 
 export interface TimeAxisNotebook {
@@ -54,6 +68,9 @@ export interface TimeAxisEntry {
   date: string
   notebookId: Exclude<TimeAxisNotebook['id'], 'all'>
   isAnniversary: boolean
+  sourceType: TimeAxisEntrySourceType
+  systemType: TimeAxisSystemType
+  locked: boolean
   createdAt: string
   updatedAt: string
 }
@@ -74,6 +91,11 @@ export interface AchievementState {
   rewarded: boolean
 }
 
+export interface LabTaskDailyLedgerEntry {
+  date: string
+  counts: Record<string, number>
+}
+
 export interface LabProgress {
   totalPoints: number
   todayPoints: number
@@ -82,6 +104,32 @@ export interface LabProgress {
   lastWeeklyResetDate: string
   tasks: LabTaskState[]
   achievements: AchievementState[]
+  taskDailyLedger: LabTaskDailyLedgerEntry[]
+}
+
+export interface MoyuSession {
+  sessionId: string
+  status: MoyuSessionStatus
+  date: string
+  startedAt: string | null
+  lastTickAt: string | null
+  accumulatedDurationSec: number
+  stopReason: MoyuStopReason
+}
+
+export interface CalendarHolidayRange {
+  from: string
+  to: string
+  badge: string
+  title: string
+  desc: string
+}
+
+export interface CalendarYearConfig {
+  year: number
+  holidayRanges: CalendarHolidayRange[]
+  makeupDays: string[]
+  supportOfficialHoliday: boolean
 }
 
 export interface DataExportPackage {
@@ -93,7 +141,7 @@ export interface DataExportPackage {
   dailyRecords: DailyVoyageRecord[]
   timeAxisEntries: TimeAxisEntry[]
   labProgress: LabProgress | null
-  reportAdjustments: Record<string, number>
+  moyuSession: MoyuSession | null
   preferences: {
     amountVisible: boolean
   }

@@ -54,21 +54,31 @@ function buildProfileMenuItems<
   )
 }
 
+type ProfileCurrentRank = {
+  level: number
+  name: string
+  tone: string
+  iconPair: IconImagePair
+}
+
 export function buildProfilePageState() {
   const currentAvatar = String(profileHomeModel.avatarPresets[0].src)
-  const currentRank = profileHomeModel.user.rank
+  const currentRank: ProfileCurrentRank = {
+    level: profileHomeModel.user.rank.level,
+    name: profileHomeModel.user.rank.name,
+    tone: profileHomeModel.user.rank.tone,
+    iconPair: animatedIconPair(profileHomeModel.user.rank.iconName, {
+      color: profileHomeModel.user.rank.iconColor,
+      size: 12,
+      animation: getProfileIconAnimation(profileHomeModel.user.rank.iconName),
+      durationMs: 2200,
+    }),
+  }
 
   return {
     currentAvatar,
     draftAvatar: currentAvatar,
-    currentRank: Object.assign({}, currentRank, {
-      iconPair: animatedIconPair(currentRank.iconName, {
-        color: currentRank.iconColor,
-        size: 12,
-        animation: getProfileIconAnimation(currentRank.iconName),
-        durationMs: 2200,
-      }),
-    }),
+    currentRank,
     consoleItems: buildProfileMenuItems('console', profileHomeModel.consoleItems),
     aboutItems: buildProfileMenuItems('about', profileHomeModel.aboutItems),
     storageItems: buildProfileMenuItems('storage', profileHomeModel.storageItems),

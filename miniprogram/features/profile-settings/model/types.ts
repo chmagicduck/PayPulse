@@ -1,11 +1,13 @@
-import type { Gender, ProfileSettings, WorkMode } from '../../../lib/domain/types'
+import type { Gender, ProfileSettings, RetirementProfile, WorkMode } from '../../../lib/domain/types'
 
 export type ProfileSettingsForm = {
   nickname: string
   birthday: string
   gender: Gender
+  retirementProfile: RetirementProfile
   careerStartDate: string
   retirementAge: string
+  retirementAgeEditedByUser: boolean
   expectedLifespan: string
   monthlySalary: string
   payDay: string

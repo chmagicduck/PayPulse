@@ -9,4 +9,5 @@ export const storageKeys = {
   labProgress: 'lab.progress',
   timeAxisEntries: 'time.axis.entries',
   reportHistoryAdjustments: 'report.history.adjustments',
+  moyuSession: 'moyu.session',
 } as const

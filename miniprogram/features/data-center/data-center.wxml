@@ -94,7 +94,7 @@
   </view>
 
   <view wx:if="{{showResetModal}}" class="reset-overlay {{resetModalVisible ? 'reset-overlay--visible' : ''}}" bind:tap="closeResetModal">
-    <view class="reset-sheet {{resetModalVisible ? 'reset-sheet--visible' : ''}}" catch:tap="">
+    <view class="reset-sheet {{resetModalVisible ? 'reset-sheet--visible' : ''}}" catch:tap="stopModalTap">
       <view class="reset-sheet__header">
         <view class="reset-sheet__titles">
           <text class="reset-sheet__title">确定要清空航程吗</text>

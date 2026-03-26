@@ -20,52 +20,37 @@ export const profileHomeModel = {
   ],
   consoleItems: [
     {
-      title: '基本信息设置',
-      desc: '修改航行昵称、薪资基数及工时',
+      title: '航行档案设置',
       tone: 'blue',
       iconName: 'user',
       iconColor: '#3b82f6',
       url: '/features/profile-settings/settings',
     },
     {
-      title: '岁月坐标设置',
-      desc: '管理重要的时间节点与纪念日',
+      title: '航程界标设置',
       tone: 'emerald',
       iconName: 'map-pin',
       iconColor: '#10b981',
       url: '/features/time-axis/time-axis-settings',
     },
     {
-      title: '查看日历',
-      desc: '纵览航行周期与重要考勤节点',
+      title: '查看航行日历',
       tone: 'indigo',
       iconName: 'calendar',
       iconColor: '#4f46e5',
       url: '/features/calendar/calendar',
-    },
-    {
-      title: '任务中心设置',
-      desc: '配置你的每日航行目标与奖励',
-      tone: 'rose',
-      iconName: 'target',
-      iconColor: '#f43f5e',
-      badge: '3',
-      url: '/features/lab/lab',
-      navMethod: 'switchTab',
-    },
+    }
   ],
   aboutItems: [
     {
-      title: '加入社群',
-      desc: '与万千舵手交流摸鱼心得',
+      title: '船员俱乐部',
       tone: 'indigo',
       iconName: 'users',
       iconColor: '#6366f1',
       url: '/features/community/join',
     },
     {
-      title: '关于软件',
-      desc: '版本 v1.0.0 (Build 2026)',
+      title: '航行通告',
       tone: 'slate',
       iconName: 'info',
       iconColor: '#64748b',
@@ -75,7 +60,6 @@ export const profileHomeModel = {
   storageItems: [
     {
       title: '数据同步中心',
-      desc: '管理本地备份、云端同步与隐私',
       tone: 'amber',
       iconName: 'database',
       iconColor: '#f59e0b',

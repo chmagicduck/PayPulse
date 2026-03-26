@@ -1,7 +1,5 @@
-import { adjustDailyRecordDuration } from '../../lib/domain/daily-records'
-import { clearTimerBag, createTimerBag, openModal, pulseState, replayState } from '../../lib/wx/page'
+import { clearTimerBag, createTimerBag, pulseState, replayState } from '../../lib/wx/page'
 import { ensureBootstrapReady } from '../../store/bootstrap'
-import { readProfileSettings } from '../profile-settings/model/storage'
 import { buildAnnualCards, buildHistoryItems, buildRatioRing, buildReportIcons } from './ocean-report.helper'
 import { reportModel } from './model'
 import { buildReportRuntimeState } from './model/state'
@@ -24,12 +22,6 @@ Page({
     ratioRingSrc: buildRatioRing(reportModel.ratio.stats[DEFAULT_RANGE_KEY].moyu),
     annualCards: buildAnnualCards() as any[],
     historyItems: buildHistoryItems() as any[],
-    showEditModal: false,
-    editModalVisible: false,
-    editingIndex: -1,
-    editH: '00',
-    editM: '00',
-    editS: '00',
     icons: buildReportIcons(),
     iconAnimations: {
       chart: false,
@@ -41,8 +33,6 @@ Page({
       chartBarIndex: -1,
       annualIndex: -1,
       historyIndex: -1,
-      modalClose: false,
-      modalConfirm: false,
     },
   },
 
@@ -113,69 +103,13 @@ Page({
     pulseState(this, timers, 'report-range', 'pressStates.rangeKey', key, '')
   },
 
-  openEditModal(e: WechatMiniprogram.TouchEvent) {
+  pressHistoryCard(e: WechatMiniprogram.TouchEvent) {
     const cardIndex = Number(e.currentTarget.dataset.index)
-    const item = this.data.historyItems[cardIndex]
-    if (!item) return
-
-    const [editH = '00', editM = '00', editS = '00'] = item.duration.split(':')
-
+    if (Number.isNaN(cardIndex)) return
     pulseState(this, timers, 'report-history-card', 'pressStates.historyIndex', cardIndex, -1)
-    openModal(
-      this,
-      timers,
-      'edit-modal',
-      {
-        show: 'showEditModal',
-        visible: 'editModalVisible',
-      },
-      {
-        editingIndex: cardIndex,
-        editH,
-        editM,
-        editS,
-      },
-    )
-  },
-
-  hideEditModal() {
-    this.setData({ editModalVisible: false })
-    timers['edit-modal'] = setTimeout(() => {
-      this.setData({
-        showEditModal: false,
-        editModalVisible: false,
-        editingIndex: -1,
-      })
-      timers['edit-modal'] = null
-    }, 280)
-  },
-
-  closeEditModal() {
-    pulseState(this, timers, 'report-modal-close', 'pressStates.modalClose', true, false)
-    this.hideEditModal()
-  },
-
-  updateTimeField(e: WechatMiniprogram.Input) {
-    const { field, max } = e.currentTarget.dataset
-    if (!field) return
-
-    const parsed = Math.max(0, Math.min(Number(max) || 59, parseInt(e.detail.value, 10) || 0))
-    this.setData({
-      [String(field)]: parsed.toString().padStart(2, '0'),
+    wx.showToast({
+      title: '请前往首页领潮中心修改今日避风时长',
+      icon: 'none',
     })
-  },
-
-  saveEditTime() {
-    const index = this.data.editingIndex
-    if (index < 0) return
-
-    const item = this.data.historyItems[index]
-    if (!item?.fullDate) return
-
-    const durationSec = Number(this.data.editH) * 3600 + Number(this.data.editM) * 60 + Number(this.data.editS)
-    adjustDailyRecordDuration(item.fullDate, durationSec, 'report', readProfileSettings())
-    pulseState(this, timers, 'report-modal-confirm', 'pressStates.modalConfirm', true, false)
-    this.hideEditModal()
-    this.reloadRuntimeState()
   },
 })
