@@ -6,7 +6,7 @@
 
 ## 页面
 
-- `dashboard`
+- `home`
 
 ## Model 文件
 

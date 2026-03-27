@@ -21,7 +21,7 @@ Page({
   },
 
   handleBack() {
-    handlePageBack('/features/profile/home')
+    handlePageBack('/features/profile/profile')
   },
 
   switchTab(e: WechatMiniprogram.TouchEvent) {

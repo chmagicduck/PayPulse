@@ -1,14 +1,14 @@
 export const routes = [
   {
     featureId: 'home',
-    pageId: 'dashboard',
-    route: 'features/home/dashboard',
+    pageId: 'home',
+    route: 'features/home/home',
     kind: 'tab',
   },
   {
     featureId: 'report',
-    pageId: 'ocean-report',
-    route: 'features/report/ocean-report',
+    pageId: 'report',
+    route: 'features/report/report',
     kind: 'tab',
   },
   {
@@ -19,20 +19,20 @@ export const routes = [
   },
   {
     featureId: 'profile',
-    pageId: 'home',
-    route: 'features/profile/home',
+    pageId: 'profile',
+    route: 'features/profile/profile',
     kind: 'tab',
   },
   {
     featureId: 'profile-settings',
-    pageId: 'settings',
-    route: 'features/profile-settings/settings',
+    pageId: 'profile-settings',
+    route: 'features/profile-settings/profile-settings',
     kind: 'page',
   },
   {
     featureId: 'time-axis',
-    pageId: 'time-axis-settings',
-    route: 'features/time-axis/time-axis-settings',
+    pageId: 'time-axis',
+    route: 'features/time-axis/time-axis',
     kind: 'page',
   },
   {
@@ -43,8 +43,8 @@ export const routes = [
   },
   {
     featureId: 'community',
-    pageId: 'join',
-    route: 'features/community/join',
+    pageId: 'community',
+    route: 'features/community/community',
     kind: 'page',
   },
   {

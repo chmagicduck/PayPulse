@@ -1,7 +1,7 @@
 export const tabbarItems = [
   {
     key: 'home',
-    pagePath: 'features/home/dashboard',
+    pagePath: 'features/home/home',
     text: '领潮中心',
     iconSvg: '/assets/images/tabbar/svg/tab-home.svg',
     activeIconSvg: '/assets/images/tabbar/svg/tab-home-active.svg',
@@ -10,7 +10,7 @@ export const tabbarItems = [
   },
   {
     key: 'report',
-    pagePath: 'features/report/ocean-report',
+    pagePath: 'features/report/report',
     text: '洋流战报',
     iconSvg: '/assets/images/tabbar/svg/tab-chart.svg',
     activeIconSvg: '/assets/images/tabbar/svg/tab-chart-active.svg',
@@ -28,7 +28,7 @@ export const tabbarItems = [
   },
   {
     key: 'profile',
-    pagePath: 'features/profile/home',
+    pagePath: 'features/profile/profile',
     text: '个人基地',
     iconSvg: '/assets/images/tabbar/svg/tab-profile.svg',
     activeIconSvg: '/assets/images/tabbar/svg/tab-profile-active.svg',

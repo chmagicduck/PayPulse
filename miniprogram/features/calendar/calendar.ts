@@ -34,7 +34,7 @@ Page({
   },
 
   handleBack() {
-    handlePageBack('/features/profile/home')
+    handlePageBack('/features/profile/profile')
   },
 
   refreshMonthState() {

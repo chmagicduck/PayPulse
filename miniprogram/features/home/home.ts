@@ -299,7 +299,7 @@ Page({
 
   openTimeAxisPage() {
     setTimeout(() => {
-      wx.navigateTo({ url: '/features/time-axis/time-axis-settings' })
+      wx.navigateTo({ url: '/features/time-axis/time-axis' })
     }, 120)
   },
 })

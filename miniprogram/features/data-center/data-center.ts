@@ -51,7 +51,7 @@ Page({
   },
 
   handleBack() {
-    handlePageBack('/features/profile/home')
+    handlePageBack('/features/profile/profile')
   },
 
   handleExport() {
@@ -116,7 +116,7 @@ Page({
         resetModalVisible: false,
       })
       timers['reset-modal'] = null
-      wx.reLaunch({ url: '/features/profile-settings/settings' })
+      wx.reLaunch({ url: '/features/profile-settings/profile-settings' })
     }, 280)
   },
 })

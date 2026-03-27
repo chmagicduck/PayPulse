@@ -72,7 +72,7 @@ Page({
       wx.navigateBack({ delta: 1 })
       return
     }
-    wx.switchTab({ url: '/features/home/dashboard' })
+    wx.switchTab({ url: '/features/home/home' })
   },
 
   updateField(e: WechatMiniprogram.Input | WechatMiniprogram.CustomEvent) {

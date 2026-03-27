@@ -1,13 +1,13 @@
 {
   "pages": [
-    "features/home/dashboard",
-    "features/report/ocean-report",
+    "features/home/home",
+    "features/report/report",
     "features/lab/lab",
-    "features/profile/home",
-    "features/profile-settings/settings",
-    "features/time-axis/time-axis-settings",
+    "features/profile/profile",
+    "features/profile-settings/profile-settings",
+    "features/time-axis/time-axis",
     "features/calendar/calendar",
-    "features/community/join",
+    "features/community/community",
     "features/about/about",
     "features/data-center/data-center"
   ],
@@ -25,13 +25,13 @@
     "borderStyle": "white",
     "list": [
       {
-        "pagePath": "features/home/dashboard",
+        "pagePath": "features/home/home",
         "text": "领潮中心",
         "iconPath": "assets/images/tabbar/tab-home.png",
         "selectedIconPath": "assets/images/tabbar/tab-home-active.png"
       },
       {
-        "pagePath": "features/report/ocean-report",
+        "pagePath": "features/report/report",
         "text": "洋流战报",
         "iconPath": "assets/images/tabbar/tab-chart.png",
         "selectedIconPath": "assets/images/tabbar/tab-chart-active.png"
@@ -43,7 +43,7 @@
         "selectedIconPath": "assets/images/tabbar/tab-lab-active.png"
       },
       {
-        "pagePath": "features/profile/home",
+        "pagePath": "features/profile/profile",
         "text": "个人基地",
         "iconPath": "assets/images/tabbar/tab-profile.png",
         "selectedIconPath": "assets/images/tabbar/tab-profile-active.png"

@@ -24,14 +24,14 @@ export const profileHomeModel = {
       tone: 'blue',
       iconName: 'user',
       iconColor: '#3b82f6',
-      url: '/features/profile-settings/settings',
+      url: '/features/profile-settings/profile-settings',
     },
     {
       title: '航程界标设置',
       tone: 'emerald',
       iconName: 'map-pin',
       iconColor: '#10b981',
-      url: '/features/time-axis/time-axis-settings',
+      url: '/features/time-axis/time-axis',
     },
     {
       title: '查看航行日历',
@@ -47,7 +47,7 @@ export const profileHomeModel = {
       tone: 'indigo',
       iconName: 'users',
       iconColor: '#6366f1',
-      url: '/features/community/join',
+      url: '/features/community/community',
     },
     {
       title: '航行通告',

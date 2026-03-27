@@ -1,5 +1,5 @@
 const appState = {
-  lastVisitedRoute: 'features/home/dashboard',
+  lastVisitedRoute: 'features/home/home',
 }
 
 export function getAppState() {

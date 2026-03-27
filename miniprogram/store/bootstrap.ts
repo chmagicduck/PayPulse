@@ -16,8 +16,8 @@ import { readProfileAvatar, writeProfileAvatar } from '../features/profile/model
 import { ensureDefaultTimeAxisEntries, readTimeAxisEntries } from '../features/time-axis/model/storage'
 import { profileHomeModel } from '../features/profile/model'
 
-const SETTINGS_ROUTE = '/features/profile-settings/settings'
-const HOME_ROUTE = '/features/home/dashboard'
+const SETTINGS_ROUTE = '/features/profile-settings/profile-settings'
+const HOME_ROUTE = '/features/home/home'
 
 let hasPreparedCurrentLaunch = false
 
