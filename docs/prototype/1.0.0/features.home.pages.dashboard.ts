@@ -201,8 +201,8 @@ const App = () => {
           <div className="relative w-full bg-white rounded-t-[2rem] p-6 pb-10 shadow-2xl animate-in slide-in-from-bottom-8 border border-slate-200">
             <div className="flex justify-between items-start mb-8">
               <div>
-                <h3 className="text-lg font-bold tracking-tight text-slate-900">修正避风时长</h3>
-                <p className="text-xs text-slate-500 mt-1">手动校准今日避风港停留的时间</p>
+                <h3 className="text-lg font-bold tracking-tight text-slate-900">修正摸鱼时长</h3>
+                <p className="text-xs text-slate-500 mt-1">手动校准今日摸鱼港停留的时间</p>
               </div>
               <button onClick={() => setIsEditModalOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400">
                 <X size={18} />
@@ -260,7 +260,7 @@ const App = () => {
           <div className="relative z-10">
             <div className="flex flex-row items-center justify-between pb-4">
               <div className="flex items-center gap-2">
-                <h3 className="text-sm font-medium text-blue-100 opacity-90">今日累计避风收益</h3>
+                <h3 className="text-sm font-medium text-blue-100 opacity-90">今日累计摸鱼收益</h3>
                 <button onClick={() => setShowAmount(!showAmount)} className="p-1 text-blue-200 hover:text-white transition-colors">
                   {showAmount ? <Eye size={14} /> : <EyeOff size={14} />}
                 </button>
@@ -284,7 +284,7 @@ const App = () => {
                   className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl transition-all shadow-lg active:scale-95 ${isMoYu ? 'bg-white text-blue-600 font-black' : 'bg-white/10 text-white border border-white/20 backdrop-blur-md'}`}
                 >
                   <Coffee size={18} className={isMoYu ? 'animate-bounce' : ''} />
-                  <span className="text-xs font-bold">{isMoYu ? '避风中' : '点击避风'}</span>
+                  <span className="text-xs font-bold">{isMoYu ? '摸鱼中' : '点击摸鱼'}</span>
                 </button>
                 <div className="text-[10px] font-bold text-blue-200 tabular-nums bg-white/5 px-2 py-0.5 rounded-md">
                    停留: {formatTime(moYuSeconds)}
@@ -298,7 +298,7 @@ const App = () => {
                   <div className="flex flex-col gap-0.5">
                     <div className="flex items-center gap-1.5">
                        <TrendingUp size={12} className="text-blue-200" />
-                       <span className="text-[10px] font-bold text-blue-100 uppercase tracking-widest">避风收益深度</span>
+                       <span className="text-[10px] font-bold text-blue-100 uppercase tracking-widest">摸鱼收益深度</span>
                     </div>
                     <div className="flex items-baseline gap-1.5">
                        <span className="text-xl font-black text-white tabular-nums">{moYuPercent.toFixed(1)}%</span>

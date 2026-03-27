@@ -76,6 +76,27 @@
       <view class="field-grid">
         <view class="field">
           <view class="field__label">
+            <image class="icon-xs" src="{{icons.wallet}}" mode="aspectFit" />
+            <text>税前月收入</text>
+          </view>
+          <view class="field__money">
+            <text class="field__money-prefix">¥</text>
+            <input class="field__input field__input--money" type="number" value="{{form.monthlySalary}}" data-field="monthlySalary" bindinput="updateField" />
+          </view>
+        </view>
+
+        <view class="field">
+          <view class="field__label">
+            <image class="icon-xs" src="{{icons.trendingUp}}" mode="aspectFit" />
+            <text>发薪日期</text>
+          </view>
+          <input class="field__input" type="number" value="{{form.payDay}}" data-field="payDay" bindinput="updateField" />
+        </view>
+      </view>
+
+      <view class="field-grid">
+        <view class="field">
+          <view class="field__label">
             <image class="icon-xs" src="{{icons.moon}}" mode="aspectFit" />
             <text>预计退休年龄</text>
           </view>
@@ -103,31 +124,15 @@
           />
         </view>
       </view>
-
-      <view class="field-grid">
-        <view class="field">
-          <view class="field__label">
-            <image class="icon-xs" src="{{icons.wallet}}" mode="aspectFit" />
-            <text>税前月收入</text>
-          </view>
-          <view class="field__money">
-            <text class="field__money-prefix">¥</text>
-            <input class="field__input field__input--money" type="number" value="{{form.monthlySalary}}" data-field="monthlySalary" bindinput="updateField" />
-          </view>
-        </view>
-
-        <view class="field">
-          <view class="field__label">
-            <image class="icon-xs" src="{{icons.trendingUp}}" mode="aspectFit" />
-            <text>发薪日期</text>
-          </view>
-          <input class="field__input" type="number" value="{{form.payDay}}" data-field="payDay" bindinput="updateField" />
-        </view>
-      </view>
     </view>
 
     <view class="settings-section settings-section--last">
-      <pp-section-header title="航行排班计划" barTone="blue" />
+      <pp-section-header
+        title="航行排班计划"
+        subtitle="{{dailyWorkDuration.hours}}小时{{dailyWorkDuration.minutes < 10 ? '0' : ''}}{{dailyWorkDuration.minutes}}分"
+        subtitlePlacement="right"
+        barTone="blue"
+      />
 
       <view class="field">
         <view class="field__label">

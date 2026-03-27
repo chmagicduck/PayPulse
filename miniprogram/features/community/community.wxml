@@ -37,7 +37,7 @@
     <view class="join-card">
       <view class="join-card__head">
         <image class="join-card__anchor" src="{{icons.anchorPair.staticSrc}}" mode="aspectFit" />
-        <text class="join-card__title">深海避风港</text>
+        <text class="join-card__title">深海摸鱼港</text>
         <text class="join-card__subtitle">官方社群入口</text>
       </view>
 

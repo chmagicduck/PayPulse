@@ -99,7 +99,7 @@ const App = () => {
               <div className="text-center">
                 <div className="flex items-center justify-center gap-2 mb-1">
                   <Anchor size={20} className="text-blue-500" />
-                  <h3 className="text-xl font-black tracking-tight">深海避风港</h3>
+                  <h3 className="text-xl font-black tracking-tight">深海摸鱼港</h3>
                 </div>
                 <p className="text-[10px] text-slate-500 font-bold tracking-widest">官方旗舰社群</p>
               </div>

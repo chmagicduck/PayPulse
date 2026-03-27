@@ -170,7 +170,7 @@
                     <image class="history-card__clock" src="{{icons.clock}}" mode="aspectFit" />
                     <text class="history-card__duration">{{item.duration}}</text>
                   </view>
-                  <text class="history-card__hint">仅支持在领潮中心修正今日避风时长</text>
+                  <text class="history-card__hint">仅支持在领潮中心修正今日摸鱼时长</text>
                 </view>
               </view>
 

@@ -150,7 +150,7 @@ const App = () => {
             {/* 图例说明 */}
             <div className="mt-8 pt-6 border-t border-slate-50 grid grid-cols-2 gap-y-3">
               <LegendItem icon={<Coins size={12} className="text-amber-500" />} label="薪" desc="发薪宝藏日" />
-              <LegendItem icon={<Anchor size={12} className="text-rose-500" />} label="休" desc="法定避风港" />
+              <LegendItem icon={<Anchor size={12} className="text-rose-500" />} label="休" desc="法定摸鱼港" />
               <LegendItem icon={<Waves size={12} className="text-emerald-500" />} label="休" desc="浅滩休整日" />
               <LegendItem icon={<Zap size={12} className="text-slate-800" />} label="班" desc="强力补班航程" />
             </div>
@@ -173,7 +173,7 @@ const App = () => {
               <div>
                 <p className="text-xs font-bold text-slate-400 mb-1">{month + 1}月{selectedDate}日 · 星期{(startDay + selectedDate - 1) % 7 === 0 ? '日' : (startDay + selectedDate - 1) % 7}</p>
                 <h4 className="text-lg font-black text-slate-900">
-                  {calendarData[monthStr]?.[selectedDate]?.status === 1 ? '避风港：中秋佳节' :
+                  {calendarData[monthStr]?.[selectedDate]?.status === 1 ? '摸鱼港：中秋佳节' :
                    calendarData[monthStr]?.[selectedDate]?.status === 4 ? '宝藏日：薪水到账' :
                    calendarData[monthStr]?.[selectedDate]?.status === 2 ? '浅滩休整中' :
                    calendarData[monthStr]?.[selectedDate]?.status === 3 ? '强力补班中' : '正常航行模式'}
@@ -189,7 +189,7 @@ const App = () => {
             </div>
             <p className="text-[10px] text-slate-500 mt-3 leading-relaxed font-medium">
               {calendarData[monthStr]?.[selectedDate]?.status === 4 ? '叮！检测到账户有大额能量补充，建议今日适当提高摸鱼质量以示庆祝。' :
-               calendarData[monthStr]?.[selectedDate]?.status === 1 ? '检测到当前处于法定避风港区域，所有的航行任务已自动挂起。' :
+               calendarData[monthStr]?.[selectedDate]?.status === 1 ? '检测到当前处于法定摸鱼港区域，所有的航行任务已自动挂起。' :
                '当前海域风平浪静，适合稳定航行。记得保持动力室正常运转，等待下一个宝藏日。'}
             </p>
           </div>

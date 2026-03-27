@@ -23,7 +23,7 @@ export const calendarStaticViewModel = {
           desc: '当前海域风平浪静，适合稳定航行与日常推进。',
         },
         holiday: {
-          title: '法定避风港',
+          title: '法定摸鱼港',
           desc: '当前日期位于官方节假日区间，适合休整与庆祝。',
         },
         payday: {

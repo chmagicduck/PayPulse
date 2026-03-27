@@ -30,6 +30,12 @@ export type ProfileSettingsAgeLimits = {
   expectedLifespanMax: number
 }
 
+export type ProfileSettingsDailyWorkDuration = {
+  totalMinutes: number
+  hours: number
+  minutes: number
+}
+
 export type ProfileSettingsValidationResult =
   | {
       ok: true

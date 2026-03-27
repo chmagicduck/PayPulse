@@ -55,7 +55,7 @@ const RANKS = [
     theme: "basic"
   },
   { 
-    level: 4, name: "划水见习生", exp: 200, icon: <Wind size={16} />, 
+    level: 4, name: "摸鱼见习生", exp: 200, icon: <Wind size={16} />, 
     themeStyles: "bg-gradient-to-br from-emerald-400 to-teal-600 border-emerald-300 text-white shadow-emerald-500/30",
     progressStyles: "bg-white/40",
     accent: "text-emerald-100",

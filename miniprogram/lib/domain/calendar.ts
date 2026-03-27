@@ -102,13 +102,13 @@ export function buildCalendarDetail(date: Date, settings: ProfileSettings) {
     return { title: holiday.title, desc: holiday.desc }
   }
   if (config.supportOfficialHoliday && config.makeupDays.includes(dateKey)) {
-    return { title: '调休补班中', desc: '今天属于官方调休补班日，请按工作节奏安排避风与航行。' }
+    return { title: '调休补班中', desc: '今天属于官方调休补班日，请按工作节奏安排摸鱼与航行。' }
   }
   if (toDateKey(getPayDate(date.getFullYear(), date.getMonth(), settings.payDay)) === dateKey) {
-    return { title: '宝藏日：薪水到账', desc: '发薪节点已到，可以顺手回顾本月的真实航行与避风记录。' }
+    return { title: '宝藏日：薪水到账', desc: '发薪节点已到，可以顺手回顾本月的真实航行与摸鱼记录。' }
   }
   if (resolveWorkdayStatus(date, settings) === 'weekend') {
-    return { title: '周末休整中', desc: '当前日期属于休息日，适合补能、休整，不能开启避风会话。' }
+    return { title: '周末休整中', desc: '当前日期属于休息日，适合补能、休整，不能开启摸鱼会话。' }
   }
 
   return { title: '正常航行模式', desc: '当前处于正常工作日，页面中的工时与收益都会按真实时间推进。' }

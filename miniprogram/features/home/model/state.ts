@@ -75,6 +75,6 @@ export function buildHomeDashboardRuntimeState() {
     session: syncedSession,
     homeStatus,
     isMoYu: syncedSession.status === 'active',
-    moyuButtonText: syncedSession.status === 'active' ? '结束避风' : '开启避风',
+    moyuButtonText: syncedSession.status === 'active' ? '结束摸鱼' : '开启摸鱼',
   }
 }

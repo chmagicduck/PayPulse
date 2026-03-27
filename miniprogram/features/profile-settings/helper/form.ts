@@ -1,7 +1,8 @@
+import { getDurationSecFromTimeRange } from '../../../lib/domain/date'
 import { computeRetirementAge, getDefaultRetirementProfile } from '../../../lib/domain/retirement'
 import type { Gender } from '../../../lib/domain/types'
 import { genderDefaults, profileAgeLimits } from '../model/options'
-import type { ProfileSettingsAgeLimits, ProfileSettingsField, ProfileSettingsForm } from '../model/types'
+import type { ProfileSettingsAgeLimits, ProfileSettingsDailyWorkDuration, ProfileSettingsField, ProfileSettingsForm } from '../model/types'
 
 function resolveRetirementProfile(form: ProfileSettingsForm) {
   return form.gender === 'male'
@@ -74,5 +75,24 @@ export function buildProfileAgeLimits(form: ProfileSettingsForm): ProfileSetting
         )
       : profileAgeLimits.retirementAgeMin + 1,
     expectedLifespanMax: profileAgeLimits.expectedLifespanMax,
+  }
+}
+
+export function computeDailyWorkDurationSec(form: ProfileSettingsForm) {
+  const totalSec = getDurationSecFromTimeRange(form.startTime, form.endTime)
+  if (!form.lunchBreakEnabled) {
+    return totalSec
+  }
+
+  const lunchSec = getDurationSecFromTimeRange(form.lunchStartTime, form.lunchEndTime)
+  return Math.max(0, totalSec - lunchSec)
+}
+
+export function buildDailyWorkDuration(form: ProfileSettingsForm): ProfileSettingsDailyWorkDuration {
+  const totalMinutes = Math.floor(computeDailyWorkDurationSec(form) / 60)
+  return {
+    totalMinutes,
+    hours: Math.floor(totalMinutes / 60),
+    minutes: totalMinutes % 60,
   }
 }

@@ -158,8 +158,8 @@ export const homeDashboardModel = {
     },
   ],
   editModal: {
-    title: '修正避风时长',
-    subtitle: '手动校准今日避风港停留的时间',
+    title: '修正摸鱼时长',
+    subtitle: '手动校准今日摸鱼港停留的时间',
     cancelText: '取消',
     confirmText: '确认保存',
   },

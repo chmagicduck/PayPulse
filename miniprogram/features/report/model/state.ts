@@ -10,7 +10,7 @@ export function buildReportRuntimeState() {
   return Object.assign({}, state, {
     trend: Object.assign({}, state.trend, {
       subtitle: monthRecords.length
-        ? `${now().getMonth() + 1} 月每日真实避风概览`
+        ? `${now().getMonth() + 1} 月每日真实摸鱼概览`
         : '当前月份暂无真实记录',
       summaryLabel: monthRecords.length ? '本月总计' : '暂无汇总',
     }),

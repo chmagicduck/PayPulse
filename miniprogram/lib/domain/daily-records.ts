@@ -639,7 +639,7 @@ export function buildReportViewState(settings: ProfileSettings, targetDateTime: 
       isEmpty: trendBase.length === 0,
       emptyTitle: monthRecords.length === 0 ? '本月无数据' : '本月数据不足完整月',
       emptyDesc: monthRecords.length === 0
-        ? '当前月份还没有真实避风记录，开始一次有效记录后会出现在这里。'
+        ? '当前月份还没有真实摸鱼记录，开始一次有效记录后会出现在这里。'
         : '当前月份只展示已有自然日，不会补齐未来日期或演示数据。',
       riseText: `${risePercent >= 0 ? '+' : ''}${risePercent.toFixed(1)}%`,
       bars: trendBase.map(item => ({
@@ -657,9 +657,9 @@ export function buildReportViewState(settings: ProfileSettings, targetDateTime: 
       },
     },
     annualCards: [
-      { title: '年度避风收益', value: formatCurrency(yearMoyuIncomeTotal, 2), tone: 'indigo', iconName: 'coins' },
+      { title: '年度摸鱼收益', value: formatCurrency(yearMoyuIncomeTotal, 2), tone: 'indigo', iconName: 'coins' },
       { title: '摸鱼打卡天数', value: `${checkInDays} 天`, tone: 'amber', iconName: 'calendar-days' },
-      { title: '月均避风收益', value: formatCurrency(Math.round(yearMoyuIncomeTotal / recordedMonthCount), 2), tone: 'blue', iconName: 'trending-up' },
+      { title: '月均摸鱼收益', value: formatCurrency(Math.round(yearMoyuIncomeTotal / recordedMonthCount), 2), tone: 'blue', iconName: 'trending-up' },
       { title: '年度航行收益', value: formatCurrency(yearVoyageIncomeTotal, 2), tone: 'rose', iconName: 'trophy' },
     ],
     ratio: {

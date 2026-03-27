@@ -18,7 +18,7 @@
       <view class="income-card__body">
         <view class="income-card__header">
           <view class="income-card__label-row">
-            <text class="income-card__label">今日避风收益</text>
+            <text class="income-card__label">今日摸鱼收益</text>
             <view class="income-card__eye" bind:tap="toggleAmount">
               <image class="icon-sm" src="{{showAmount ? iconEye : iconEyeOff}}" mode="aspectFit" />
             </view>
@@ -37,10 +37,10 @@
           <view class="income-card__control">
             <view class="income-card__toggle {{isMoYu ? 'income-card__toggle--active' : ''}}" bind:tap="toggleMoYu">
               <image class="income-card__toggle-icon" src="{{isMoYu ? (iconAnimations.moyu ? iconPairs.coffeeBlue.animatedSrc : iconPairs.coffeeBlue.staticSrc) : (iconAnimations.moyu ? iconPairs.coffeeWhite.animatedSrc : iconPairs.coffeeWhite.staticSrc)}}" mode="aspectFit" />
-              <text class="income-card__toggle-text">{{isMoYu ? '避风中' : '开启避风'}}</text>
+              <text class="income-card__toggle-text">{{isMoYu ? '摸鱼中' : '开启摸鱼'}}</text>
             </view>
             <view class="income-card__stay">
-              <text class="income-card__stay-text">避风时长: {{vm.timer.rightValue}}</text>
+              <text class="income-card__stay-text">摸鱼时长: {{vm.timer.rightValue}}</text>
               <view class="income-card__stay-action" catch:tap="openEditModal">
                 <image class="income-card__stay-icon" src="{{iconSettingsSlate}}" mode="aspectFit" />
               </view>
@@ -51,7 +51,7 @@
         <view class="income-card__progress-panel">
           <view class="income-card__progress-head">
             <view class="income-card__progress-copy">
-              <text class="income-card__progress-title">避风占比</text>
+              <text class="income-card__progress-title">摸鱼占比</text>
               <view class="income-card__progress-metrics">
                 <text class="income-card__progress-value">{{vm.income.idlePercent}}%</text>
                 <text class="income-card__progress-meta">/ 今日航程 {{vm.income.workPercent}}%</text>

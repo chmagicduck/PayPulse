@@ -308,12 +308,12 @@ const App = () => {
           </div>
         </section>
 
-        {/* Section 4: 近7日避风明细 - 已按要求调整 */}
+        {/* Section 4: 近7日摸鱼明细 - 已按要求调整 */}
         <section className="space-y-4 pb-12">
           <div className="flex justify-between items-center px-1">
             <div className="flex items-center gap-2">
               <div className="w-1 h-3 bg-slate-900 rounded-full"></div>
-              <h3 className="text-sm font-black text-slate-800">近7日避风明细</h3>
+              <h3 className="text-sm font-black text-slate-800">近7日摸鱼明细</h3>
             </div>
           </div>
 
@@ -361,8 +361,8 @@ const App = () => {
             
             <div className="flex justify-between items-start mb-8">
               <div>
-                <h3 className="text-lg font-bold tracking-tight text-slate-900">修正避风时长</h3>
-                <p className="text-xs text-slate-500 mt-1">手动校准今日避风港停留的时间</p>
+                <h3 className="text-lg font-bold tracking-tight text-slate-900">修正摸鱼时长</h3>
+                <p className="text-xs text-slate-500 mt-1">手动校准今日摸鱼港停留的时间</p>
               </div>
               <button onClick={() => setIsEditModalOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400">
                 <X size={18} />

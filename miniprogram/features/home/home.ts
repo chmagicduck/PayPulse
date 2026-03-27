@@ -194,7 +194,7 @@ Page({
 
     if (!this.data.isMoYu && !runtimeState.homeStatus?.allowStart) {
       wx.showToast({
-        title: '当前状态不能开启避风',
+        title: '当前状态不能开启摸鱼',
         icon: 'none',
       })
       return
