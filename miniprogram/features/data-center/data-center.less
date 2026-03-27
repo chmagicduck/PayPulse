@@ -31,8 +31,8 @@
   }
 
   &__title {
-    font-size: 30rpx;
-    color: @slate900;
+    font-size: @fs-4xl;
+    color: @text-primary;
     font-weight: 900;
   }
 }
@@ -89,15 +89,15 @@
   }
 
   &__value {
-    font-size: 42rpx;
-    color: @slate900;
+    font-size: @fs-10xl;
+    color: @text-primary;
     font-weight: 900;
     line-height: 1;
   }
 
   &__unit {
-    font-size: 20rpx;
-    color: @slate400;
+    font-size: @fs-base;
+    color: @text-muted;
   }
 
   &__bar-meta,
@@ -109,8 +109,8 @@
   }
 
   &__bar-meta {
-    font-size: 18rpx;
-    color: @slate500;
+    font-size: @fs-md;
+    color: @text-tertiary;
     font-weight: 800;
     margin-bottom: 10rpx;
   }
@@ -130,8 +130,8 @@
   }
 
   &__foot {
-    font-size: 16rpx;
-    color: @slate400;
+    font-size: @fs-sm;
+    color: @text-muted;
     font-weight: 700;
   }
 
@@ -139,7 +139,7 @@
     display: flex;
     align-items: center;
     gap: 6rpx;
-    color: @emerald600;
+    color: @text-success;
   }
 }
 
@@ -167,8 +167,8 @@
   &__title {
     display: block;
     .type-card-title();
-    font-size: 26rpx;
-    color: @slate500;
+    font-size: @fs-2xl;
+    color: @text-tertiary;
     font-weight: 800;
     margin-bottom: 8rpx;
   }
@@ -191,8 +191,8 @@
   }
 
   &__tag-text {
-    font-size: 16rpx;
-    color: @slate400;
+    font-size: @fs-sm;
+    color: @text-muted;
     font-weight: 800;
   }
 }
@@ -247,19 +247,19 @@
   &__title {
     display: block;
     .type-card-title();
-    font-size: 26rpx;
-    color: @slate800;
+    font-size: @fs-2xl;
+    color: @text-heading;
     font-weight: 800;
     margin-bottom: 6rpx;
 
-    &--rose { color: @rose600; }
+    &--rose { color: @text-danger; }
   }
 
   &__desc {
     display: block;
     .type-text-secondary();
 
-    &--rose { color: @rose400; }
+    &--rose { color: @text-danger-muted; }
   }
 
   &__side {
@@ -268,8 +268,8 @@
   }
 
   &__state {
-    font-size: 18rpx;
-    color: @blue600;
+    font-size: @fs-md;
+    color: @text-brand;
     font-weight: 800;
   }
 
@@ -277,8 +277,8 @@
     padding: 8rpx 12rpx;
     border-radius: 12rpx;
     background: @rose50;
-    color: @rose600;
-    font-size: 14rpx;
+    color: @text-danger;
+    font-size: @fs-xs;
     font-weight: 900;
   }
 }
@@ -293,8 +293,8 @@
   gap: 12rpx;
 
   &__text {
-    font-size: 18rpx;
-    color: @amber700;
+    font-size: @fs-md;
+    color: @text-warning-strong;
     font-weight: 700;
     line-height: 1.8;
   }
@@ -379,12 +379,14 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
-  color: @slate400;
-  font-size: 18rpx;
+  color: @text-muted;
+  font-size: @fs-md;
   font-weight: 800;
   box-shadow: @shadow-card;
 
   &__item--active {
-    color: @blue600;
+    color: @text-brand;
   }
 }
+
+

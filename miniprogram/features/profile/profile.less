@@ -41,11 +41,11 @@
   }
 
   &__title {
-    font-size: 40rpx;
+    font-size: @fs-8xl;
     font-weight: 800;
     line-height: 1.1;
     letter-spacing: -0.04em;
-    color: @slate900;
+    color: @text-primary;
   }
 }
 
@@ -80,11 +80,11 @@
   }
 
   &__name {
-    font-size: 36rpx;
+    font-size: @fs-6xl;
     font-weight: 900;
     line-height: 1.12;
     letter-spacing: -0.04em;
-    color: @slate900;
+    color: @text-primary;
   }
 
   &__pill {
@@ -99,19 +99,19 @@
   }
 
   &__pill-text {
-    font-size: 18rpx;
+    font-size: @fs-md;
     font-weight: 900;
     line-height: 1;
-    color: @slate400;
+    color: @text-muted;
     white-space: nowrap;
   }
 
   &__pill-value {
     margin-left: 6rpx;
-    font-size: 18rpx;
+    font-size: @fs-md;
     font-weight: 900;
     line-height: 1;
-    color: @blue500;
+    color: @text-brand-soft;
     white-space: nowrap;
   }
 }
@@ -171,10 +171,10 @@
   }
 
   &__text {
-    font-size: 16rpx;
+    font-size: @fs-sm;
     font-weight: 800;
     line-height: 1;
-    color: @slate700;
+    color: @text-body-strong;
     white-space: nowrap;
   }
 }
@@ -339,13 +339,13 @@
     &--emerald {
       background: @emerald50;
       border-color: rgba(16, 185, 129, 0.18);
-      color: #059669;
+      color: @text-success;
     }
 
     &--blue {
       background: @blue50;
       border-color: @blue100;
-      color: @blue600;
+      color: @text-brand;
     }
 
     &--pressed {
@@ -354,7 +354,7 @@
   }
 
   &__action-text {
-    font-size: 22rpx;
+    font-size: @fs-lg;
     font-weight: 800;
     line-height: 1;
     color: currentColor;
@@ -367,7 +367,7 @@
 
   &__preset-title {
     .type-eyebrow();
-    font-size: 18rpx;
+    font-size: @fs-md;
     font-weight: 900;
     letter-spacing: 0.12em;
   }
@@ -385,11 +385,11 @@
   }
 
   &__confirm-text {
-    font-size: 24rpx;
+    font-size: @fs-xl;
     font-weight: 900;
     line-height: 1;
     letter-spacing: 0.12em;
-    color: @white;
+    color: @text-inverse;
   }
 }
 
@@ -426,3 +426,5 @@
     display: block;
   }
 }
+
+

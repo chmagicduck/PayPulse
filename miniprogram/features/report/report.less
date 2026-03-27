@@ -41,9 +41,9 @@
   }
 
   &__title {
-    font-size: 38rpx;
+    font-size: @fs-8xl;
     font-weight: 800;
-    color: @slate900;
+    color: @text-primary;
     letter-spacing: -0.04em;
   }
 
@@ -141,9 +141,9 @@
   }
 
   &__text {
-    font-size: 18rpx;
+    font-size: @fs-md;
     font-weight: 800;
-    color: @slate400;
+    color: @text-muted;
   }
 }
 
@@ -154,11 +154,11 @@
   }
 
   &__item--indigo.tab-switch__item--active .tab-switch__text {
-    color: @indigo500;
+    color: @text-info;
   }
 
   &__item--amber.tab-switch__item--active .tab-switch__text {
-    color: @amber600;
+    color: @text-warning;
   }
 }
 
@@ -172,7 +172,7 @@
     box-shadow: @shadow-sm;
 
     .range-switch__text {
-      color: @blue600;
+      color: @text-brand;
     }
   }
 }
@@ -228,21 +228,21 @@
   }
 
   &__value {
-    font-size: 40rpx;
+    font-size: @fs-8xl;
     line-height: 1;
     font-weight: 900;
     letter-spacing: -0.04em;
     flex-shrink: 0;
 
-    &--indigo { color: @indigo500; }
-    &--amber { color: @amber600; }
+    &--indigo { color: @text-info; }
+    &--amber { color: @text-warning; }
   }
 
   &__unit {
-    font-size: 18rpx;
+    font-size: @fs-md;
     font-weight: 800;
     line-height: 1;
-    color: @slate400;
+    color: @text-muted;
     margin-bottom: 4rpx;
     flex-shrink: 0;
   }
@@ -259,9 +259,9 @@
   }
 
   &__rise-text {
-    font-size: 18rpx;
+    font-size: @fs-md;
     font-weight: 900;
-    color: @emerald600;
+    color: @text-success;
   }
 }
 
@@ -277,7 +277,7 @@
 
   &--active {
     .chart-bar__label {
-      color: @slate600;
+      color: @text-secondary;
     }
   }
 
@@ -300,8 +300,8 @@
     align-items: center;
     justify-content: center;
     background: @slate900;
-    color: @white;
-    font-size: 12rpx;
+    color: @text-inverse;
+    font-size: @fs-xs;
     font-weight: 900;
     white-space: nowrap;
   }
@@ -335,9 +335,9 @@
   }
 
   &__label {
-    font-size: 16rpx;
+    font-size: @fs-sm;
     font-weight: 900;
-    color: @slate300;
+    color: @text-disabled;
     transition: color @duration-fast ease;
   }
 }
@@ -383,15 +383,15 @@
 
   &__value {
     display: block;
-    font-size: 32rpx;
+    font-size: @fs-4xl;
     line-height: 1.16;
     font-weight: 900;
-    color: @slate900;
+    color: @text-primary;
     letter-spacing: -0.03em;
     white-space: nowrap;
 
     &--rose {
-      color: @rose600;
+      color: @text-danger;
     }
   }
 }
@@ -429,16 +429,16 @@
   }
 
   &__ring-value {
-    font-size: 40rpx;
+    font-size: @fs-8xl;
     font-weight: 900;
-    color: @slate900;
+    color: @text-primary;
     letter-spacing: -0.04em;
   }
 
   &__ring-label {
-    font-size: 14rpx;
+    font-size: @fs-xs;
     font-weight: 800;
-    color: @slate400;
+    color: @text-muted;
     letter-spacing: 0.08em;
   }
 
@@ -465,14 +465,14 @@
 
   &__label,
   &__value {
-    font-size: 18rpx;
+    font-size: @fs-md;
     font-weight: 900;
-    color: @slate500;
+    color: @text-tertiary;
   }
 
   &__label--blue,
   &__value--blue {
-    color: @blue600;
+    color: @text-brand;
   }
 
   &__track {
@@ -531,10 +531,10 @@
   }
 
   &__date {
-    font-size: 24rpx;
+    font-size: @fs-xl;
     font-weight: 900;
     line-height: 1;
-    color: @slate800;
+    color: @text-heading;
     white-space: nowrap;
   }
 
@@ -564,16 +564,16 @@
   }
 
   &__duration {
-    font-size: 22rpx;
+    font-size: @fs-lg;
     font-weight: 800;
-    color: @slate800;
+    color: @text-heading;
   }
 
   &__hint {
     display: block;
-    font-size: 16rpx;
+    font-size: @fs-sm;
     font-weight: 600;
-    color: @slate400;
+    color: @text-muted;
   }
 
   &__right {
@@ -588,17 +588,17 @@
 
   &__income {
     display: block;
-    font-size: 26rpx;
+    font-size: @fs-2xl;
     font-weight: 900;
-    color: @emerald600;
+    color: @text-success;
   }
 
   &__income-label {
     display: block;
     margin-top: 4rpx;
-    font-size: 14rpx;
+    font-size: @fs-xs;
     font-weight: 800;
-    color: @slate300;
+    color: @text-disabled;
     letter-spacing: 0.08em;
   }
 
@@ -632,7 +632,7 @@
 
   &__subtitle {
     .sheet-subtitle(20rpx, 600, 1.4, 0, none);
-    font-size: 20rpx;
+    font-size: @fs-base;
     line-height: 1.4;
     font-weight: 600;
   }
@@ -687,21 +687,23 @@
     background: @slate50;
     border: 1rpx solid @slate200;
     text-align: center;
-    font-size: 44rpx;
+    font-size: @fs-10xl;
     font-weight: 900;
-    color: @slate900;
+    color: @text-primary;
   }
 
   &__label {
-    font-size: 18rpx;
+    font-size: @fs-md;
     font-weight: 800;
-    color: @slate400;
+    color: @text-muted;
   }
 
   &__sep {
     margin-top: -28rpx;
-    font-size: 36rpx;
+    font-size: @fs-6xl;
     font-weight: 900;
-    color: @slate300;
+    color: @text-disabled;
   }
 }
+
+

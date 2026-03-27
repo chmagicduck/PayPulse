@@ -63,6 +63,9 @@
 @violet100: #ede9fe;
 @violet600: #7c3aed;
 
+// ---- Pink ----
+@pink500: #ec4899;
+
 // ---- Yellow ----
 @yellow50: #fefce8;
 @yellow200: #fef08a;
@@ -97,14 +100,83 @@
 @card-pad-lg: 40rpx;
 @card-pad-xl: 48rpx;
 
-// ---- Typography (rpx) ----
-@fs-hero: 72rpx;
-@fs-title: 48rpx;
-@fs-heading: 32rpx;
-@fs-body: 28rpx;
-@fs-caption: 24rpx;
-@fs-tiny: 20rpx;
-@fs-micro: 18rpx;
+// ---- Typography Scale (rpx) ----
+// Canonical rendered sizes are intentionally compressed to keep the app readable
+// and avoid drifting into too many near-duplicate font sizes.
+@fs-xs: 16rpx;
+@fs-sm: 18rpx;
+@fs-md: 20rpx;
+@fs-base: 20rpx;
+@fs-lg: 24rpx;
+@fs-xl: 24rpx;
+@fs-2xl: 28rpx;
+@fs-4xl: 32rpx;
+@fs-6xl: 36rpx;
+@fs-8xl: 40rpx;
+@fs-10xl: 48rpx;
+@fs-display-sm: 48rpx;
+@fs-display-md: 48rpx;
+@fs-display-lg: 64rpx;
+@fs-display-xl: 72rpx;
+
+// ---- Typography Legacy Alias (rpx) ----
+@fs-hero: @fs-display-xl;
+@fs-title: @fs-display-sm;
+@fs-heading: @fs-4xl;
+@fs-body: @fs-2xl;
+@fs-caption: @fs-xl;
+@fs-tiny: @fs-base;
+@fs-micro: @fs-md;
+
+// ---- Text Color ----
+@text-primary: @slate900;
+@text-heading: @slate800;
+@text-body-strong: @slate700;
+@text-secondary: @slate600;
+@text-tertiary: @slate500;
+@text-muted: @slate400;
+@text-disabled: @slate300;
+@text-inverse: @white;
+
+@text-brand: @blue600;
+@text-brand-soft: @blue500;
+@text-brand-muted: @blue100;
+@text-brand-subtle: @blue200;
+@text-info: @indigo500;
+
+@text-success: @emerald600;
+@text-success-soft: @emerald500;
+@text-success-ghost: rgba(5, 150, 105, 0.4);
+@text-success-deep: rgba(6, 95, 70, 0.65);
+
+@text-warning: @amber600;
+@text-warning-soft: @amber500;
+@text-warning-strong: @amber700;
+
+@text-danger: @rose600;
+@text-danger-soft: @rose500;
+@text-danger-muted: @rose400;
+@text-danger-quote: rgba(136, 19, 55, 0.72);
+@text-danger-note: rgba(136, 19, 55, 0.62);
+
+@text-accent-orange: @orange600;
+@text-accent-violet: @violet600;
+@text-accent-yellow: @yellow700;
+@text-pink: @pink500;
+
+@text-on-brand-emphasis: rgba(191, 219, 254, 0.9);
+@text-on-brand-soft: rgba(191, 219, 254, 0.8);
+@text-on-dark-high: rgba(255, 255, 255, 0.92);
+@text-on-dark-medium: rgba(255, 255, 255, 0.76);
+@text-on-dark-soft: rgba(255, 255, 255, 0.7);
+@text-on-dark-faint: rgba(255, 255, 255, 0.4);
+@text-on-surface-strong: rgba(15, 23, 42, 0.72);
+@text-on-amber-soft: rgba(120, 53, 15, 0.64);
+@text-on-amber-medium: rgba(120, 53, 15, 0.78);
+@text-amber-deep: #78350f;
+@text-amber-deeper: #451a03;
+@text-ocean-deep: #164e63;
+@text-warm-deep: #7c2d12;
 
 // ---- Shadow ----
 @shadow-card: 0 12rpx 40rpx rgba(18, 32, 51, 0.08);

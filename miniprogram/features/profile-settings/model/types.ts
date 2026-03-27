@@ -20,6 +20,16 @@ export type ProfileSettingsForm = {
   lunchEndTime: string
 }
 
+export type ProfileSettingsField =
+  Exclude<keyof ProfileSettingsForm, 'gender' | 'retirementProfile' | 'retirementAgeEditedByUser' | 'isCurrentBigWeek' | 'lunchBreakEnabled'>
+
+export type ProfileSettingsAgeLimits = {
+  retirementAgeMin: number
+  retirementAgeMax: number
+  expectedLifespanMin: number
+  expectedLifespanMax: number
+}
+
 export type ProfileSettingsValidationResult =
   | {
       ok: true

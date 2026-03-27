@@ -10,33 +10,30 @@
   </view>
 
   <view class="settings-main">
-    <view class="settings-banner" bind:tap="triggerBannerAnimation">
-      <view class="settings-banner__icon">
-        <image class="icon-lg" src="{{iconAnimations.banner ? icons.compassPair.animatedSrc : icons.compassPair.staticSrc}}" mode="aspectFit" />
-      </view>
-      <view class="settings-banner__copy">
-        <text class="settings-banner__title">校准你的航向（完善基础参数）</text>
-        <text class="settings-banner__desc">输入航行坐标参数，用于推演你的时间分布、航程节奏与长期轨迹。</text>
-      </view>
-      <image class="settings-banner__anchor" src="{{icons.anchor}}" mode="aspectFit" />
-    </view>
-
     <view class="settings-section">
-      <pp-section-header title="船员身份识别（用户基础资料）" barTone="blue" />
+      <pp-section-header title="船员身份识别" barTone="blue" />
 
       <view class="field">
         <view class="field__label">
           <image class="icon-xs" src="{{icons.user}}" mode="aspectFit" />
-          <text>专属代号（用户昵称）</text>
+          <text>用户昵称</text>
         </view>
-        <input class="field__input" value="{{form.nickname}}" data-field="nickname" bindinput="updateField" />
+        <input
+          class="field__input"
+          type="nickname"
+          placeholder="点击输入或使用微信昵称"
+          value="{{form.nickname}}"
+          data-field="nickname"
+          bindinput="updateField"
+          bindnicknamereview="handleNicknameReview"
+        />
       </view>
 
       <view class="field-grid">
         <view class="field">
           <view class="field__label">
             <image class="icon-xs" src="{{icons.calendar}}" mode="aspectFit" />
-            <text>出厂日期（出生日期）</text>
+            <text>出生日期</text>
           </view>
           <picker mode="date" value="{{form.birthday}}" data-field="birthday" bindchange="updateField">
             <view class="field__picker">{{form.birthday}}</view>
@@ -46,42 +43,30 @@
         <view class="field">
           <view class="field__label">
             <image class="icon-xs" src="{{icons.user}}" mode="aspectFit" />
-            <text>生命取向（性别）</text>
+            <text>性别</text>
           </view>
           <view class="segmented">
-            <view class="segmented__item {{form.gender === 'male' ? 'segmented__item--active' : ''}}" data-value="male" bind:tap="chooseGender">
-              <text class="segmented__text">男性</text>
+            <view
+              wx:for="{{genderOptions}}"
+              wx:key="value"
+              class="segmented__item {{form.gender === item.value ? 'segmented__item--active' : ''}}"
+              data-value="{{item.value}}"
+              bind:tap="chooseGender"
+            >
+              <text class="segmented__text">{{item.label}}</text>
             </view>
-            <view class="segmented__item {{form.gender === 'female' ? 'segmented__item--active' : ''}}" data-value="female" bind:tap="chooseGender">
-              <text class="segmented__text">女性</text>
-            </view>
-          </view>
-        </view>
-      </view>
-
-      <view class="field" wx:if="{{form.gender === 'female'}}">
-        <view class="field__label">
-          <image class="icon-xs" src="{{icons.user}}" mode="aspectFit" />
-          <text>女性退休口径</text>
-        </view>
-        <view class="segmented">
-          <view class="segmented__item {{form.retirementProfile === 'female-50' ? 'segmented__item--active' : ''}}" data-value="female-50" bind:tap="chooseRetirementProfile">
-            <text class="segmented__text">原法定 50 岁</text>
-          </view>
-          <view class="segmented__item {{form.retirementProfile === 'female-55' ? 'segmented__item--active' : ''}}" data-value="female-55" bind:tap="chooseRetirementProfile">
-            <text class="segmented__text">原法定 55 岁</text>
           </view>
         </view>
       </view>
     </view>
 
     <view class="settings-section">
-      <pp-section-header title="航程工龄坐标（职业与收入参数）" barTone="blue" />
+      <pp-section-header title="航程工龄坐标" barTone="blue" />
 
       <view class="field">
         <view class="field__label">
           <image class="icon-xs" src="{{icons.briefcase}}" mode="aspectFit" />
-          <text>首次入港日期（参加工作日期）</text>
+          <text>首份工作日期</text>
         </view>
         <picker mode="date" value="{{form.careerStartDate}}" data-field="careerStartDate" bindchange="updateField">
           <view class="field__picker">{{form.careerStartDate}}</view>
@@ -92,17 +77,30 @@
         <view class="field">
           <view class="field__label">
             <image class="icon-xs" src="{{icons.moon}}" mode="aspectFit" />
-            <text>预计退休（退休年龄）</text>
+            <text>预计退休年龄</text>
           </view>
-          <input class="field__input" type="number" value="{{form.retirementAge}}" bindinput="updateRetirementAge" />
+          <input
+            class="field__input"
+            type="number"
+            placeholder="例如 {{ageLimits.retirementAgeMin}} - {{ageLimits.retirementAgeMax}}"
+            value="{{form.retirementAge}}"
+            bindinput="updateRetirementAge"
+          />
         </view>
 
         <view class="field">
           <view class="field__label">
             <image class="icon-xs" src="{{icons.sun}}" mode="aspectFit" />
-            <text>预期寿命（生命周期估算）</text>
+            <text>预期寿龄</text>
           </view>
-          <input class="field__input" type="number" value="{{form.expectedLifespan}}" data-field="expectedLifespan" bindinput="updateField" />
+          <input
+            class="field__input"
+            type="number"
+            placeholder="至少 {{ageLimits.expectedLifespanMin}} 岁"
+            value="{{form.expectedLifespan}}"
+            data-field="expectedLifespan"
+            bindinput="updateField"
+          />
         </view>
       </view>
 
@@ -110,7 +108,7 @@
         <view class="field">
           <view class="field__label">
             <image class="icon-xs" src="{{icons.wallet}}" mode="aspectFit" />
-            <text>月度燃料（税前月收入）</text>
+            <text>税前月收入</text>
           </view>
           <view class="field__money">
             <text class="field__money-prefix">¥</text>
@@ -121,7 +119,7 @@
         <view class="field">
           <view class="field__label">
             <image class="icon-xs" src="{{icons.trendingUp}}" mode="aspectFit" />
-            <text>燃料到账日（发薪日）</text>
+            <text>发薪日期</text>
           </view>
           <input class="field__input" type="number" value="{{form.payDay}}" data-field="payDay" bindinput="updateField" />
         </view>
@@ -129,25 +127,22 @@
     </view>
 
     <view class="settings-section settings-section--last">
-      <pp-section-header title="航行排班计划（工作作息配置）" barTone="blue" />
+      <pp-section-header title="航行排班计划" barTone="blue" />
 
       <view class="field">
         <view class="field__label">
           <image class="icon-xs" src="{{icons.calendarDays}}" mode="aspectFit" />
-          <text>航行周期模式（每周休息制度）</text>
+          <text>休息模式</text>
         </view>
         <view class="mode-grid">
-          <view class="mode-grid__item {{form.workMode === 'double' ? 'mode-grid__item--active' : ''}}" data-value="double" bind:tap="chooseWorkMode">
-            <text class="mode-grid__text">双休</text>
-          </view>
-          <view class="mode-grid__item {{form.workMode === 'single-sat' ? 'mode-grid__item--active' : ''}}" data-value="single-sat" bind:tap="chooseWorkMode">
-            <text class="mode-grid__text">休六</text>
-          </view>
-          <view class="mode-grid__item {{form.workMode === 'single-sun' ? 'mode-grid__item--active' : ''}}" data-value="single-sun" bind:tap="chooseWorkMode">
-            <text class="mode-grid__text">休日</text>
-          </view>
-          <view class="mode-grid__item {{form.workMode === 'big-small' ? 'mode-grid__item--active' : ''}}" data-value="big-small" bind:tap="chooseWorkMode">
-            <text class="mode-grid__text">大小周</text>
+          <view
+            wx:for="{{workModeOptions}}"
+            wx:key="value"
+            class="mode-grid__item {{form.workMode === item.value ? 'mode-grid__item--active' : ''}}"
+            data-value="{{item.value}}"
+            bind:tap="chooseWorkMode"
+          >
+            <text class="mode-grid__text">{{item.label}}</text>
           </view>
         </view>
       </view>
@@ -163,7 +158,7 @@
         <view class="field">
           <view class="field__label">
             <image class="icon-xs" src="{{icons.clock}}" mode="aspectFit" />
-            <text>预计启航时间（上班时间）</text>
+            <text>上班打卡时间</text>
           </view>
           <picker mode="time" value="{{form.startTime}}" data-field="startTime" bindchange="updateField">
             <view class="field__picker">{{form.startTime}}</view>
@@ -173,7 +168,7 @@
         <view class="field">
           <view class="field__label">
             <image class="icon-xs" src="{{icons.clock}}" mode="aspectFit" />
-            <text>预计归港时间（下班时间）</text>
+            <text>下班打卡时间</text>
           </view>
           <picker mode="time" value="{{form.endTime}}" data-field="endTime" bindchange="updateField">
             <view class="field__picker">{{form.endTime}}</view>
@@ -181,32 +176,32 @@
         </view>
       </view>
 
-      <view class="sub-card">
-        <view class="switch-row switch-row--tight">
-          <view class="field__label field__label--compact">
-            <image class="icon-xs" src="{{icons.coffee}}" mode="aspectFit" />
-            <text>午间补给时间（午休时间段）</text>
-          </view>
-          <view class="switch {{form.lunchBreakEnabled ? 'switch--active switch--active-emerald' : ''}}" bind:tap="toggleLunchBreak">
-            <view class="switch__thumb"></view>
-          </view>
+      <view class="switch-row">
+        <view class="field__label">
+          <image class="icon-xs" src="{{icons.coffee}}" mode="aspectFit" />
+          <text>午休时间段</text>
         </view>
+        <view class="switch {{form.lunchBreakEnabled ? 'switch--active switch--active-emerald' : ''}}" bind:tap="toggleLunchBreak">
+          <view class="switch__thumb"></view>
+        </view>
+      </view>
 
-        <view class="field-grid" wx:if="{{form.lunchBreakEnabled}}">
-          <view class="field field--sub">
+      <view class="sub-card" wx:if="{{form.lunchBreakEnabled}}">
+        <view class="field-grid">
+          <view class="field">
             <view class="field__label">
               <image class="icon-xs" src="{{icons.clock}}" mode="aspectFit" />
-              <text>补给开始（午休开始时间）</text>
+              <text>午休开始时间</text>
             </view>
             <picker mode="time" value="{{form.lunchStartTime}}" data-field="lunchStartTime" bindchange="updateField">
               <view class="field__picker">{{form.lunchStartTime}}</view>
             </picker>
           </view>
 
-          <view class="field field--sub">
+          <view class="field">
             <view class="field__label">
               <image class="icon-xs" src="{{icons.clock}}" mode="aspectFit" />
-              <text>补给结束（午休结束时间）</text>
+              <text>午休结束时间</text>
             </view>
             <picker mode="time" value="{{form.lunchEndTime}}" data-field="lunchEndTime" bindchange="updateField">
               <view class="field__picker">{{form.lunchEndTime}}</view>

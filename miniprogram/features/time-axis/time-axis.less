@@ -42,11 +42,11 @@
   }
 
   &__title {
-    font-size: 30rpx;
+    font-size: @fs-4xl;
     font-weight: 900;
     line-height: 1;
     letter-spacing: -0.03em;
-    color: @slate800;
+    color: @text-heading;
   }
 }
 
@@ -93,7 +93,7 @@
     }
 
     .notebook-card__name {
-      color: @slate900;
+      color: @text-primary;
     }
   }
 
@@ -182,11 +182,11 @@
   &__name {
     width: 100%;
     padding: 0 16rpx;
-    font-size: 18rpx;
+    font-size: @fs-md;
     font-weight: 900;
     line-height: 1.25;
     text-align: center;
-    color: @slate600;
+    color: @text-secondary;
     transition: color 220ms ease;
   }
 }
@@ -254,11 +254,11 @@
   &__title {
     display: block;
     margin-bottom: 10rpx;
-    font-size: 28rpx;
+    font-size: @fs-2xl;
     font-weight: 800;
     line-height: 1.18;
     letter-spacing: -0.03em;
-    color: @slate800;
+    color: @text-heading;
   }
 
   &__meta {
@@ -269,10 +269,10 @@
   }
 
   &__date {
-    font-size: 18rpx;
+    font-size: @fs-md;
     font-weight: 800;
     line-height: 1;
-    color: @slate400;
+    color: @text-muted;
   }
 
   &__badge {
@@ -291,10 +291,10 @@
   }
 
   &__badge-text {
-    font-size: 16rpx;
+    font-size: @fs-sm;
     font-weight: 900;
     line-height: 1;
-    color: @slate600;
+    color: @text-secondary;
   }
 
   &__countdown {
@@ -306,30 +306,30 @@
   }
 
   &__value {
-    font-size: 52rpx;
+    font-size: @fs-display-md;
     font-weight: 900;
     line-height: 0.86;
     letter-spacing: -0.06em;
 
-    &--rose { color: @rose500; }
-    &--amber { color: @amber500; }
-    &--blue { color: @blue600; }
-    &--yellow { color: @yellow700; }
-    &--indigo { color: @indigo500; }
-    &--violet { color: @violet600; }
-    &--orange { color: @orange600; }
-    &--emerald { color: @emerald500; }
-    &--pink { color: #ec4899; }
-    &--slate { color: @slate500; }
-    &--past { color: @slate300; }
+    &--rose { color: @text-danger-soft; }
+    &--amber { color: @text-warning-soft; }
+    &--blue { color: @text-brand; }
+    &--yellow { color: @text-accent-yellow; }
+    &--indigo { color: @text-info; }
+    &--violet { color: @text-accent-violet; }
+    &--orange { color: @text-accent-orange; }
+    &--emerald { color: @text-success-soft; }
+    &--pink { color: @text-pink; }
+    &--slate { color: @text-tertiary; }
+    &--past { color: @text-disabled; }
   }
 
   &__unit {
     padding-bottom: 8rpx;
-    font-size: 20rpx;
+    font-size: @fs-base;
     font-weight: 800;
     line-height: 1;
-    color: @slate400;
+    color: @text-muted;
   }
 }
 
@@ -348,11 +348,11 @@
   }
 
   &__title {
-    font-size: 22rpx;
+    font-size: @fs-lg;
     font-weight: 900;
     line-height: 1;
     letter-spacing: 0.12em;
-    color: @slate400;
+    color: @text-muted;
   }
 }
 
@@ -392,11 +392,11 @@
   }
 
   &__text {
-    font-size: 18rpx;
+    font-size: @fs-md;
     font-weight: 900;
     line-height: 1;
     letter-spacing: 0.16em;
-    color: @slate500;
+    color: @text-tertiary;
   }
 }
 
@@ -413,7 +413,7 @@
 
   &__title {
     .sheet-title(34rpx, 0);
-    color: @slate800;
+    color: @text-heading;
   }
 
   &__close {
@@ -438,11 +438,11 @@
     display: block;
     margin-bottom: 14rpx;
     padding-left: 4rpx;
-    font-size: 18rpx;
+    font-size: @fs-md;
     font-weight: 900;
     line-height: 1;
     letter-spacing: 0.12em;
-    color: @slate400;
+    color: @text-muted;
   }
 
   &__input,
@@ -457,16 +457,16 @@
   }
 
   &__input {
-    font-size: 28rpx;
+    font-size: @fs-2xl;
     font-weight: 800;
     line-height: 1;
-    color: @slate800;
+    color: @text-heading;
   }
 
   &__picker {
     &--placeholder {
       .edit-field__picker-text {
-        color: @slate400;
+        color: @text-muted;
       }
     }
   }
@@ -488,10 +488,10 @@
   &__picker-text {
     min-width: 0;
     flex: 1;
-    font-size: 28rpx;
+    font-size: @fs-2xl;
     font-weight: 800;
     line-height: 1;
-    color: @slate800;
+    color: @text-heading;
   }
 }
 
@@ -520,19 +520,19 @@
   &__title {
     display: block;
     margin-bottom: 8rpx;
-    font-size: 24rpx;
+    font-size: @fs-xl;
     font-weight: 900;
     line-height: 1;
-    color: @slate800;
+    color: @text-heading;
   }
 
   &__subtitle {
     display: block;
-    font-size: 16rpx;
+    font-size: @fs-sm;
     font-weight: 800;
     line-height: 1;
     letter-spacing: 0.14em;
-    color: @slate400;
+    color: @text-muted;
   }
 
   &__track {
@@ -623,10 +623,10 @@
   }
 
   &__name {
-    font-size: 20rpx;
+    font-size: @fs-base;
     font-weight: 900;
     line-height: 1;
-    color: @slate800;
+    color: @text-heading;
   }
 }
 
@@ -677,10 +677,12 @@
   }
 
   &__primary-text {
-    font-size: 24rpx;
+    font-size: @fs-xl;
     font-weight: 900;
     line-height: 1;
     letter-spacing: 0.14em;
-    color: @white;
+    color: @text-inverse;
   }
 }
+
+

@@ -30,8 +30,8 @@
   }
 
   &__title {
-    font-size: 30rpx;
-    color: @slate900;
+    font-size: @fs-4xl;
+    color: @text-primary;
     font-weight: 900;
   }
 }
@@ -68,8 +68,8 @@
   }
 
   &__badge-text {
-    font-size: 16rpx;
-    color: @white;
+    font-size: @fs-sm;
+    color: @text-inverse;
     font-weight: 900;
     letter-spacing: 0.12em;
   }
@@ -77,21 +77,21 @@
   &__title,
   &__highlight {
     display: block;
-    font-size: 48rpx;
+    font-size: @fs-display-sm;
     line-height: 1.12;
     font-weight: 900;
-    color: @slate900;
+    color: @text-primary;
   }
 
   &__highlight {
-    color: @blue600;
+    color: @text-brand;
     margin-bottom: 18rpx;
   }
 
   &__desc {
     display: block;
-    font-size: 22rpx;
-    color: @slate400;
+    font-size: @fs-lg;
+    color: @text-muted;
     font-weight: 700;
     line-height: 1.7;
     margin-bottom: 24rpx;
@@ -118,14 +118,14 @@
   }
 
   &__label {
-    font-size: 14rpx;
-    color: @slate400;
+    font-size: @fs-xs;
+    color: @text-muted;
     font-weight: 800;
   }
 
   &__value {
-    font-size: 24rpx;
-    color: @slate800;
+    font-size: @fs-xl;
+    color: @text-heading;
     font-weight: 900;
   }
 }
@@ -135,7 +135,7 @@
   padding: 36rpx 32rpx;
   background: @slate900;
   border-color: @slate900;
-  color: @white;
+  color: @text-inverse;
   margin-bottom: 36rpx;
 
   &__head {
@@ -154,7 +154,7 @@
 
   &__title {
     display: block;
-    font-size: 36rpx;
+    font-size: @fs-6xl;
     font-weight: 900;
     margin-bottom: 6rpx;
   }
@@ -177,8 +177,8 @@
   }
 
   &__button-text {
-    font-size: 24rpx;
-    color: @white;
+    font-size: @fs-xl;
+    color: @text-inverse;
     font-weight: 900;
     letter-spacing: 0.06em;
   }
@@ -186,8 +186,8 @@
   &__note {
     display: block;
     text-align: center;
-    font-size: 18rpx;
-    color: @slate500;
+    font-size: @fs-md;
+    color: @text-tertiary;
     font-weight: 700;
     line-height: 1.6;
   }
@@ -227,7 +227,7 @@
   &__title {
     display: block;
     .type-card-title();
-    color: @slate900;
+    color: @text-primary;
     font-weight: 800;
     margin-bottom: 8rpx;
   }
@@ -235,7 +235,7 @@
   &__desc {
     display: block;
     .type-text-secondary();
-    font-size: 22rpx;
+    font-size: @fs-lg;
     line-height: 1.7;
   }
 }
@@ -252,12 +252,14 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
-  color: @slate400;
-  font-size: 18rpx;
+  color: @text-muted;
+  font-size: @fs-md;
   font-weight: 800;
   box-shadow: @shadow-card;
 
   &__item--active {
-    color: @blue600;
+    color: @text-brand;
   }
 }
+
+

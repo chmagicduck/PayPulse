@@ -1,5 +1,6 @@
 import type { ProfileSettings } from '../../../lib/domain/types'
 import { computeRetirementAge, getDefaultRetirementProfile } from '../../../lib/domain/retirement'
+import { genderDefaults } from './options'
 import type { ProfileSettingsForm } from './types'
 
 export const defaultProfileSettings: ProfileSettings = {
@@ -10,7 +11,7 @@ export const defaultProfileSettings: ProfileSettings = {
   careerStartDate: '',
   retirementAge: 60,
   retirementAgeEditedByUser: false,
-  expectedLifespan: 85,
+  expectedLifespan: genderDefaults.male.expectedLifespan,
   monthlySalaryCents: 0,
   payDay: 10,
   workMode: 'double',

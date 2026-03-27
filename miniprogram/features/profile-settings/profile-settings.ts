@@ -1,40 +1,25 @@
-import { clearTimerBag, createTimerBag, replayState, pulseState } from '../../lib/wx/page'
-import { computeRetirementAge, getDefaultRetirementProfile } from '../../lib/domain/retirement'
+import { clearTimerBag, createTimerBag, pulseState } from '../../lib/wx/page'
 import { isBootstrapReady, finishInitialSetup } from '../../store/bootstrap'
-import { buildSettingsIcons } from './settings.helper'
-import { validateProfileSettings } from './model/actions'
-import { saveProfileSettings } from './model/save'
-import { defaultProfileSettingsForm, toProfileSettingsForm } from './model/state'
+import { applyGenderDefaults, buildProfileAgeLimits, patchProfileSettingsForm, syncProfileSettingsForm, updateRetirementAgeValue } from './helper/form'
+import { buildSettingsIcons } from './helper/icons'
+import { saveProfileSettings } from './helper/save'
+import { validateProfileSettings } from './helper/validate'
+import { genderOptions, workModeOptions } from './model/options'
+import { defaultProfileSettingsForm, toProfileSettingsForm } from './model/schema'
 import { readProfileSettings } from './model/storage'
-import type { ProfileSettingsForm } from './model/types'
+import type { ProfileSettingsField, ProfileSettingsForm } from './model/types'
 
 const timers = createTimerBag()
-
-function syncRetirementFields(form: ProfileSettingsForm) {
-  const retirementProfile = form.gender === 'male'
-    ? 'male-60'
-    : (form.retirementProfile || getDefaultRetirementProfile(form.gender, form.retirementProfile))
-
-  return {
-    ...form,
-    retirementProfile,
-    retirementAge: (!form.retirementAgeEditedByUser && form.birthday)
-      ? String(computeRetirementAge(retirementProfile, form.birthday))
-      : form.retirementAge,
-  }
-}
 
 Page({
   data: {
     statusBarHeight: 0,
     bootstrapReady: false,
-    form: {
-      ...defaultProfileSettingsForm,
-    },
+    form: syncProfileSettingsForm({ ...defaultProfileSettingsForm }),
+    ageLimits: buildProfileAgeLimits(defaultProfileSettingsForm),
+    genderOptions,
+    workModeOptions,
     icons: buildSettingsIcons(),
-    iconAnimations: {
-      banner: false,
-    },
     pressStates: {
       save: false,
     },
@@ -47,17 +32,15 @@ Page({
 
   onShow() {
     const bootstrapReady = isBootstrapReady()
-    if (bootstrapReady) {
-      this.setData({
-        bootstrapReady,
-        form: toProfileSettingsForm(readProfileSettings()),
-      })
-    } else {
-      this.setData({
-        bootstrapReady,
-        form: syncRetirementFields({ ...defaultProfileSettingsForm }),
-      })
-    }
+    const form = bootstrapReady
+      ? toProfileSettingsForm(readProfileSettings())
+      : syncProfileSettingsForm({ ...defaultProfileSettingsForm })
+
+    this.setData({
+      bootstrapReady,
+      form,
+      ageLimits: buildProfileAgeLimits(form),
+    })
   },
 
   onUnload() {
@@ -76,19 +59,15 @@ Page({
   },
 
   updateField(e: WechatMiniprogram.Input | WechatMiniprogram.CustomEvent) {
-    const { field } = e.currentTarget.dataset
+    const field = e.currentTarget.dataset.field as ProfileSettingsField | undefined
     if (!field) return
 
     const value = 'detail' in e && 'value' in e.detail ? e.detail.value : ''
-    const nextForm = {
-      ...this.data.form,
-      [String(field)]: value,
-    }
+    const nextForm = patchProfileSettingsForm(this.data.form, field, value)
 
     this.setData({
-      form: field === 'birthday'
-        ? syncRetirementFields(nextForm)
-        : nextForm,
+      form: nextForm,
+      ageLimits: buildProfileAgeLimits(nextForm),
     })
   },
 
@@ -96,36 +75,25 @@ Page({
     const value = String(e.currentTarget.dataset.value || '')
     if (!value) return
 
-    const nextForm = syncRetirementFields({
-      ...this.data.form,
-      gender: value as ProfileSettingsForm['gender'],
-      retirementProfile: value === 'male' ? 'male-60' : getDefaultRetirementProfile('female', this.data.form.retirementProfile),
-    })
-    this.setData({ form: nextForm })
-  },
-
-  chooseRetirementProfile(e: WechatMiniprogram.TouchEvent) {
-    const value = String(e.currentTarget.dataset.value || '')
-    if (!value) return
-
+    const nextForm = applyGenderDefaults(this.data.form, value as ProfileSettingsForm['gender'])
     this.setData({
-      form: syncRetirementFields({
-        ...this.data.form,
-        retirementProfile: value as ProfileSettingsForm['retirementProfile'],
-      }),
+      form: nextForm,
+      ageLimits: buildProfileAgeLimits(nextForm),
     })
   },
 
   chooseWorkMode(e: WechatMiniprogram.TouchEvent) {
     const value = String(e.currentTarget.dataset.value || '')
     if (!value) return
-    this.setData({ 'form.workMode': value })
+
+    this.setData({ 'form.workMode': value as ProfileSettingsForm['workMode'] })
   },
 
   updateRetirementAge(e: WechatMiniprogram.Input) {
+    const nextForm = updateRetirementAgeValue(this.data.form, e.detail.value)
     this.setData({
-      'form.retirementAge': e.detail.value,
-      'form.retirementAgeEditedByUser': true,
+      form: nextForm,
+      ageLimits: buildProfileAgeLimits(nextForm),
     })
   },
 
@@ -137,8 +105,21 @@ Page({
     this.setData({ 'form.lunchBreakEnabled': !this.data.form.lunchBreakEnabled })
   },
 
-  triggerBannerAnimation() {
-    replayState(this, timers, 'settings-banner', 'iconAnimations.banner', true, false, 2200)
+  handleNicknameReview(e: WechatMiniprogram.CustomEvent<{ pass: boolean; timeout: boolean }>) {
+    if (e.detail.timeout) {
+      wx.showToast({
+        title: '昵称审核中，请稍后确认',
+        icon: 'none',
+      })
+      return
+    }
+
+    if (!e.detail.pass) {
+      wx.showToast({
+        title: '昵称未通过审核，请重新输入',
+        icon: 'none',
+      })
+    }
   },
 
   pressSave() {

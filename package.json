@@ -2,7 +2,11 @@
   "name": "miniprogram-ts-less-quickstart",
   "version": "1.0.0",
   "description": "",
-  "scripts": {},
+  "scripts": {
+    "check": "npm run check:style-tokens",
+    "check:style-tokens": "node scripts/check-style-tokens.js",
+    "check:types": "npx tsc --noEmit"
+  },
   "keywords": [],
   "author": "",
   "license": "",

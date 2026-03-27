@@ -38,8 +38,8 @@
   }
 
   &__title {
-    font-size: 30rpx;
-    color: @slate900;
+    font-size: @fs-4xl;
+    color: @text-primary;
     font-weight: 900;
     letter-spacing: -0.03em;
   }
@@ -47,60 +47,6 @@
 
 .settings-main {
   padding: 28rpx 32rpx 180rpx;
-}
-
-.settings-banner {
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  gap: 18rpx;
-  padding: 28rpx;
-  border-radius: @radius-card;
-  background: @blue600;
-  color: @white;
-  box-shadow: @shadow-xl;
-  margin-bottom: 36rpx;
-
-  &__icon {
-    width: 64rpx;
-    height: 64rpx;
-    min-width: 64rpx;
-    border-radius: 18rpx;
-    background: rgba(255, 255, 255, 0.18);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &__copy {
-    position: relative;
-    z-index: 1;
-    flex: 1;
-  }
-
-  &__title {
-    display: block;
-    font-size: 26rpx;
-    font-weight: 800;
-    margin-bottom: 8rpx;
-  }
-
-  &__desc {
-    display: block;
-    font-size: 20rpx;
-    line-height: 1.6;
-    color: @blue100;
-    font-weight: 600;
-  }
-
-  &__anchor {
-    position: absolute;
-    right: -12rpx;
-    bottom: -12rpx;
-    width: 120rpx;
-    height: 120rpx;
-    opacity: 0.1;
-  }
 }
 
 .settings-section {
@@ -112,45 +58,31 @@
 }
 
 .field,
-.sub-card {
-  background: @white;
-  border: 1rpx solid @slate100;
-  box-shadow: @shadow-sm;
+.sub-card,
+.switch-row {
+  .card-surface();
 }
 
 .field {
-  border-radius: @radius-card;
   padding: 22rpx 24rpx;
   margin-bottom: 16rpx;
-
-  &--sub {
-    margin-bottom: 0;
-    box-shadow: none;
-    border-color: @slate100;
-  }
 
   &__label {
     display: flex;
     align-items: center;
     gap: 10rpx;
     margin-bottom: 12rpx;
-    font-size: 18rpx;
-    color: @slate400;
+    font-size: @fs-xl;
+    color: @text-body-strong;
     font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-
-    &--compact {
-      margin-bottom: 0;
-    }
   }
 
   &__input,
   &__picker {
     width: 100%;
     min-height: 56rpx;
-    font-size: 26rpx;
-    color: @slate900;
+    font-size: @fs-2xl;
+    color: @text-primary;
     font-weight: 800;
     display: flex;
     align-items: center;
@@ -169,8 +101,8 @@
     left: 0;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 24rpx;
-    color: @slate400;
+    font-size: @fs-2xl;
+    color: @text-muted;
     font-weight: 800;
   }
 
@@ -185,6 +117,11 @@
 
   .field {
     flex: 1;
+  }
+
+  .sub-card & .field {
+    margin-bottom: 0;
+    box-shadow: none;
   }
 }
 
@@ -208,14 +145,14 @@
       box-shadow: @shadow-sm;
 
       .segmented__text {
-        color: @blue600;
+        color: @text-brand;
       }
     }
   }
 
   &__text {
-    font-size: 20rpx;
-    color: @slate500;
+    font-size: @fs-2xl;
+    color: @text-tertiary;
     font-weight: 800;
   }
 }
@@ -241,41 +178,34 @@
       box-shadow: 0 10rpx 20rpx rgba(37, 99, 235, 0.18);
 
       .mode-grid__text {
-        color: @white;
+        color: @text-inverse;
       }
     }
   }
 
   &__text {
-    font-size: 18rpx;
-    color: @slate500;
+    font-size: @fs-2xl;
+    color: @text-tertiary;
     font-weight: 800;
   }
 }
 
 .switch-row {
-  background: @white;
-  border: 1rpx solid @slate100;
-  border-radius: @radius-card;
   padding: 22rpx 24rpx;
-  box-shadow: @shadow-sm;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20rpx;
   margin-bottom: 16rpx;
 
-  &--tight {
-    margin-bottom: 0;
-    padding: 0 0 18rpx;
-    border: none;
-    box-shadow: none;
+  &__label {
+    font-size: @fs-xl;
+    color: @text-body-strong;
+    font-weight: 800;
   }
 
-  &__label {
-    font-size: 22rpx;
-    color: @slate600;
-    font-weight: 800;
+  .field__label {
+    margin-bottom: 0;
   }
 }
 
@@ -312,8 +242,7 @@
 }
 
 .sub-card {
-  border-radius: @radius-card;
-  padding: 20rpx 24rpx 24rpx;
+  padding: 22rpx 24rpx;
 }
 
 .save-bar {
@@ -340,8 +269,8 @@
   }
 
   &__text {
-    font-size: 26rpx;
-    color: @white;
+    font-size: @fs-2xl;
+    color: @text-inverse;
     font-weight: 900;
     letter-spacing: 0.04em;
   }
