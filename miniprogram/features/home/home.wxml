@@ -30,17 +30,17 @@
             <text class="income-card__value">{{showAmount ? vm.income.value : '***'}}</text>
             <view class="income-card__meta">
               <text class="income-card__badge-tag">{{vm.income.rateBadge}}</text>
-              <text class="income-card__rate">单位航速 {{vm.income.rate}}/s</text>
+              <text class="income-card__rate">当前秒薪 {{vm.income.rate}}/s</text>
             </view>
           </view>
 
           <view class="income-card__control">
             <view class="income-card__toggle {{isMoYu ? 'income-card__toggle--active' : ''}}" bind:tap="toggleMoYu">
               <image class="income-card__toggle-icon" src="{{isMoYu ? (iconAnimations.moyu ? iconPairs.coffeeBlue.animatedSrc : iconPairs.coffeeBlue.staticSrc) : (iconAnimations.moyu ? iconPairs.coffeeWhite.animatedSrc : iconPairs.coffeeWhite.staticSrc)}}" mode="aspectFit" />
-              <text class="income-card__toggle-text">{{isMoYu ? '摸鱼中' : '开启摸鱼'}}</text>
+              <text class="income-card__toggle-text">{{isMoYu ? '摸鱼中' : '自动摸鱼'}}</text>
             </view>
             <view class="income-card__stay">
-              <text class="income-card__stay-text">摸鱼时长: {{vm.timer.rightValue}}</text>
+              <text class="income-card__stay-text">手动摸鱼: {{vm.timer.rightValue}}</text>
               <view class="income-card__stay-action" catch:tap="openEditModal">
                 <image class="income-card__stay-icon" src="{{iconSettingsSlate}}" mode="aspectFit" />
               </view>
@@ -54,14 +54,14 @@
               <text class="income-card__progress-title">摸鱼占比</text>
               <view class="income-card__progress-metrics">
                 <text class="income-card__progress-value">{{vm.income.idlePercent}}%</text>
-                <text class="income-card__progress-meta">/ 今日航程 {{vm.income.workPercent}}%</text>
+                <text class="income-card__progress-meta">/ 今日工时 {{vm.income.workPercent}}%</text>
               </view>
             </view>
 
             <view class="income-card__countdown">
               <view class="income-card__countdown-label">
                 <image class="icon-xs" src="{{iconLogOut}}" mode="aspectFit" />
-                <text>离港倒计时</text>
+                <text>下班倒计时</text>
               </view>
               <text class="income-card__countdown-value">{{vm.timer.leftValue}}</text>
             </view>
@@ -74,11 +74,11 @@
 
           <view class="income-card__footer">
             <view class="income-card__stat income-card__stat--left">
-              <text class="income-card__footer-label">今日航行收益</text>
+              <text class="income-card__footer-label">今日已赚</text>
               <text class="income-card__stat-value">{{showAmount ? vm.income.moyuIncome : '***'}}</text>
             </view>
             <view class="income-card__stat">
-              <text class="income-card__footer-label">本月累计航行收益</text>
+              <text class="income-card__footer-label">本月已赚</text>
               <text class="income-card__stat-value">{{showAmount ? vm.income.monthlyIncome : '***'}}</text>
             </view>
           </view>
@@ -90,7 +90,7 @@
       <pp-section-header
         title="日常巡航任务"
         barTone="blue"
-        manageText="任务中心"
+        manageText="查看动力室"
         manageTone="blue"
         chevronSrc="{{iconChevronRightBlue}}"
         bind:manage="openLabPage"
@@ -102,8 +102,8 @@
               <image class="task-card__icon-image" src="{{iconRadar}}" mode="aspectFit" />
             </view>
             <view class="task-card__text">
-              <text class="task-card__title">航道任务清理</text>
-              <text class="task-card__desc">{{vm.taskPreview.description}}</text>
+              <text class="task-card__title">航道清理・动力补给</text>
+              <text class="task-card__desc">保障航行通畅，完成动力补给作业</text>
             </view>
           </view>
           <view class="task-card__summary">
@@ -111,7 +111,7 @@
               <image class="task-card__reward-icon" src="{{iconZapAmber}}" mode="aspectFit" />
               <text class="task-card__reward-text">{{vm.taskPreview.rewardText}}</text>
             </view>
-            <text class="task-card__progress-text">完成度 {{vm.taskPreview.completed}}/{{vm.taskPreview.total}}</text>
+            <text class="task-card__progress-text">今日任务完成度 {{vm.taskPreview.completed}}/{{vm.taskPreview.total}}</text>
           </view>
         </view>
       </view>

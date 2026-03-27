@@ -54,7 +54,6 @@ export const homeDashboardModel = {
     completed: 2,
     total: 6,
     rewardText: '待获取 200',
-    description: '保持航道通畅，领取额外动力补给',
     segments: [
       { filled: true },
       { filled: true },
