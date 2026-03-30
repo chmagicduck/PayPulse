@@ -34,6 +34,7 @@ export const homeDashboardModel: HomeViewModel = {
     total: 0,
     rewardValue: 0,
   },
+  dailyTasks: [],
   regularTides: [
     { id: 'salary', days: '0' },
     { id: 'weekend', days: '0' },

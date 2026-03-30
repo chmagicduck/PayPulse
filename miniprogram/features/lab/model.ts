@@ -1,3 +1,5 @@
+import { DAILY_MOYU_TASKS } from '../../lib/domain/lab-tasks'
+
 export const labStaticViewModel = {
   header: {
     title: '摸鱼任务',
@@ -41,13 +43,7 @@ export const labStaticViewModel = {
     today: 0,
     selectedRankIndex: 0,
   },
-  tasks: [
-    { id: 'water', title: '带薪喝水', desc: '去接杯水，顺便离开工位透个气。', reward: 1, count: 0, limit: 8, tone: 'blue', iconName: 'droplets' },
-    { id: 'move', title: '带薪扭腰', desc: '站起来走两步，别把腰坐坏了。', reward: 1, count: 0, limit: 10, tone: 'emerald', iconName: 'accessibility' },
-    { id: 'eye', title: '发呆眺望', desc: '看看窗外的风景，给眼睛放个假。', reward: 1, count: 0, limit: 10, tone: 'amber', iconName: 'eye' },
-    { id: 'leave', title: '准点下班', desc: '到点就跑，一秒不留，拒绝无意义加班。', reward: 12, count: 0, limit: 1, tone: 'rose', iconName: 'log-out' },
-    { id: 'toilet', title: '带薪拉屎', desc: '带薪蹲坑，累计清空压力的分钟数。', reward: 4, count: 0, limit: 5, tone: 'indigo', iconName: 'navigation', rotate: true },
-  ],
+  tasks: DAILY_MOYU_TASKS,
   achievements: [
     { id: 'discipline', title: '下班急先锋', desc: '本周连续 7 天到点就跑，绝不加班。', reward: 50, progress: 0, target: 7 },
     { id: 'idle-master', title: '厕所钉子户', desc: '本周累计带薪拉屎 120 分钟以上。', reward: 50, progress: 0, target: 120, unit: '分钟' },

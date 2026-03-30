@@ -43,6 +43,23 @@ export type HomeViewModel = {
     total: number
     rewardValue: number
   }
+  dailyTasks: Array<{
+    id: string
+    title: string
+    desc: string
+    reward: number
+    tone: HomeTone
+    badgeText: string
+    iconSrc: string
+    count: number
+    limit: number
+    countText: string
+    progressPercent: number
+    done: boolean
+    rotate?: boolean
+    minusActionKey: string
+    plusActionKey: string
+  }>
   regularTides: Array<{
     id: HomeRegularTideId
     days: string

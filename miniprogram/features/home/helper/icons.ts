@@ -6,8 +6,6 @@ export function buildDashboardIcons() {
     iconEyeOff: icon('eye-off', '#bfdbfe', 14),
     iconLogOut: icon('log-out', '#bfdbfe', 12),
     iconSettingsSlate: icon('settings2', '#dbeafe', 16),
-    iconRadar: icon('target', '#3b82f6', 20),
-    iconZapAmber: icon('zap', '#f59e0b', 12),
     iconChevronRightBlue: icon('chevron-right', '#2563eb', 12),
     iconX: icon('x', '#94a3b8', 18),
     iconPairs: {

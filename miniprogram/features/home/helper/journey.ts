@@ -3,7 +3,7 @@ import { HOME_JOURNEY_IDS, type HomeJourneyDisplayItem, type HomeJourneyItem, ty
 export type JourneyTimeModes = Record<JourneyId, number>
 
 export const INITIAL_JOURNEY_TIME_MODES: JourneyTimeModes = HOME_JOURNEY_IDS.reduce((result, id) => {
-  result[id] = 0
+  result[id] = 1
   return result
 }, {} as JourneyTimeModes)
 

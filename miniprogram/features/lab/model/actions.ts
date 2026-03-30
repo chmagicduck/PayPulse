@@ -187,7 +187,8 @@ export function adjustTaskCount(taskId: string, delta: number) {
 
 export function updateSelectedRankIndex(rankIndex: number) {
   const progress = readCurrentLabProgress()
-  const safeIndex = Math.max(0, Math.min(rankIndex, labStaticViewModel.ranks.length - 1))
+  const unlockedRankIndex = getLabRankIndexByPoints(progress.totalPoints)
+  const safeIndex = Math.max(0, Math.min(rankIndex, unlockedRankIndex, labStaticViewModel.ranks.length - 1))
   const next = {
     ...progress,
     selectedRankIndex: safeIndex,

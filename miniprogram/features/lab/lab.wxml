@@ -46,7 +46,7 @@
         <view class="rank-card__progress">
           <view class="rank-card__progress-head">
             <text class="rank-card__progress-text">{{copy.rankPanel.totalLabel}}: <text class="rank-card__progress-strong">{{totalHappiness}}</text></text>
-            <text class="rank-card__progress-text" wx:if="{{nextRank}}">{{copy.rankPanel.targetLabel}}: <text class="rank-card__progress-strong">{{nextRank.exp}}</text></text>
+            <text class="rank-card__progress-text" wx:if="{{nextRank}}">{{copy.rankPanel.targetLabel}}: <text class="rank-card__progress-strong">{{pointsToNext}}</text></text>
             <text class="rank-card__progress-text rank-card__progress-text--max" wx:else>{{copy.rankPanel.maxLabel}}</text>
           </view>
 
@@ -61,13 +61,14 @@
           <view class="rank-axis__line"></view>
           <block wx:for="{{ranks}}" wx:key="level">
             <view
-              class="rank-axis__item {{rankIndex === index ? 'rank-axis__item--active' : 'rank-axis__item--inactive'}} {{pressStates.rankIndex === index ? 'rank-axis__item--pressed' : ''}}"
+              class="rank-axis__item {{rankIndex === index ? 'rank-axis__item--active' : 'rank-axis__item--inactive'}} {{item.locked ? 'rank-axis__item--locked' : ''}} {{pressStates.rankIndex === index ? 'rank-axis__item--pressed' : ''}}"
               data-index="{{index}}"
               bind:tap="selectRank"
             >
-              <view class="rank-axis__badge {{rankIndex === index ? 'rank-axis__badge--active' : 'rank-axis__badge--inactive'}}">
+              <view class="rank-axis__badge {{item.locked ? 'rank-axis__badge--locked' : ''}} {{!item.locked && rankIndex === index ? 'rank-axis__badge--active' : 'rank-axis__badge--inactive'}}">
+                <text wx:if="{{item.locked}}" class="rank-axis__level">Lv{{item.level}}</text>
                 <image
-                  wx:if="{{rankIndex === index}}"
+                  wx:elif="{{rankIndex === index}}"
                   class="rank-axis__icon"
                   src="{{iconAnimations.activeRankIndex === index ? item.axisActiveIconPair.animatedSrc : item.axisActiveIconPair.staticSrc}}"
                   mode="aspectFit"
@@ -96,55 +97,26 @@
 
       <view class="task-list">
         <block wx:for="{{tasks}}" wx:key="id">
-          <view class="task-card">
-            <view class="task-card__head">
-              <view class="task-card__main">
-                <view class="task-card__icon-shell">
-                  <image class="task-card__icon {{item.rotate ? 'task-card__icon--rotate' : ''}}" src="{{iconAnimations.activeTaskId === item.id ? item.iconPair.animatedSrc : item.iconPair.staticSrc}}" mode="aspectFit" />
-                </view>
-
-                <view class="task-card__copy">
-                  <text class="task-card__title">{{item.title}}</text>
-                  <text class="task-card__desc">{{item.desc}}</text>
-                </view>
-              </view>
-
-              <view class="task-card__badge {{item.done ? 'task-card__badge--done' : 'task-card__badge--active'}}">
-                <text class="task-card__badge-text">{{item.badgeText}}</text>
-              </view>
-            </view>
-
-            <view class="task-card__bottom">
-              <view class="task-card__progress">
-                <view class="task-card__progress-head">
-                  <text class="task-card__progress-label">{{copy.sections.tasks.progressLabel}}</text>
-                  <text class="task-card__count">{{item.countText}}</text>
-                </view>
-                <view class="task-card__progress-track">
-                  <view class="task-card__progress-fill {{item.done ? 'task-card__progress-fill--done' : ''}}" style="width: {{item.progressPercent}}%;"></view>
-                </view>
-              </view>
-
-              <view class="task-card__controls">
-                <view
-                  class="task-card__control-btn {{pressStates.taskActionKey === item.minusActionKey ? 'task-card__control-btn--pressed' : ''}} {{item.count <= 0 ? 'task-card__control-btn--disabled' : ''}}"
-                  data-id="{{item.id}}"
-                  data-delta="-1"
-                  catch:tap="adjustTask"
-                >
-                  <image class="task-card__control-icon" src="{{icons.minusSlate}}" mode="aspectFit" />
-                </view>
-                <view
-                  class="task-card__control-btn {{pressStates.taskActionKey === item.plusActionKey ? 'task-card__control-btn--pressed' : ''}} {{item.count >= item.limit ? 'task-card__control-btn--disabled' : ''}}"
-                  data-id="{{item.id}}"
-                  data-delta="1"
-                  catch:tap="adjustTask"
-                >
-                  <image class="task-card__control-icon" src="{{icons.plusSlate}}" mode="aspectFit" />
-                </view>
-              </view>
-            </view>
-          </view>
+          <pp-task-card
+            variant="full"
+            taskId="{{item.id}}"
+            title="{{item.title}}"
+            desc="{{item.desc}}"
+            tone="{{item.tone}}"
+            badgeText="{{item.badgeText}}"
+            iconSrc="{{iconAnimations.activeTaskId === item.id ? item.iconPair.animatedSrc : item.iconPair.staticSrc}}"
+            countText="{{item.countText}}"
+            progressLabel="{{copy.sections.tasks.progressLabel}}"
+            progressPercent="{{item.progressPercent}}"
+            done="{{item.done}}"
+            rotate="{{item.rotate}}"
+            showControls="{{true}}"
+            minusDisabled="{{item.count <= 0}}"
+            plusDisabled="{{item.count >= item.limit}}"
+            minusPressed="{{pressStates.taskActionKey === item.minusActionKey}}"
+            plusPressed="{{pressStates.taskActionKey === item.plusActionKey}}"
+            bind:adjust="adjustTask"
+          />
         </block>
       </view>
     </view>
@@ -184,5 +156,12 @@
         </block>
       </view>
     </view>
+  </view>
+
+  <view
+    wx:if="{{taskNotice.text}}"
+    class="task-notice task-notice--tone-{{taskNotice.tone}} {{taskNotice.active ? 'task-notice--active' : ''}}"
+  >
+    <text class="task-notice__text">{{taskNotice.text}}</text>
   </view>
 </view>

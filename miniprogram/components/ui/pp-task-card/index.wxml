@@ -1,0 +1,74 @@
+<view
+  class="pp-task-card pp-task-card--{{variant}} pp-task-card--tone-{{tone}} {{pressed ? 'pp-task-card--pressed' : ''}}"
+  bind:tap="handleTap"
+>
+  <block wx:if="{{variant === 'ticker'}}">
+    <view class="pp-task-card__ticker-main">
+      <view class="pp-task-card__icon-shell pp-task-card__icon-shell--ticker">
+        <image class="pp-task-card__icon {{rotate ? 'pp-task-card__icon--rotate' : ''}}" src="{{iconSrc}}" mode="aspectFit" />
+      </view>
+
+      <view class="pp-task-card__ticker-copy">
+        <view class="pp-task-card__ticker-line">
+          <text class="pp-task-card__ticker-title">{{title}}</text>
+          <text class="pp-task-card__ticker-divider">·</text>
+          <text class="pp-task-card__ticker-desc">{{desc}}</text>
+        </view>
+        <view class="pp-task-card__ticker-meta">
+          <view class="pp-task-card__badge {{done ? 'pp-task-card__badge--done' : 'pp-task-card__badge--active'}}" wx:if="{{badgeText}}">
+            <text class="pp-task-card__badge-text">{{badgeText}}</text>
+          </view>
+          <text class="pp-task-card__count">{{countText}}</text>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="pp-task-card__head">
+      <view class="pp-task-card__main">
+        <view class="pp-task-card__icon-shell">
+          <image class="pp-task-card__icon {{rotate ? 'pp-task-card__icon--rotate' : ''}}" src="{{iconSrc}}" mode="aspectFit" />
+        </view>
+
+        <view class="pp-task-card__copy">
+          <text class="pp-task-card__title">{{title}}</text>
+          <text class="pp-task-card__desc">{{desc}}</text>
+        </view>
+      </view>
+
+      <view class="pp-task-card__badge {{done ? 'pp-task-card__badge--done' : 'pp-task-card__badge--active'}}" wx:if="{{badgeText}}">
+        <text class="pp-task-card__badge-text">{{badgeText}}</text>
+      </view>
+    </view>
+
+    <view class="pp-task-card__bottom">
+      <view class="pp-task-card__progress">
+        <view class="pp-task-card__progress-head">
+          <text class="pp-task-card__progress-label">{{progressLabel}}</text>
+          <text class="pp-task-card__count">{{countText}}</text>
+        </view>
+        <view class="pp-task-card__progress-track">
+          <view class="pp-task-card__progress-fill {{done ? 'pp-task-card__progress-fill--done' : ''}}" style="width: {{progressPercent}}%;"></view>
+        </view>
+      </view>
+
+      <view class="pp-task-card__controls" wx:if="{{showControls}}">
+        <view
+          class="pp-task-card__control-btn {{minusPressed ? 'pp-task-card__control-btn--pressed' : ''}} {{minusDisabled ? 'pp-task-card__control-btn--disabled' : ''}}"
+          data-delta="-1"
+          catch:tap="handleAdjust"
+        >
+          <text class="pp-task-card__control-text">-</text>
+        </view>
+        <view
+          class="pp-task-card__control-btn {{plusPressed ? 'pp-task-card__control-btn--pressed' : ''}} {{plusDisabled ? 'pp-task-card__control-btn--disabled' : ''}}"
+          data-delta="1"
+          catch:tap="handleAdjust"
+        >
+          <text class="pp-task-card__control-text">+</text>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

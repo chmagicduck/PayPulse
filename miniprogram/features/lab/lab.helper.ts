@@ -1,5 +1,7 @@
 import { animatedIconPair, icon, type IconImagePair, type IconName } from '../../lib/icons'
+import { getLabRankIndexByPoints } from '../../lib/domain/lab-progress'
 import type { LabProgress } from '../../lib/domain/types'
+import { buildDailyMoyuTaskBadgeText, buildDailyMoyuTaskIconPair } from '../../lib/domain/lab-tasks'
 import { labStaticViewModel } from './model'
 
 type RankStaticItem = (typeof labStaticViewModel.ranks)[number]
@@ -10,6 +12,9 @@ export type RankRuntimeItem = RankStaticItem & {
   axisActiveIconPair: IconImagePair
   axisInactiveIconPair: IconImagePair
   cardIconPair: IconImagePair
+  locked: boolean
+  unlockGap: number
+  lockHint: string
 }
 
 export type TaskRuntimeItem = TaskStaticItem & {
@@ -26,47 +31,26 @@ export type AchievementRuntimeItem = AchievementStaticItem & {
   progressPercent: number
 }
 
-export type LabPageStateOptions = {
-  totalHappiness?: number
-  todayHappiness?: number
-  rankIndex?: number
-  taskCounts?: Record<string, number>
-  achievementProgress?: Record<string, number>
+const LAB_ICON_ANIMATIONS = {
+  header: false,
+  activeRankIndex: -1,
+  activeTaskId: '',
 }
 
-type LabSnapshot = {
-  totalHappiness: number
-  todayHappiness: number
-  rankIndex: number
-  taskCounts: Record<string, number>
-  achievementProgress: Record<string, number>
+const LAB_PRESS_STATES = {
+  rankIndex: -1,
+  taskActionKey: '',
 }
 
-function getToneColor(tone: string) {
-  switch (tone) {
-    case 'cyan':
-      return '#0891b2'
-    case 'orange':
-      return '#ea580c'
-    case 'emerald':
-      return '#10b981'
-    case 'blue':
-      return '#3b82f6'
-    case 'indigo':
-      return '#6366f1'
-    case 'violet':
-      return '#7c3aed'
-    case 'rose':
-      return '#e11d48'
-    case 'amber':
-      return '#f59e0b'
-    case 'slate':
-    default:
-      return '#94a3b8'
-  }
+export function createLabIconAnimations() {
+  return { ...LAB_ICON_ANIMATIONS }
 }
 
-function getAxisIconColors(theme: string) {
+export function createLabPressStates() {
+  return { ...LAB_PRESS_STATES }
+}
+
+function getAxisIconColors(theme: RankStaticItem['theme']) {
   switch (theme) {
     case 'mid':
     case 'high':
@@ -88,87 +72,8 @@ function getAxisIconColors(theme: string) {
   }
 }
 
-function buildTaskBadgeText(reward: number, done: boolean) {
-  if (done) return labStaticViewModel.sections.tasks.doneText
-  return `+${reward}${labStaticViewModel.sections.tasks.rewardSuffix}`
-}
-
-function buildDefaultTaskCounts() {
-  const counts: Record<string, number> = {}
-
-  labStaticViewModel.tasks.forEach(task => {
-    counts[task.id] = task.count
-  })
-
-  return counts
-}
-
-function buildDefaultAchievementProgress() {
-  const progress: Record<string, number> = {}
-
-  labStaticViewModel.achievements.forEach(item => {
-    progress[item.id] = item.progress
-  })
-
-  return progress
-}
-
-function isLabProgress(source: LabProgress | LabPageStateOptions | undefined): source is LabProgress {
-  return !!source
-    && typeof (source as LabProgress).totalPoints === 'number'
-    && Array.isArray((source as LabProgress).tasks)
-    && Array.isArray((source as LabProgress).achievements)
-}
-
-function resolveSnapshot(source?: LabProgress | LabPageStateOptions): LabSnapshot {
-  const taskCounts = buildDefaultTaskCounts()
-  const achievementProgress = buildDefaultAchievementProgress()
-
-  let totalHappiness: number = labStaticViewModel.score.total
-  let todayHappiness: number = labStaticViewModel.score.today
-  let rankIndex: number = labStaticViewModel.score.selectedRankIndex
-
-  if (isLabProgress(source)) {
-    totalHappiness = source.totalPoints
-    todayHappiness = source.todayPoints
-    rankIndex = source.selectedRankIndex
-
-    source.tasks.forEach(task => {
-      taskCounts[task.taskId] = task.count
-    })
-
-    source.achievements.forEach(item => {
-      achievementProgress[item.achievementId] = item.progress
-    })
-  } else if (source) {
-    if (typeof source.totalHappiness === 'number') {
-      totalHappiness = source.totalHappiness
-    }
-    if (typeof source.todayHappiness === 'number') {
-      todayHappiness = source.todayHappiness
-    }
-    if (typeof source.rankIndex === 'number') {
-      rankIndex = source.rankIndex
-    }
-    if (source.taskCounts) {
-      Object.keys(source.taskCounts).forEach(taskId => {
-        taskCounts[taskId] = source.taskCounts?.[taskId] ?? taskCounts[taskId] ?? 0
-      })
-    }
-    if (source.achievementProgress) {
-      Object.keys(source.achievementProgress).forEach(achievementId => {
-        achievementProgress[achievementId] = source.achievementProgress?.[achievementId] ?? achievementProgress[achievementId] ?? 0
-      })
-    }
-  }
-
-  return {
-    totalHappiness,
-    todayHappiness,
-    rankIndex,
-    taskCounts,
-    achievementProgress,
-  }
+function clampRankIndex(rankIndex: number, actualRankIndex: number) {
+  return Math.max(0, Math.min(rankIndex, actualRankIndex, Math.max(0, labStaticViewModel.ranks.length - 1)))
 }
 
 export function buildRankDisplay(ranks: RankRuntimeItem[], rankIndex: number, totalHappiness: number) {
@@ -190,15 +95,24 @@ export function buildRankDisplay(ranks: RankRuntimeItem[], rankIndex: number, to
   }
 }
 
-export function buildLabPageState(source?: LabProgress | LabPageStateOptions) {
-  const snapshot = resolveSnapshot(source)
-  const currentTheme = labStaticViewModel.ranks[
-    Math.max(0, Math.min(snapshot.rankIndex, Math.max(0, labStaticViewModel.ranks.length - 1)))
-  ]?.theme || 'basic'
+export function buildLabPageState(progress: LabProgress) {
+  const actualRankIndex = getLabRankIndexByPoints(progress.totalPoints)
+  const selectedRankIndex = clampRankIndex(progress.selectedRankIndex, actualRankIndex)
+  const currentTheme = labStaticViewModel.ranks[selectedRankIndex]?.theme || 'basic'
   const axisIconColors = getAxisIconColors(currentTheme)
+  const taskCountMap = progress.tasks.reduce<Record<string, number>>((result, task) => {
+    result[task.taskId] = task.count
+    return result
+  }, {})
+  const achievementProgressMap = progress.achievements.reduce<Record<string, number>>((result, item) => {
+    result[item.achievementId] = item.progress
+    return result
+  }, {})
 
-  const ranks = labStaticViewModel.ranks.map(rank =>
-    Object.assign({}, rank, {
+  const ranks = labStaticViewModel.ranks.map((rank, index) => {
+    const unlockGap = Math.max(rank.exp - progress.totalPoints, 0)
+
+    return Object.assign({}, rank, {
       axisActiveIconPair: animatedIconPair(rank.iconName as IconName, {
         color: axisIconColors.active,
         size: 12,
@@ -217,39 +131,43 @@ export function buildLabPageState(source?: LabProgress | LabPageStateOptions) {
         animation: rank.theme === 'ultra' ? 'twinkle' : 'float',
         durationMs: rank.theme === 'ultra' ? 1800 : 2200,
       }),
-    }),
-  )
+      locked: index > actualRankIndex,
+      unlockGap,
+      lockHint: unlockGap > 0
+        ? `还差 ${unlockGap} 摸鱼值解锁 ${rank.name}`
+        : `${rank.name} 已解锁`,
+    })
+  })
 
   const tasks = labStaticViewModel.tasks.map(task => {
-    const count = snapshot.taskCounts[task.id] ?? 0
+    const count = taskCountMap[task.id] ?? 0
     const done = count >= task.limit
 
     return Object.assign({}, task, {
       count,
       done,
       countText: `${count}/${task.limit}`,
-      progressPercent: Math.round((count / task.limit) * 100),
-      badgeText: buildTaskBadgeText(task.reward, done),
+      progressPercent: task.limit > 0 ? Math.min(100, Math.round((count / task.limit) * 100)) : 0,
+      badgeText: buildDailyMoyuTaskBadgeText(task.reward, done, {
+        doneText: labStaticViewModel.sections.tasks.doneText,
+        rewardSuffix: labStaticViewModel.sections.tasks.rewardSuffix,
+      }),
       minusActionKey: `${task.id}:minus`,
       plusActionKey: `${task.id}:plus`,
-      iconPair: animatedIconPair(task.iconName as IconName, {
-        color: getToneColor(task.tone),
-        animation: 'rotate' in task && task.rotate ? 'drift' : 'bounce',
-        durationMs: 1800,
-      }),
+      iconPair: buildDailyMoyuTaskIconPair(task),
     })
   })
 
   const achievements = labStaticViewModel.achievements.map(item => {
-    const progress = snapshot.achievementProgress[item.id] ?? 0
+    const progressValue = achievementProgressMap[item.id] ?? 0
 
     return Object.assign({}, item, {
-      progress,
-      progressPercent: Math.round((progress / item.target) * 100),
+      progress: progressValue,
+      progressPercent: item.target > 0 ? Math.min(100, Math.round((progressValue / item.target) * 100)) : 0,
     })
   })
 
-  const display = buildRankDisplay(ranks, snapshot.rankIndex, snapshot.totalHappiness)
+  const display = buildRankDisplay(ranks, selectedRankIndex, progress.totalPoints)
 
   return {
     copy: {
@@ -257,9 +175,11 @@ export function buildLabPageState(source?: LabProgress | LabPageStateOptions) {
       rankPanel: labStaticViewModel.rankPanel,
       sections: labStaticViewModel.sections,
     },
-    totalHappiness: snapshot.totalHappiness,
-    todayHappiness: snapshot.todayHappiness,
+    totalHappiness: progress.totalPoints,
+    todayHappiness: progress.todayPoints,
     rankIndex: display.rankIndex,
+    selectedRankIndex: display.rankIndex,
+    actualRankIndex,
     ranks,
     tasks,
     achievements,
@@ -267,6 +187,7 @@ export function buildLabPageState(source?: LabProgress | LabPageStateOptions) {
     nextRank: display.nextRank,
     pointsToNext: display.pointsToNext,
     progressPercent: display.progressPercent,
+    actualRank: ranks[actualRankIndex] || ranks[0],
     icons: {
       labPair: animatedIconPair('flask-conical', {
         color: '#ffffff',
@@ -276,8 +197,6 @@ export function buildLabPageState(source?: LabProgress | LabPageStateOptions) {
       }),
       trophyAmber: icon('trophy', '#f59e0b', 18),
       medalGhost: icon('medal', '#0f172a', 80),
-      plusSlate: icon('plus', '#64748b', 14),
-      minusSlate: icon('minus', '#64748b', 14),
       starPair: animatedIconPair('star', {
         color: '#fff8d6',
         size: 20,

@@ -122,31 +122,43 @@
       <pp-section-header
         title="日常摸鱼任务"
         barTone="blue"
-        manageText="去领积分"
+        manageText="待领取 {{vm.taskPreview.rewardValue}} 摸鱼值"
         manageTone="blue"
         chevronSrc="{{iconChevronRightBlue}}"
         bind:manage="openLabPage"
       />
-      <view class="task-card {{pressStates.task ? 'task-card--pressed' : ''}}" bind:tap="triggerTaskCardFeedback">
-        <view class="task-card__row">
-          <view class="task-card__left">
-            <view class="task-card__icon">
-              <image class="task-card__icon-image" src="{{iconRadar}}" mode="aspectFit" />
-            </view>
-            <view class="task-card__text">
-              <text class="task-card__title">带薪喝水・活动筋骨</text>
-              <text class="task-card__desc">离开工位，放松一下，顺便赚点摸鱼积分</text>
-            </view>
-          </view>
-          <view class="task-card__summary">
-            <view class="task-card__reward">
-              <image class="task-card__reward-icon" src="{{iconZapAmber}}" mode="aspectFit" />
-              <text class="task-card__reward-text">待领取 {{vm.taskPreview.rewardValue}} 摸鱼值</text>
-            </view>
-            <text class="task-card__progress-text">今日完成度 {{vm.taskPreview.completed}}/{{vm.taskPreview.total}}</text>
-          </view>
-        </view>
-      </view>
+      <swiper
+        class="task-swiper"
+        circular="{{vm.dailyTasks.length > 1}}"
+        interval="3200"
+        duration="420"
+        indicator-dots="{{false}}"
+      >
+        <block wx:for="{{vm.dailyTasks}}" wx:key="id">
+          <swiper-item class="task-swiper__item">
+            <pp-task-card
+              variant="full"
+              taskId="{{item.id}}"
+              title="{{item.title}}"
+              desc="{{item.desc}}"
+              tone="{{item.tone}}"
+            badgeText="{{item.badgeText}}"
+            iconSrc="{{item.iconSrc}}"
+            countText="{{item.countText}}"
+            progressLabel="完成进度"
+            progressPercent="{{item.progressPercent}}"
+            done="{{item.done}}"
+            rotate="{{item.rotate}}"
+            showControls="{{true}}"
+            minusDisabled="{{item.count <= 0}}"
+            plusDisabled="{{item.count >= item.limit}}"
+            minusPressed="{{taskActionKey === item.minusActionKey}}"
+            plusPressed="{{taskActionKey === item.plusActionKey}}"
+            bind:adjust="adjustHomeTask"
+          />
+        </swiper-item>
+      </block>
+      </swiper>
     </view>
 
     <view class="section">
@@ -170,10 +182,10 @@
             </view>
             <view class="tide-card__content">
               <view class="tide-card__number">
-                <text class="tide-card__leading">距</text>
+                <text class="tide-card__leading">剩</text>
                 <text class="tide-card__value">{{vm.regularTides[0].days}}天</text>
               </view>
-              <text class="tide-card__desc">稳住，距离下一次<text class="tide-card__desc-strong tide-card__desc-strong--blue">发工资</text>越来越近了。</text>
+              <text class="tide-card__desc">距离下次<text class="tide-card__desc-strong tide-card__desc-strong--blue">发工资</text>越来越近了。</text>
             </view>
           </view>
         </view>
@@ -189,10 +201,10 @@
             </view>
             <view class="tide-card__content">
               <view class="tide-card__number">
-                <text class="tide-card__leading">距</text>
+                <text class="tide-card__leading">剩</text>
                 <text class="tide-card__value">{{vm.regularTides[1].days}}天</text>
               </view>
-              <text class="tide-card__desc">马上就能迎来<text class="tide-card__desc-strong tide-card__desc-strong--emerald">休息日</text>，再坚持一下。</text>
+              <text class="tide-card__desc">马上就能迎来<text class="tide-card__desc-strong tide-card__desc-strong--emerald">休息日</text></text>
             </view>
           </view>
         </view>
@@ -368,6 +380,13 @@
         </view>
       </view>
     </view>
+  </view>
+
+  <view
+    wx:if="{{taskNotice.text}}"
+    class="task-notice task-notice--tone-{{taskNotice.tone}} {{taskNotice.active ? 'task-notice--active' : ''}}"
+  >
+    <text class="task-notice__text">{{taskNotice.text}}</text>
   </view>
 
   <view wx:if="{{showEditModal}}" class="modal-overlay {{editModalVisible ? 'modal-overlay--visible' : ''}}" bind:tap="closeEditModal">

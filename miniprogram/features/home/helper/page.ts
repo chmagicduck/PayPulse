@@ -15,7 +15,6 @@ const HOME_ICON_ANIMATION_KEYS = [
 ] as const
 
 const HOME_PRESS_STATE_KEYS = [
-  'task',
   'tideWallet',
   'tideWeekend',
   'dateHeart',

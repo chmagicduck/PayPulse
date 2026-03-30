@@ -1,5 +1,6 @@
 import { adjustDailyRecordDuration, readAmountVisibility, writeAmountVisibility } from '../../lib/domain/daily-records'
 import { now, toDateKey } from '../../lib/domain/date'
+import { buildDailyMoyuTaskNotice, type DailyMoyuTaskNoticeTone } from '../../lib/domain/lab-tasks'
 import { startMoyuSession, stopMoyuSession, syncMoyuSession } from '../../lib/domain/moyu-session'
 import { formatTimeFieldValue, sanitizeTimeFieldInput } from '../../lib/domain/time-fields'
 import { clearTimerBag, createTimerBag, openModal, replayState } from '../../lib/wx/page'
@@ -10,12 +11,15 @@ import { buildJourneyDisplayItems, INITIAL_JOURNEY_TIME_MODES, type JourneyTimeM
 import { buildHomeViewModel, createHomeIconAnimations, createHomePressStates, type HomeIconAnimationKey, type HomePressStateKey } from './helper/page'
 import { homeDashboardModel, type JourneyId } from './model/index'
 import { buildHomeDashboardRuntimeState } from './model/state'
+import { adjustTaskCount } from '../lab/model/actions'
 
 const timers = createTimerBag()
 const ICON_ANIMATION_DURATION = 2200
 const CARD_FEEDBACK_DURATION = 260
 const LIVE_CLOCK_TIMER_KEY = 'live-clock'
 const LIVE_CLOCK_INTERVAL = 1000
+const TASK_NOTICE_HIDE_DURATION = 1680
+const TASK_NOTICE_EXIT_DURATION = 220
 
 Page({
   data: {
@@ -28,6 +32,12 @@ Page({
     editH: '00',
     editM: '00',
     editS: '00',
+    taskActionKey: '',
+    taskNotice: {
+      text: '',
+      tone: 'blue' as DailyMoyuTaskNoticeTone,
+      active: false,
+    },
     journeyTimeModes: INITIAL_JOURNEY_TIME_MODES,
     journeyDisplayItems: buildJourneyDisplayItems(homeDashboardModel.lifeJourney, INITIAL_JOURNEY_TIME_MODES),
     ...buildDashboardIcons(),
@@ -102,6 +112,47 @@ Page({
     timers[LIVE_CLOCK_TIMER_KEY] = null
   },
 
+  showTaskNotice(text: string, tone: DailyMoyuTaskNoticeTone = 'blue') {
+    const hideTimer = timers['home-task-notice-hide']
+    const clearTimer = timers['home-task-notice-clear']
+
+    if (hideTimer) {
+      clearTimeout(hideTimer)
+      timers['home-task-notice-hide'] = null
+    }
+
+    if (clearTimer) {
+      clearTimeout(clearTimer)
+      timers['home-task-notice-clear'] = null
+    }
+
+    this.setData({
+      taskNotice: {
+        text,
+        tone,
+        active: false,
+      },
+    }, () => {
+      this.setData({ 'taskNotice.active': true })
+
+      timers['home-task-notice-hide'] = setTimeout(() => {
+        this.setData({ 'taskNotice.active': false })
+        timers['home-task-notice-hide'] = null
+      }, TASK_NOTICE_HIDE_DURATION)
+
+      timers['home-task-notice-clear'] = setTimeout(() => {
+        this.setData({
+          taskNotice: {
+            text: '',
+            tone: 'blue',
+            active: false,
+          },
+        })
+        timers['home-task-notice-clear'] = null
+      }, TASK_NOTICE_HIDE_DURATION + TASK_NOTICE_EXIT_DURATION)
+    })
+  },
+
   playIconAnimation(key: HomeIconAnimationKey, duration: number = ICON_ANIMATION_DURATION) {
     replayState(this, timers, `icon:${key}`, `iconAnimations.${key}`, true, false, duration)
   },
@@ -121,11 +172,6 @@ Page({
 
   triggerLogoAnimation() {
     this.playIconAnimation('logo', 2800)
-  },
-
-  triggerTaskCardFeedback() {
-    this.playPressState('task')
-    this.openLabPage()
   },
 
   triggerWalletTideAnimation() {
@@ -290,6 +336,39 @@ Page({
     this.setData({
       [String(field)]: formatTimeFieldValue(String(this.data[String(field) as 'editH' | 'editM' | 'editS'] || ''), Number(max) || 59),
     })
+  },
+
+  adjustHomeTask(e: WechatMiniprogram.CustomEvent<{ id?: string; delta?: number }>) {
+    const step = Number(e.detail?.delta)
+    const taskId = String(e.detail?.id || '')
+    if (!taskId || Number.isNaN(step) || step === 0) {
+      return
+    }
+
+    const currentTask = this.data.vm.dailyTasks.find(task => task.id === taskId)
+    if (!currentTask) {
+      return
+    }
+
+    const nextCount = Math.max(0, Math.min(currentTask.limit, currentTask.count + step))
+    if (nextCount === currentTask.count) {
+      return
+    }
+
+    const notice = buildDailyMoyuTaskNotice(currentTask, nextCount)
+
+    adjustTaskCount(taskId, step)
+    this.reloadRuntimeState()
+    replayState(
+      this,
+      timers,
+      'home-task-action',
+      'taskActionKey',
+      `${taskId}:${step > 0 ? 'plus' : 'minus'}`,
+      '',
+      220,
+    )
+    this.showTaskNotice(notice.text, notice.tone)
   },
 
   openLabPage() {
