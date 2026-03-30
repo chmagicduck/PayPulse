@@ -5,17 +5,21 @@ import { formatTimeFieldValue, sanitizeTimeFieldInput } from '../../lib/domain/t
 import { clearTimerBag, createTimerBag, openModal, replayState } from '../../lib/wx/page'
 import { ensureBootstrapReady } from '../../store/bootstrap'
 import { readProfileSettings } from '../profile-settings/model/storage'
-import { buildDashboardIcons, buildJourneyDisplayItems, INITIAL_JOURNEY_TIME_MODES, type JourneyId, type JourneyTimeModes } from './dashboard.helper'
-import { homeDashboardModel } from './model'
+import { buildDashboardIcons } from './helper/icons'
+import { buildJourneyDisplayItems, INITIAL_JOURNEY_TIME_MODES, type JourneyTimeModes } from './helper/journey'
+import { buildHomeViewModel, createHomeIconAnimations, createHomePressStates, type HomeIconAnimationKey, type HomePressStateKey } from './helper/page'
+import { homeDashboardModel, type JourneyId } from './model/index'
 import { buildHomeDashboardRuntimeState } from './model/state'
 
 const timers = createTimerBag()
 const ICON_ANIMATION_DURATION = 2200
 const CARD_FEEDBACK_DURATION = 260
+const LIVE_CLOCK_TIMER_KEY = 'live-clock'
+const LIVE_CLOCK_INTERVAL = 1000
 
 Page({
   data: {
-    vm: homeDashboardModel as any,
+    vm: homeDashboardModel,
     statusBarHeight: 0,
     showAmount: true,
     isMoYu: false,
@@ -25,35 +29,10 @@ Page({
     editM: '00',
     editS: '00',
     journeyTimeModes: INITIAL_JOURNEY_TIME_MODES,
-    journeyDisplayItems: buildJourneyDisplayItems(homeDashboardModel.lifeJourney as any, INITIAL_JOURNEY_TIME_MODES) as any[],
+    journeyDisplayItems: buildJourneyDisplayItems(homeDashboardModel.lifeJourney, INITIAL_JOURNEY_TIME_MODES),
     ...buildDashboardIcons(),
-    iconAnimations: {
-      logo: false,
-      moyu: false,
-      tideWallet: false,
-      tideWeekend: false,
-      dateHeart: false,
-      dateGift: false,
-      dateStar: false,
-      journeyLife: false,
-      journeyCareer: false,
-      journeyRetire: false,
-      journeyFinal: false,
-    },
-    pressStates: {
-      task: false,
-      tideWallet: false,
-      tideWeekend: false,
-      dateHeart: false,
-      dateGift: false,
-      dateStar: false,
-      journeyLife: false,
-      journeyCareer: false,
-      journeyRetire: false,
-      journeyFinal: false,
-      modalConfirm: false,
-      modalClose: false,
-    },
+    iconAnimations: createHomeIconAnimations(),
+    pressStates: createHomePressStates(),
   },
 
   onLoad() {
@@ -69,9 +48,11 @@ Page({
       return
     }
     this.reloadRuntimeState()
+    this.startLiveClock()
   },
 
   onHide() {
+    this.stopLiveClock()
     if (!ensureBootstrapReady()) {
       return
     }
@@ -79,31 +60,61 @@ Page({
   },
 
   onUnload() {
+    this.stopLiveClock()
     clearTimerBag(timers)
   },
 
   reloadRuntimeState() {
-    const runtimeState = buildHomeDashboardRuntimeState() as unknown as typeof homeDashboardModel
-    const vm = Object.assign({}, homeDashboardModel, runtimeState, {
-      importantDates: runtimeState.importantDates.filter(item => !String(item.id).startsWith('placeholder-')),
-    })
+    const runtimeState = buildHomeDashboardRuntimeState()
+    const vm = buildHomeViewModel(runtimeState)
+
     this.setData({
       vm,
-      isMoYu: Boolean((runtimeState as any).isMoYu),
+      isMoYu: runtimeState.isMoYu,
       journeyDisplayItems: buildJourneyDisplayItems(vm.lifeJourney, this.data.journeyTimeModes as JourneyTimeModes),
       showAmount: readAmountVisibility(),
     })
   },
 
-  playIconAnimation(key: string, duration: number = ICON_ANIMATION_DURATION) {
+  startLiveClock() {
+    this.stopLiveClock()
+
+    const tick = () => {
+      if (!ensureBootstrapReady()) {
+        timers[LIVE_CLOCK_TIMER_KEY] = null
+        return
+      }
+
+      this.reloadRuntimeState()
+      timers[LIVE_CLOCK_TIMER_KEY] = setTimeout(tick, LIVE_CLOCK_INTERVAL)
+    }
+
+    timers[LIVE_CLOCK_TIMER_KEY] = setTimeout(tick, LIVE_CLOCK_INTERVAL)
+  },
+
+  stopLiveClock() {
+    const pending = timers[LIVE_CLOCK_TIMER_KEY]
+    if (!pending) {
+      return
+    }
+
+    clearTimeout(pending)
+    timers[LIVE_CLOCK_TIMER_KEY] = null
+  },
+
+  playIconAnimation(key: HomeIconAnimationKey, duration: number = ICON_ANIMATION_DURATION) {
     replayState(this, timers, `icon:${key}`, `iconAnimations.${key}`, true, false, duration)
   },
 
-  playPressState(key: string, duration: number = CARD_FEEDBACK_DURATION) {
+  playPressState(key: HomePressStateKey, duration: number = CARD_FEEDBACK_DURATION) {
     replayState(this, timers, `press:${key}`, `pressStates.${key}`, true, false, duration)
   },
 
-  triggerCardFeedback(animationKey: string, pressKey: string, animationDuration: number = ICON_ANIMATION_DURATION) {
+  triggerCardFeedback(
+    animationKey: HomeIconAnimationKey,
+    pressKey: HomePressStateKey,
+    animationDuration: number = ICON_ANIMATION_DURATION,
+  ) {
     this.playPressState(pressKey)
     this.playIconAnimation(animationKey, animationDuration)
   },
@@ -164,13 +175,13 @@ Page({
 
   toggleJourneyDisplayMode(id: JourneyId) {
     const currentModes = this.data.journeyTimeModes as JourneyTimeModes
+    const nextMode = (currentModes[id] + 1) % 4
     const nextModes: JourneyTimeModes = {
-      life: currentModes.life,
-      career: currentModes.career,
-      retire: currentModes.retire,
-      final: currentModes.final,
+      life: nextMode,
+      career: nextMode,
+      retire: nextMode,
+      final: nextMode,
     }
-    nextModes[id] = (currentModes[id] + 1) % 4
 
     this.setData({
       journeyTimeModes: nextModes,
@@ -184,17 +195,13 @@ Page({
     this.setData({ showAmount: nextValue })
   },
 
-  toggleMoYu() {
+  toggleMoYu(e: WechatMiniprogram.TouchEvent) {
     const settings = readProfileSettings()
-    const runtimeState = this.data.vm as typeof homeDashboardModel & {
-      homeStatus?: {
-        allowStart: boolean
-      }
-    }
+    const blockedMessage = String(e.currentTarget.dataset.blockedMessage || '')
 
-    if (!this.data.isMoYu && !runtimeState.homeStatus?.allowStart) {
+    if (!this.data.isMoYu && !this.data.vm.homeStatus.allowStart) {
       wx.showToast({
-        title: '当前状态不能开启摸鱼',
+        title: blockedMessage,
         icon: 'none',
       })
       return

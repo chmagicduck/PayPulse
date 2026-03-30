@@ -42,19 +42,6 @@ export type WorkdayTimeline = {
   lunchEndAt: Date | null
 }
 
-type RegularTideCard = {
-  id: string
-  title: string
-  days: string
-  suffix: string
-  tone: string
-  badge: string
-  leadingText: string
-  descriptionPrefix: string
-  descriptionHighlight: string
-  descriptionSuffix: string
-}
-
 function writeDailyRecordMap(value: DailyRecordMap) {
   safeSetStorage(storageKeys.homeDailySession, value)
 }
@@ -391,29 +378,13 @@ function buildRegularTides(settings: ProfileSettings, targetDateTime: Date) {
   return [
     {
       id: 'salary',
-      title: '发薪大潮',
       days: String(daysToPay),
-      suffix: '天',
-      tone: 'blue',
-      badge: '发薪 (PAY)',
-      leadingText: '距',
-      descriptionPrefix: '下一次',
-      descriptionHighlight: '资金补给',
-      descriptionSuffix: '正在靠近。',
     },
     {
       id: 'weekend',
-      title: '休息倒计时',
       days: String(daysToBreak),
-      suffix: '天',
-      tone: 'emerald',
-      badge: '休息 (WKD)',
-      leadingText: '距',
-      descriptionPrefix: '距离下一次',
-      descriptionHighlight: '靠岸补能',
-      descriptionSuffix: '已经不远了。',
     },
-  ] satisfies RegularTideCard[]
+  ]
 }
 
 function buildLifeJourney(settings: ProfileSettings, targetDateTime: Date) {
@@ -432,10 +403,26 @@ function buildLifeJourney(settings: ProfileSettings, targetDateTime: Date) {
     const years = Math.floor(days / 365)
     const weeks = Math.floor(days / 7)
     return [
-      `${days.toLocaleString('en-US')}天`,
-      `${years}年 ${Math.floor((days % 365) / 30)}个月 ${days % 30}天`,
-      `${months}个月 ${days % 30}天`,
-      `${weeks}周 ${days % 7}天`,
+      {
+        mode: 'days',
+        major: days.toLocaleString('en-US'),
+      },
+      {
+        mode: 'years',
+        major: String(years),
+        middle: String(Math.floor((days % 365) / 30)),
+        minor: String(days % 30),
+      },
+      {
+        mode: 'months',
+        major: String(months),
+        minor: String(days % 30),
+      },
+      {
+        mode: 'weeks',
+        major: String(weeks),
+        minor: String(days % 7),
+      },
     ]
   }
 
@@ -448,39 +435,20 @@ function buildLifeJourney(settings: ProfileSettings, targetDateTime: Date) {
   return [
     {
       id: 'life',
-      eyebrow: '生命航程 (LIFE)',
-      statusLabel: '已过',
-      valueModes: buildValueModes(lifeDays),
-      descriptionPrefix: '这是你从',
-      descriptionHighlight: '出生启航',
-      descriptionSuffix: '至今走过的日数。',
+      values: buildValueModes(lifeDays),
     },
     {
       id: 'career',
-      eyebrow: '职场航程 (CAREER)',
-      statusLabel: '已过',
-      valueModes: buildValueModes(careerDays),
-      descriptionPrefix: '自从步入',
-      descriptionHighlight: '社会海域',
-      descriptionSuffix: '以后，你已投入的岁月。',
+      values: buildValueModes(careerDays),
     },
     {
       id: 'retire',
-      eyebrow: '退休倒计时 (RETIRE)',
-      statusLabel: '还剩',
-      valueModes: buildValueModes(retireDays),
-      descriptionPrefix: '距离你可以',
-      descriptionHighlight: '正式卸甲',
-      descriptionSuffix: '，还有这些既定航程。',
+      values: buildValueModes(retireDays),
       progress: Math.min(100, Math.round((lifeDays / lifeTotal) * 100)),
     },
     {
       id: 'final',
-      eyebrow: '终点倒计时 (FINAL)',
-      statusLabel: '还剩',
-      valueModes: buildValueModes(finalDays),
-      quote: '"警告：航线即将耗尽，此数据不可逆转。"',
-      note: '* 基于预计 85 岁自然终点计算。每一秒都属于不可再生的生命样本。',
+      values: buildValueModes(finalDays),
     },
   ] as const
 }
@@ -490,6 +458,7 @@ export function buildTodayDashboardState(
   entries: readonly TimeAxisEntry[],
   taskCompleted: number,
   taskTotal: number,
+  taskRemainingReward: number,
   options: {
     activeMoyuDurationSec?: number
     targetDateTime?: Date
@@ -519,7 +488,7 @@ export function buildTodayDashboardState(
         title: entry.title,
         date: formatMonthDay(entry.date),
         remaining: relative.valueText,
-        suffix: relative.unitText,
+        isPast: relative.isPast,
         tone: entry.notebookId === 'commemorative'
           ? 'rose'
           : entry.notebookId === 'travel'
@@ -527,25 +496,24 @@ export function buildTodayDashboardState(
             : entry.notebookId === 'career'
               ? 'blue'
               : 'indigo',
-        notebookLabel: entry.notebookId === 'commemorative'
-          ? '纪念本'
-          : entry.notebookId === 'travel'
-            ? '旅行本'
-            : entry.notebookId === 'career'
-              ? '职场本'
-              : '人生本',
+        notebookId: entry.notebookId === 'commemorative' || entry.notebookId === 'travel' || entry.notebookId === 'career'
+          ? entry.notebookId
+          : 'life',
       }
     })
     .sort((left, right) => Number(left.remaining) - Number(right.remaining))
     .slice(0, 3)
 
+  const idlePercent = todayRecord.scheduledWorkDurationSec > 0
+    ? Math.max(0, Math.min(100, Math.round(derivedTodayRecord.moyuRatio * 100)))
+    : 0
+
   return {
     income: {
       value: formatCurrency(derivedTodayRecord.moyuIncomeCents, 2),
       rate: (computeSecondSalaryCents(settings, targetDateTime) / 100).toFixed(3),
-      rateBadge: '实时折算',
-      workPercent: Math.max(0, Math.round((1 - derivedTodayRecord.moyuRatio) * 100)),
-      idlePercent: Math.max(0, Math.round(derivedTodayRecord.moyuRatio * 100)),
+      workPercent: todayRecord.scheduledWorkDurationSec > 0 ? 100 - idlePercent : 0,
+      idlePercent,
       moyuIncome: formatCurrency(derivedTodayRecord.voyageIncomeCents, 2),
       monthlyIncome: formatCurrency(
         monthRecords.reduce((sum, item) => sum + item.voyageIncomeCents, 0),
@@ -564,9 +532,7 @@ export function buildTodayDashboardState(
     taskPreview: {
       completed: taskCompleted,
       total: taskTotal,
-      rewardText: '待获得动能',
-      description: '保持每日任务节奏，获取额外成长加成。',
-      segments: Array.from({ length: taskTotal }, (_, index) => ({ filled: index < taskCompleted })),
+      rewardValue: taskRemainingReward,
     },
     regularTides: buildRegularTides(settings, targetDateTime),
     importantDates,

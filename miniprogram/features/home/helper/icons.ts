@@ -1,30 +1,4 @@
-import { animatedIconPair, icon, type IconImagePair } from '../../lib/icons'
-
-const JOURNEY_IDS = ['life', 'career', 'retire', 'final'] as const
-
-export type JourneyId = (typeof JOURNEY_IDS)[number]
-
-type JourneyItem = {
-  id: JourneyId
-  valueModes: readonly string[]
-}
-
-export type JourneyTimeModes = Record<JourneyId, number>
-
-export const INITIAL_JOURNEY_TIME_MODES: JourneyTimeModes = {
-  life: 0,
-  career: 0,
-  retire: 0,
-  final: 0,
-}
-
-export function buildJourneyDisplayItems<T extends JourneyItem>(items: readonly T[], timeModes: JourneyTimeModes) {
-  return items.map(item =>
-    Object.assign({}, item, {
-      displayValue: item.valueModes[timeModes[item.id]],
-    }),
-  )
-}
+import { animatedIconPair, icon, type IconImagePair } from '../../../lib/icons'
 
 export function buildDashboardIcons() {
   return {
@@ -32,7 +6,6 @@ export function buildDashboardIcons() {
     iconEyeOff: icon('eye-off', '#bfdbfe', 14),
     iconLogOut: icon('log-out', '#bfdbfe', 12),
     iconSettingsSlate: icon('settings2', '#dbeafe', 16),
-    iconListTodo: icon('list-todo', '#2563eb', 16),
     iconRadar: icon('target', '#3b82f6', 20),
     iconZapAmber: icon('zap', '#f59e0b', 12),
     iconChevronRightBlue: icon('chevron-right', '#2563eb', 12),

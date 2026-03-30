@@ -1,18 +1,22 @@
 import { buildTodayDashboardState, getWorkdayTimeline } from '../../../lib/domain/daily-records'
-import { formatDurationHMS } from '../../../lib/domain/format'
 import { now } from '../../../lib/domain/date'
 import { syncMoyuSession } from '../../../lib/domain/moyu-session'
 import { readCurrentLabProgress } from '../../lab/model/actions'
 import { readProfileSettings } from '../../profile-settings/model/storage'
 import { readTimeAxisEntries } from '../../time-axis/model/storage'
+import type { HomeViewModel } from './index'
 
-function getHomeStatusLabel(settings: ReturnType<typeof readProfileSettings>, targetTime: Date) {
+type HomeDashboardRuntimeBase = Omit<HomeViewModel, 'homeStatus'>
+
+function getHomeStatus(
+  settings: ReturnType<typeof readProfileSettings>,
+  targetTime: Date,
+): HomeViewModel['homeStatus'] {
   const timeline = getWorkdayTimeline(targetTime, settings)
 
   if (timeline.scheduledWorkDurationSec <= 0) {
     return {
       key: 'rest-day',
-      leftValue: '充电中',
       allowStart: false,
     }
   }
@@ -20,7 +24,6 @@ function getHomeStatusLabel(settings: ReturnType<typeof readProfileSettings>, ta
   if (targetTime.getTime() < timeline.startAt.getTime()) {
     return {
       key: 'pre-work',
-      leftValue: '待启航',
       allowStart: false,
     }
   }
@@ -33,7 +36,6 @@ function getHomeStatusLabel(settings: ReturnType<typeof readProfileSettings>, ta
   ) {
     return {
       key: 'lunch-break',
-      leftValue: '午休中',
       allowStart: false,
     }
   }
@@ -41,14 +43,12 @@ function getHomeStatusLabel(settings: ReturnType<typeof readProfileSettings>, ta
   if (targetTime.getTime() >= timeline.endAt.getTime()) {
     return {
       key: 'off-duty',
-      leftValue: '已离岗',
       allowStart: false,
     }
   }
 
   return {
     key: 'working',
-    leftValue: formatDurationHMS(Math.max(0, Math.round((timeline.endAt.getTime() - targetTime.getTime()) / 1000))),
     allowStart: true,
   }
 }
@@ -60,21 +60,26 @@ export function buildHomeDashboardRuntimeState() {
   const currentTime = now()
   const syncedSession = syncMoyuSession(settings, currentTime)
   const completedTasks = labProgress.tasks.filter(item => item.count >= item.limit).length
-  const runtimeState = buildTodayDashboardState(settings, timeAxisEntries, completedTasks, labProgress.tasks.length, {
-    targetDateTime: currentTime,
-    activeMoyuDurationSec: syncedSession.status === 'active' ? syncedSession.accumulatedDurationSec : 0,
-  })
-  const homeStatus = getHomeStatusLabel(settings, currentTime)
+  const remainingTaskReward = labProgress.tasks.reduce(
+    (total, item) => total + Math.max(0, item.limit - item.count) * item.rewardPoints,
+    0,
+  )
+  const runtimeState = buildTodayDashboardState(
+    settings,
+    timeAxisEntries,
+    completedTasks,
+    labProgress.tasks.length,
+    remainingTaskReward,
+    {
+      targetDateTime: currentTime,
+      activeMoyuDurationSec: syncedSession.status === 'active' ? syncedSession.accumulatedDurationSec : 0,
+    },
+  ) as unknown as HomeDashboardRuntimeBase
+  const homeStatus = getHomeStatus(settings, currentTime)
 
   return {
     ...runtimeState,
-    timer: {
-      ...runtimeState.timer,
-      leftValue: homeStatus.leftValue,
-    },
-    session: syncedSession,
     homeStatus,
     isMoYu: syncedSession.status === 'active',
-    moyuButtonText: syncedSession.status === 'active' ? '结束摸鱼' : '开启摸鱼',
   }
 }

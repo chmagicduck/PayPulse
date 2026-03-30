@@ -53,14 +53,6 @@
     letter-spacing: -0.025em;
     color: @text-primary;
   }
-
-  &__subtitle {
-    font-size: @fs-2xl;
-    color: @text-tertiary;
-    font-weight: 500;
-    letter-spacing: -0.025em;
-    opacity: 0.8;
-  }
 }
 
 .income-card {
@@ -204,7 +196,7 @@
   }
 
   &__toggle-text {
-    font-size: @fs-base;
+    font-size: @fs-md;
     font-weight: 700;
     color: @text-inverse;
     line-height: 1;
@@ -323,7 +315,7 @@
 
   &__countdown-value {
     display: block;
-    font-size: @fs-xl;
+    font-size: @fs-lg;
     font-weight: 700;
     color: @text-on-dark-high;
     font-variant-numeric: tabular-nums;
@@ -332,7 +324,7 @@
   }
 
   &__bar {
-    position: relative;
+    display: flex;
     height: 12rpx;
     background-color: rgba(0, 0, 0, 0.18);
     border-radius: @radius-pill;
@@ -340,18 +332,14 @@
   }
 
   &__bar-work {
-    position: absolute;
-    left: 0;
-    top: 0;
     height: 100%;
+    flex-shrink: 0;
     background-color: rgba(255, 255, 255, 0.3);
   }
 
   &__bar-idle {
-    position: absolute;
-    left: 0;
-    top: 0;
     height: 100%;
+    flex-shrink: 0;
     background-color: @white;
     box-shadow: 0 0 16rpx rgba(255, 255, 255, 0.6);
   }
@@ -455,7 +443,7 @@
   &__desc {
     display: block;
     margin-top: 10rpx;
-    font-size: @fs-base;
+    font-size: @fs-md;
     line-height: 1.45;
     color: @text-muted;
     font-weight: 600;
@@ -575,7 +563,7 @@
 
   &__badge {
     margin-left: 12rpx;
-    font-size: @fs-base;
+    font-size: @fs-md;
     font-weight: 900;
     letter-spacing: 0.1em;
     line-height: 1.2;
@@ -622,7 +610,7 @@
     display: block;
     position: relative;
     z-index: 1;
-    font-size: @fs-lg;
+    font-size: @fs-md;
     line-height: 1.45;
     color: @text-tertiary;
     font-weight: 500;
@@ -655,7 +643,7 @@
   justify-content: center;
 
   &__text {
-    font-size: @fs-xl;
+    font-size: @fs-lg;
     line-height: 1.5;
     text-align: center;
     color: @text-tertiary;
@@ -706,6 +694,11 @@
       background-color: @blue50;
       border-color: @blue100;
     }
+
+    &--indigo {
+      background-color: @violet50;
+      border-color: @violet100;
+    }
   }
 
   &__icon-image {
@@ -754,6 +747,7 @@
     &--rose { background: @rose100; }
     &--amber { background: @amber100; }
     &--blue { background: @blue100; }
+    &--indigo { background: @violet100; }
   }
 
   &__badge-text {
@@ -773,7 +767,7 @@
   }
 
   &__days {
-    font-size: @fs-display-md;
+    font-size: @fs-display-sm;
     font-weight: 900;
     line-height: 0.86;
     letter-spacing: -0.06em;
@@ -782,11 +776,12 @@
     &--rose { color: @text-danger-soft; }
     &--amber { color: @text-warning-soft; }
     &--blue { color: @text-brand; }
+    &--indigo { color: @text-info; }
   }
 
   &__suffix {
     padding-bottom: 8rpx;
-    font-size: @fs-base;
+    font-size: @fs-md;
     font-weight: 800;
     color: @text-muted;
     line-height: 1;
@@ -930,7 +925,7 @@
     display: block;
     position: relative;
     z-index: 1;
-    font-size: @fs-lg;
+    font-size: @fs-md;
     line-height: 1.45;
     color: @text-tertiary;
     font-weight: 500;
@@ -968,7 +963,7 @@
     display: block;
     position: relative;
     z-index: 1;
-    font-size: @fs-base;
+    font-size: @fs-md;
     font-weight: 900;
     line-height: 1.35;
     color: @text-danger-quote;
@@ -1079,7 +1074,7 @@
   &__field {
     width: 112rpx;
     height: 112rpx;
-    font-size: @fs-display-md;
+    font-size: @fs-display-sm;
     font-weight: 900;
     text-align: center;
     background-color: @slate50;
@@ -1090,7 +1085,7 @@
   }
 
   &__label {
-    font-size: @fs-md;
+    font-size: @fs-sm;
     font-weight: 700;
     letter-spacing: 0.1em;
     color: @text-muted;
