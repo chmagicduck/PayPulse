@@ -5,7 +5,7 @@
         <view class="profile-nav__logo" bind:tap="triggerHeaderAnimation">
           <image class="profile-nav__logo-icon" src="{{iconAnimations.header ? icons.headerPair.animatedSrc : icons.headerPair.staticSrc}}" mode="aspectFit" />
         </view>
-        <text class="profile-nav__title">个人基地</text>
+        <text class="profile-nav__title">我的基地</text>
       </view>
     </view>
   </view>
@@ -34,7 +34,7 @@
           </view>
 
           <view class="profile-identity__pill">
-            <text class="profile-identity__pill-text">累计摸鱼打卡：</text>
+            <text class="profile-identity__pill-text">累计摸鱼天数：</text>
             <text class="profile-identity__pill-value">{{vm.user.checkInDays}}天</text>
           </view>
         </view>
@@ -42,7 +42,7 @@
     </view>
 
     <view class="profile-section">
-      <pp-section-header title="航行控制台" barTone="blue" />
+      <pp-section-header title="打工控制台" barTone="blue" />
 
       <view class="profile-card-list">
         <block wx:for="{{consoleItems}}" wx:key="cardKey">
@@ -65,7 +65,7 @@
     </view>
 
     <view class="profile-section">
-      <pp-section-header title="甲板议事台" barTone="indigo" />
+      <pp-section-header title="摸鱼茶水间" barTone="indigo" />
 
       <view class="profile-card-list">
         <block wx:for="{{aboutItems}}" wx:key="cardKey">
@@ -88,7 +88,7 @@
     </view>
 
     <view class="profile-section profile-section--last">
-      <pp-section-header title="灯塔同步站" barTone="dark" />
+      <pp-section-header title="数据与设置" barTone="dark" />
 
       <view class="profile-card-list">
         <block wx:for="{{storageItems}}" wx:key="cardKey">
@@ -126,16 +126,16 @@
       <view class="avatar-sheet__action-row">
         <view class="avatar-sheet__action avatar-sheet__action--emerald {{pressStates.wechatAvatar ? 'avatar-sheet__action--pressed' : ''}}" bind:tap="useWechatAvatar">
           <image class="icon-md" src="{{icons.messageSquare}}" mode="aspectFit" />
-          <text class="avatar-sheet__action-text">微信头像</text>
+          <text class="avatar-sheet__action-text">使用微信头像</text>
         </view>
         <view class="avatar-sheet__action avatar-sheet__action--blue {{pressStates.uploadAvatar ? 'avatar-sheet__action--pressed' : ''}}" bind:tap="useUploadedAvatar">
           <image class="icon-md" src="{{icons.cameraBlue}}" mode="aspectFit" />
-          <text class="avatar-sheet__action-text">上传图片</text>
+          <text class="avatar-sheet__action-text">相册上传</text>
         </view>
       </view>
 
       <view class="avatar-sheet__preset-block">
-        <text class="avatar-sheet__preset-title">预设形象</text>
+        <text class="avatar-sheet__preset-title">默认头像</text>
       </view>
 
       <view class="avatar-grid">
@@ -147,7 +147,7 @@
       </view>
 
       <view class="avatar-sheet__confirm {{pressStates.modalConfirm ? 'avatar-sheet__confirm--pressed' : ''}}" bind:tap="confirmAvatar">
-        <text class="avatar-sheet__confirm-text">确认修改</text>
+        <text class="avatar-sheet__confirm-text">确定修改</text>
       </view>
     </view>
   </view>

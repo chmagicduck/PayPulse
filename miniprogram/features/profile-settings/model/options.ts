@@ -1,8 +1,8 @@
 import type { Gender, RetirementProfile, WorkMode } from '../../../lib/domain/types'
 
 export const genderOptions: Array<{ value: Gender; label: string }> = [
-  { value: 'male', label: '男性' },
-  { value: 'female', label: '女性' },
+  { value: 'male', label: '男' },
+  { value: 'female', label: '女' },
 ]
 
 export const workModeOptions: Array<{ value: WorkMode; label: string }> = [

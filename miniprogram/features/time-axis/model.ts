@@ -4,7 +4,7 @@ export const timeAxisModel = {
     { id: 'commemorative', name: '纪念日', iconId: 'heart', tone: 'rose' },
     { id: 'travel', name: '旅行本', iconId: 'map', tone: 'amber' },
     { id: 'life', name: '人生本', iconId: 'user', tone: 'blue' },
-    { id: 'career', name: '职场本', iconId: 'briefcase', tone: 'indigo' },
+    { id: 'career', name: '打工本', iconId: 'briefcase', tone: 'indigo' },
   ],
   entries: [
     {
@@ -23,7 +23,7 @@ export const timeAxisModel = {
     },
     {
       id: 'career-milestone',
-      title: '拿到高级架构师证',
+      title: '终于考上岸/拿证',
       date: '2022-07-15',
       notebookId: 'career',
       isAnniversary: false,

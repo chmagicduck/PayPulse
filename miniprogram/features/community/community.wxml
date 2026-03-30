@@ -37,8 +37,8 @@
     <view class="join-card">
       <view class="join-card__head">
         <image class="join-card__anchor" src="{{icons.anchorPair.staticSrc}}" mode="aspectFit" />
-        <text class="join-card__title">深海摸鱼港</text>
-        <text class="join-card__subtitle">官方社群入口</text>
+        <text class="join-card__title">打工人摸鱼基地</text>
+        <text class="join-card__subtitle">官方摸鱼交流群</text>
       </view>
 
       <view wx:if="{{!joinUnavailable}}" class="join-card__button">
@@ -47,19 +47,19 @@
           url="{{vm.groupUrl}}"
           bind:startmessage="onStartMessage"
           bind:completemessage="onCompleteMessage"
-          contactText="立即加入微信社群"
+          contactText="加入组织一起摸鱼"
           contactTextBlod="{{true}}"
         />
       </view>
       <view wx:else class="join-card__button" bind:tap="handleJoinFallback">
-        <text class="join-card__button-text">复制群链接</text>
+        <text class="join-card__button-text">复制进群链接</text>
         <image class="icon-sm" src="{{icons.chevronRight}}" mode="aspectFit" />
       </view>
 
-      <text class="join-card__note">{{joinHint || '点击主按钮后会拉起真实企微入群流程，若失败会提供明确提示与降级路径。'}}</text>
+      <text class="join-card__note">{{joinHint || '点按钮会直接拉起企微加群，如果失败了会给你其他办法。'}}</text>
     </view>
 
-    <pp-section-header title="社群专属权益" barTone="blue" />
+    <pp-section-header title="群友专属福利" barTone="blue" />
 
     <view class="benefit-list">
       <block wx:for="{{benefits}}" wx:key="title">

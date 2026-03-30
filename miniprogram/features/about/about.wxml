@@ -4,7 +4,7 @@
       <view class="about-nav__back" bind:tap="handleBack">
         <image class="icon-lg" src="{{icons.chevronLeft}}" mode="aspectFit" />
       </view>
-      <text class="about-nav__title">关于软件</text>
+      <text class="about-nav__title">关于薪潮涌动</text>
       <view class="about-nav__placeholder"></view>
     </view>
   </view>
@@ -14,7 +14,7 @@
       <view class="brand-hero__logo">
         <image class="brand-hero__logo-icon" src="{{icons.anchor}}" mode="aspectFit" />
         <view class="brand-hero__badge">
-          <text class="brand-hero__badge-text">版本 {{vm.currentVersion}}</text>
+          <text class="brand-hero__badge-text">当前版本 {{vm.currentVersion}}</text>
         </view>
       </view>
 
@@ -32,10 +32,10 @@
 
     <view class="tab-switch">
       <view class="tab-switch__item {{activeTab === 'changelog' ? 'tab-switch__item--active' : ''}}" data-value="changelog" bind:tap="switchTab">
-        <text class="tab-switch__text">更新日志</text>
+        <text class="tab-switch__text">更新日记</text>
       </view>
       <view class="tab-switch__item {{activeTab === 'concept' ? 'tab-switch__item--active' : ''}}" data-value="concept" bind:tap="switchTab">
-        <text class="tab-switch__text">设计理念</text>
+        <text class="tab-switch__text">为什么做这个</text>
       </view>
     </view>
 
@@ -77,8 +77,8 @@
     </view>
 
     <view class="about-footer">
-      <text class="about-footer__copy">薪潮涌动工作室 · 深度定制</text>
-      <text class="about-footer__legal">© 2026 版权所有</text>
+      <text class="about-footer__copy">薪潮涌动工作室 · 为打工人定制</text>
+      <text class="about-footer__legal">© 2026 版权所有，拒绝内卷</text>
     </view>
   </view>
 </view>

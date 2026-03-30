@@ -140,7 +140,7 @@ const App = () => {
                 />
                 <MenuButton 
                    icon={<MapPin size={18} className="text-emerald-500" />} 
-                   title="岁月坐标设置" 
+                   title="纪念日设置" 
                    desc="管理重要的时间节点与纪念日"
                 />
                 <MenuButton 

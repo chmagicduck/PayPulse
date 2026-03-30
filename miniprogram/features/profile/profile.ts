@@ -114,7 +114,7 @@ Page({
     const nextAvatar = String(this.data.vm.avatarPresets[0]?.src || this.data.draftAvatar)
     this.setData({ draftAvatar: nextAvatar })
     wx.showToast({
-      title: '已切换微信头像演示',
+      title: '已切换为微信头像',
       icon: 'none',
     })
   },
@@ -124,7 +124,7 @@ Page({
     const nextAvatar = String(this.data.vm.avatarPresets[1]?.src || this.data.draftAvatar)
     this.setData({ draftAvatar: nextAvatar })
     wx.showToast({
-      title: '已切换上传头像演示',
+      title: '头像上传成功',
       icon: 'none',
     })
   },

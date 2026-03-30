@@ -108,7 +108,7 @@ Page({
 
     if (target.locked) {
       wx.showToast({
-        title: '系统卡请在航行档案设置中修改',
+        title: '这是系统自带的，去职场档案里改吧',
         icon: 'none',
       })
       return
@@ -202,7 +202,7 @@ Page({
     const target = this.data.entries.find(item => item.id === this.data.editingId)
     if (target?.locked) {
       wx.showToast({
-        title: '系统卡不可删除',
+        title: '系统卡片不能删哦',
         icon: 'none',
       })
       return

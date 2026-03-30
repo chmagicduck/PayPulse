@@ -1,12 +1,12 @@
 // 这里预置了 2026 年官方节假日样例月份，后续正式阶段会演进为可计算的完整日历模型。
 // 节假日安排依据国务院办公厅 2025 年 11 月 5 日发布的 2026 年部分节假日安排通知。
 export const calendarStaticViewModel = {
-  title: '日历',
+  title: '打工日历',
   months: [
     {
       key: '2026-09',
       title: '2026 九月',
-      reminder: '距离国庆长假还有 6 天，舵手请继续坚持。',
+      reminder: '距离国庆长假还有 6 天，挺住。',
       year: '2026',
       monthLabel: '九月',
       offset: 2,
@@ -19,27 +19,27 @@ export const calendarStaticViewModel = {
       ],
       detailMap: {
         default: {
-          title: '正常航行模式',
-          desc: '当前海域风平浪静，适合稳定航行与日常推进。',
+          title: '日常搬砖模式',
+          desc: '风平浪静的工作日，适合老老实实摸鱼。',
         },
         holiday: {
-          title: '法定摸鱼港',
-          desc: '当前日期位于官方节假日区间，适合休整与庆祝。',
+          title: '法定快乐日',
+          desc: '现在是国家规定的假期，尽情玩耍吧！',
         },
         payday: {
-          title: '宝藏日：薪水到账',
-          desc: '检测到账户有大额能量补充，建议今日适当提高摸鱼质量。',
+          title: '宝藏日：工资到账',
+          desc: '今天老板发钱了，中午给自己加个鸡腿。',
         },
         makeup: {
-          title: '强力补班中',
-          desc: '今天属于官方调休补班日，节奏会比普通工作日更紧凑。',
+          title: '苦逼补班中',
+          desc: '今天可是调休补班日，少干点活，多摸会儿鱼。',
         },
       },
     },
     {
       key: '2026-10',
       title: '2026 十月',
-      reminder: '距离下一次发薪日还有 10 天，继续稳住节奏。',
+      reminder: '距离下一次发工资还有 10 天，稳住我们能赢。',
       year: '2026',
       monthLabel: '十月',
       offset: 4,
@@ -52,20 +52,20 @@ export const calendarStaticViewModel = {
       ],
       detailMap: {
         default: {
-          title: '正常航行模式',
-          desc: '当前海域风平浪静，适合稳定航行与日常推进。',
+          title: '日常搬砖模式',
+          desc: '平平无奇的工作日，请继续你的摸鱼表演。',
         },
         holiday: {
           title: '国庆长假中',
-          desc: '当前日期位于 2026 年国庆法定假期区间，适合放松与出游。',
+          desc: '别看手机了，好好享受难得的长假吧。',
         },
         payday: {
-          title: '宝藏日：薪水到账',
-          desc: '薪资节点已到，适合回顾本月航行收获。',
+          title: '宝藏日：工资到账',
+          desc: '来钱了！快看看工资条上的数字。',
         },
         makeup: {
-          title: '强力补班中',
-          desc: '今天属于 2026 年国庆调休补班日，请注意工作节奏切换。',
+          title: '苦逼补班中',
+          desc: '长假过后的连轴转，请开启最高级别摸鱼模式。',
         },
       },
     },

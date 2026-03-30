@@ -603,10 +603,10 @@ export function buildReportViewState(settings: ProfileSettings, targetDateTime: 
   return {
     trend: {
       isEmpty: trendBase.length === 0,
-      emptyTitle: monthRecords.length === 0 ? '本月无数据' : '本月数据不足完整月',
+      emptyTitle: monthRecords.length === 0 ? '本月暂无数据' : '本月数据未满一月',
       emptyDesc: monthRecords.length === 0
-        ? '当前月份还没有真实摸鱼记录，开始一次有效记录后会出现在这里。'
-        : '当前月份只展示已有自然日，不会补齐未来日期或演示数据。',
+        ? '这个月还没留下你摸鱼的痕迹，产生一次记录后即可查看。'
+        : '只展示当前已度过的自然日，不预支未来的打工时光。',
       riseText: `${risePercent >= 0 ? '+' : ''}${risePercent.toFixed(1)}%`,
       bars: trendBase.map(item => ({
         day: item.record.date.slice(-2).replace(/^0/, ''),
@@ -623,10 +623,10 @@ export function buildReportViewState(settings: ProfileSettings, targetDateTime: 
       },
     },
     annualCards: [
-      { title: '年度摸鱼收益', value: formatCurrency(yearMoyuIncomeTotal, 2), tone: 'indigo', iconName: 'coins' },
-      { title: '摸鱼打卡天数', value: `${checkInDays} 天`, tone: 'amber', iconName: 'calendar-days' },
+      { title: '年度带薪摸鱼', value: formatCurrency(yearMoyuIncomeTotal, 2), tone: 'indigo', iconName: 'coins' },
+      { title: '成功摸鱼天数', value: `${checkInDays} 天`, tone: 'amber', iconName: 'calendar-days' },
       { title: '月均摸鱼收益', value: formatCurrency(Math.round(yearMoyuIncomeTotal / recordedMonthCount), 2), tone: 'blue', iconName: 'trending-up' },
-      { title: '年度航行收益', value: formatCurrency(yearVoyageIncomeTotal, 2), tone: 'rose', iconName: 'trophy' },
+      { title: '年度打工总收益', value: formatCurrency(yearVoyageIncomeTotal, 2), tone: 'rose', iconName: 'trophy' },
     ],
     ratio: {
       stats: {

@@ -54,15 +54,15 @@
       <view class="legend-grid">
         <view class="legend-item">
           <image class="icon-xs" src="{{icons.coins}}" mode="aspectFit" />
-          <text class="legend-item__text">薪日</text>
+          <text class="legend-item__text">发钱</text>
         </view>
         <view class="legend-item">
           <image class="icon-xs" src="{{icons.anchor}}" mode="aspectFit" />
-          <text class="legend-item__text">法定假日</text>
+          <text class="legend-item__text">法定节假日</text>
         </view>
         <view class="legend-item">
           <image class="icon-xs" src="{{icons.waves}}" mode="aspectFit" />
-          <text class="legend-item__text">周末休息</text>
+          <text class="legend-item__text">周末</text>
         </view>
         <view class="legend-item">
           <image class="icon-xs" src="{{icons.zap}}" mode="aspectFit" />
@@ -72,7 +72,7 @@
     </view>
 
     <view class="calendar-section">
-      <pp-section-header title="今日航行状态" barTone="blue" />
+      <pp-section-header title="今日打工状态" barTone="blue" />
 
       <view class="detail-card detail-card--{{selectedStatus}}">
         <view class="detail-card__head">
@@ -87,7 +87,7 @@
     </view>
 
     <view class="reminder-card">
-      <text class="reminder-card__title">下一关键提醒</text>
+      <text class="reminder-card__title">下个盼头</text>
       <text class="reminder-card__desc">{{currentMonth.reminder}}</text>
     </view>
   </view>

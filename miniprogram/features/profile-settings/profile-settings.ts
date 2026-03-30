@@ -116,7 +116,7 @@ Page({
   handleNicknameReview(e: WechatMiniprogram.CustomEvent<{ pass: boolean; timeout: boolean }>) {
     if (e.detail.timeout) {
       wx.showToast({
-        title: '昵称审核中，请稍后确认',
+        title: '昵称审核中，等一会儿就好',
         icon: 'none',
       })
       return
@@ -124,7 +124,7 @@ Page({
 
     if (!e.detail.pass) {
       wx.showToast({
-        title: '昵称未通过审核，请重新输入',
+        title: '这昵称不行，换一个吧',
         icon: 'none',
       })
     }
@@ -143,7 +143,7 @@ Page({
 
     const saveResult = saveProfileSettings(result.settings)
     wx.showToast({
-      title: saveResult.initialized ? '初始化完成' : '保存成功',
+      title: saveResult.initialized ? '档案建立成功' : '保存成功',
       icon: 'success',
     })
 

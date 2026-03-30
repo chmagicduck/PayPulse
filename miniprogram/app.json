@@ -26,25 +26,25 @@
     "list": [
       {
         "pagePath": "features/home/home",
-        "text": "领潮中心",
+        "text": "今日概览",
         "iconPath": "assets/images/tabbar/tab-home.png",
         "selectedIconPath": "assets/images/tabbar/tab-home-active.png"
       },
       {
         "pagePath": "features/report/report",
-        "text": "航行报告",
+        "text": "数据报告",
         "iconPath": "assets/images/tabbar/tab-chart.png",
         "selectedIconPath": "assets/images/tabbar/tab-chart-active.png"
       },
       {
         "pagePath": "features/lab/lab",
-        "text": "动力舱",
+        "text": "摸鱼任务",
         "iconPath": "assets/images/tabbar/tab-lab.png",
         "selectedIconPath": "assets/images/tabbar/tab-lab-active.png"
       },
       {
         "pagePath": "features/profile/profile",
-        "text": "个人基地",
+        "text": "我的基地",
         "iconPath": "assets/images/tabbar/tab-profile.png",
         "selectedIconPath": "assets/images/tabbar/tab-profile-active.png"
       }

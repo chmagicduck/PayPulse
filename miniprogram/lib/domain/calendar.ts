@@ -102,16 +102,16 @@ export function buildCalendarDetail(date: Date, settings: ProfileSettings) {
     return { title: holiday.title, desc: holiday.desc }
   }
   if (config.supportOfficialHoliday && config.makeupDays.includes(dateKey)) {
-    return { title: '调休补班中', desc: '今天属于官方调休补班日，请按工作节奏安排摸鱼与航行。' }
+    return { title: '苦逼补班中', desc: '今天属于官方调休补班日，请合理安排摸鱼节奏，保重身体。' }
   }
   if (toDateKey(getPayDate(date.getFullYear(), date.getMonth(), settings.payDay)) === dateKey) {
-    return { title: '宝藏日：薪水到账', desc: '发薪节点已到，可以顺手回顾本月的真实航行与摸鱼记录。' }
+    return { title: '宝藏日：工资到账', desc: '发薪日到了，快看看这笔钱对得起你受的委屈吗。' }
   }
   if (resolveWorkdayStatus(date, settings) === 'weekend') {
-    return { title: '周末休整中', desc: '当前日期属于休息日，适合补能、休整，不能开启摸鱼会话。' }
+    return { title: '周末躺平中', desc: '今天是休息日，不谈工作，好好回血，暂停摸鱼计费。' }
   }
 
-  return { title: '正常航行模式', desc: '当前处于正常工作日，页面中的工时与收益都会按真实时间推进。' }
+  return { title: '日常搬砖模式', desc: '当前处于正常工作日，工时与打工收益正常推进中。' }
 }
 
 function getNextTimeAxisEventInMonth(year: number, monthIndex: number, entries: readonly TimeAxisEntry[]) {
@@ -149,7 +149,7 @@ export function buildNextReminder(year: number, monthIndex: number, settings: Pr
 
   const payDate = getPayDate(year, monthIndex, settings.payDay)
   if (payDate >= today && payDate >= monthStart && payDate <= monthEnd) {
-    candidates.push({ date: payDate, label: `距离下次发薪还有 ${diffDays(today, payDate)} 天` })
+    candidates.push({ date: payDate, label: `距离下次发工资还有 ${diffDays(today, payDate)} 天` })
   }
 
   if (config.supportOfficialHoliday) {
@@ -163,7 +163,7 @@ export function buildNextReminder(year: number, monthIndex: number, settings: Pr
     config.makeupDays.forEach(item => {
       const makeupDate = parseDateString(item)
       if (makeupDate >= today && makeupDate >= monthStart && makeupDate <= monthEnd) {
-        candidates.push({ date: makeupDate, label: `距离下一次补班日还有 ${diffDays(today, makeupDate)} 天` })
+        candidates.push({ date: makeupDate, label: `距离万恶的补班日还有 ${diffDays(today, makeupDate)} 天` })
       }
     })
   }
@@ -174,7 +174,7 @@ export function buildNextReminder(year: number, monthIndex: number, settings: Pr
   }
 
   candidates.sort((left, right) => left.date.getTime() - right.date.getTime())
-  return candidates[0]?.label || `${year} 年 ${monthIndex + 1} 月暂无额外提醒，继续保持稳定航行。`
+  return candidates[0]?.label || `${year} 年 ${monthIndex + 1} 月暂无盼头，继续稳定搬砖吧。`
 }
 
 export function getRelativeDayText(target: Date, anniversary: boolean) {

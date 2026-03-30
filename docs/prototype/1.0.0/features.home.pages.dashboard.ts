@@ -430,12 +430,12 @@ const App = () => {
           </div>
         </section>
 
-        {/* 岁月坐标 */}
+        {/* 纪念日 */}
         <section className="space-y-4">
            <div className="flex justify-between items-center px-1">
              <div className="flex items-center gap-2">
                <div className="w-1 h-3 bg-blue-600 rounded-full"></div>
-               <h3 className="text-sm font-black text-slate-800 tracking-tight">岁月坐标</h3>
+               <h3 className="text-sm font-black text-slate-800 tracking-tight">纪念日</h3>
              </div>
              <HeaderAction label="新增坐标" />
            </div>

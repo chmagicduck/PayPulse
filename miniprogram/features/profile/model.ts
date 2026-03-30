@@ -4,7 +4,7 @@ export const profileHomeModel = {
     checkInDays: 10,
     rank: {
       level: 9,
-      name: '深海霸主',
+      name: '摸鱼霸主',
       tone: 'rose',
       iconName: 'ship',
       iconColor: '#e11d48',
@@ -20,21 +20,21 @@ export const profileHomeModel = {
   ],
   consoleItems: [
     {
-      title: '航行档案设置',
+      title: '我的职场档案',
       tone: 'blue',
       iconName: 'user',
       iconColor: '#3b82f6',
       url: '/features/profile-settings/profile-settings',
     },
     {
-      title: '航程界标设置',
+      title: '纪念日设置',
       tone: 'emerald',
       iconName: 'map-pin',
       iconColor: '#10b981',
       url: '/features/time-axis/time-axis',
     },
     {
-      title: '查看航行日历',
+      title: '查看打工日历',
       tone: 'indigo',
       iconName: 'calendar',
       iconColor: '#4f46e5',
@@ -43,14 +43,14 @@ export const profileHomeModel = {
   ],
   aboutItems: [
     {
-      title: '船员俱乐部',
+      title: '打工人交流群',
       tone: 'indigo',
       iconName: 'users',
       iconColor: '#6366f1',
       url: '/features/community/community',
     },
     {
-      title: '航行通告',
+      title: '系统通知',
       tone: 'slate',
       iconName: 'info',
       iconColor: '#64748b',

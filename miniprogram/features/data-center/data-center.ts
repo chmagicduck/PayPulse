@@ -74,7 +74,7 @@ Page({
     } catch (_error) {
       this.setData({ exportStatus: 'idle' })
       wx.showToast({
-        title: '导出失败',
+        title: '导出失败了，再试一次',
         icon: 'none',
       })
     }

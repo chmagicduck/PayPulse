@@ -15,21 +15,21 @@ const SYSTEM_ENTRY_META: Record<
 > = {
   birthday: {
     id: 'birthday',
-    title: '我的生日',
+    title: '我的破壳日',
     notebookId: 'life',
     isAnniversary: true,
     systemType: 'birthday',
   },
   'career-anniversary': {
     id: 'career-anniversary',
-    title: '就业纪念日',
+    title: '踏入职场的日子',
     notebookId: 'career',
     isAnniversary: true,
     systemType: 'career-anniversary',
   },
   'retirement-day': {
     id: 'retirement-day',
-    title: '退休日',
+    title: '重获自由的退休日',
     notebookId: 'career',
     isAnniversary: false,
     systemType: 'retirement-day',

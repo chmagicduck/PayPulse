@@ -9,19 +9,19 @@ export function validateProfileSettings(form: ProfileSettingsForm): ProfileSetti
   const today = toDateKey(startOfDay(now()))
 
   if (!normalizedForm.nickname.trim()) {
-    return { ok: false, message: '请先填写正确的昵称' }
+    return { ok: false, message: '好歹填个昵称吧' }
   }
 
   if (!normalizedForm.birthday || parseDateString(normalizedForm.birthday) >= startOfDay(now())) {
-    return { ok: false, message: '请填写正确的生日' }
+    return { ok: false, message: '生日填错了哦' }
   }
 
   if (!normalizedForm.careerStartDate || parseDateString(normalizedForm.careerStartDate) > startOfDay(now())) {
-    return { ok: false, message: '入职日期不能晚于今天' }
+    return { ok: false, message: '你难道是穿越去未来入职的？' }
   }
 
   if (parseDateString(normalizedForm.careerStartDate) < parseDateString(normalizedForm.birthday)) {
-    return { ok: false, message: '入职日期不能早于生日' }
+    return { ok: false, message: '童工犯法！入职时间不能早于生日' }
   }
 
   const retirementAge = Number(normalizedForm.retirementAge)
@@ -30,51 +30,51 @@ export function validateProfileSettings(form: ProfileSettingsForm): ProfileSetti
   const payDay = Number(normalizedForm.payDay)
 
   if (!Number.isFinite(retirementAge) || retirementAge <= 0) {
-    return { ok: false, message: '退休年龄必须大于 0' }
+    return { ok: false, message: '退休年龄填错啦' }
   }
 
   if (retirementAge > profileAgeLimits.retirementAgeMax) {
-    return { ok: false, message: `退休年龄不能超过 ${profileAgeLimits.retirementAgeMax}` }
+    return { ok: false, message: `太长寿了吧，系统最高只支持 ${profileAgeLimits.retirementAgeMax} 岁退休` }
   }
 
   if (!Number.isFinite(expectedLifespan) || expectedLifespan <= 0) {
-    return { ok: false, message: '预期寿龄必须大于 0' }
+    return { ok: false, message: '预期寿命填错啦' }
   }
 
   if (expectedLifespan > profileAgeLimits.expectedLifespanMax) {
-    return { ok: false, message: `预期寿龄不能超过 ${profileAgeLimits.expectedLifespanMax}` }
+    return { ok: false, message: `系统最高只支持活到 ${profileAgeLimits.expectedLifespanMax} 岁` }
   }
 
   if (expectedLifespan <= retirementAge) {
-    return { ok: false, message: '预期寿龄必须大于退休年龄' }
+    return { ok: false, message: '总不能还没退休就挂了吧？' }
   }
 
   if (!Number.isFinite(monthlySalary) || monthlySalary <= 0) {
-    return { ok: false, message: '月薪必须大于 0' }
+    return { ok: false, message: '月薪不能填0，倒贴上班可不行' }
   }
 
   if (!Number.isFinite(payDay) || payDay <= 0 || payDay > 31) {
-    return { ok: false, message: '发薪日必须在 1 到 31 之间' }
+    return { ok: false, message: '发薪日只能是 1 到 31 号' }
   }
 
   if (getDurationSecFromTimeRange(normalizedForm.startTime, normalizedForm.endTime) <= 0) {
-    return { ok: false, message: '下班时间必须晚于上班时间' }
+    return { ok: false, message: '下班时间不能比上班时间还早呀' }
   }
 
   if (normalizedForm.lunchBreakEnabled) {
     if (!normalizedForm.lunchStartTime || !normalizedForm.lunchEndTime) {
-      return { ok: false, message: '请填写完整的午休时间' }
+      return { ok: false, message: '把午休时间填完整呗' }
     }
 
     if (getDurationSecFromTimeRange(normalizedForm.lunchStartTime, normalizedForm.lunchEndTime) <= 0) {
-      return { ok: false, message: '午休结束时间必须晚于开始时间' }
+      return { ok: false, message: '午休结束时间得比开始时间晚' }
     }
 
     if (
       getDurationSecFromTimeRange(normalizedForm.startTime, normalizedForm.lunchStartTime) < 0 ||
       getDurationSecFromTimeRange(normalizedForm.lunchEndTime, normalizedForm.endTime) < 0
     ) {
-      return { ok: false, message: '午休时间必须落在工作区间内' }
+      return { ok: false, message: '午休时间得在你的上班时间内' }
     }
   }
 

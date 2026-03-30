@@ -4,7 +4,7 @@
       <view class="time-axis-nav__back" bind:tap="handleBack">
         <image class="time-axis-nav__back-icon" src="{{icons.chevronLeft}}" mode="aspectFit" />
       </view>
-      <text class="time-axis-nav__title">岁月坐标设置</text>
+      <text class="time-axis-nav__title">纪念日</text>
       <view class="time-axis-nav__spacer"></view>
     </view>
   </view>
@@ -67,7 +67,7 @@
 
     <view class="entry-empty" wx:else>
       <image class="entry-empty__icon" src="{{icons.emptyPair.staticSrc}}" mode="aspectFit" />
-      <text class="entry-empty__title">档案位暂时空缺</text>
+      <text class="entry-empty__title">这里空空如也</text>
     </view>
 
     <view class="archive-cta {{pressStates.addCard ? 'archive-cta--pressed' : ''}}" bind:tap="openCreateModal">
@@ -78,37 +78,37 @@
           mode="aspectFit"
         />
       </view>
-      <text class="archive-cta__text">存入新档案卡片</text>
+      <text class="archive-cta__text">记一个新日子</text>
     </view>
   </view>
 
   <view wx:if="{{showEditModal}}" class="edit-modal {{editModalVisible ? 'edit-modal--visible' : ''}}" bind:tap="closeEditModal">
     <view class="edit-sheet {{editModalVisible ? 'edit-sheet--visible' : ''}}" catch:tap="stopModalTap">
       <view class="edit-sheet__header">
-        <text class="edit-sheet__title">{{editingId ? '编辑档案' : '新增档案卡片'}}</text>
+        <text class="edit-sheet__title">{{editingId ? '修改记录' : '新增一个日子'}}</text>
         <view class="edit-sheet__close {{pressStates.closeButton ? 'edit-sheet__close--pressed' : ''}}" bind:tap="closeEditModal">
           <image class="edit-sheet__close-icon" src="{{icons.close}}" mode="aspectFit" />
         </view>
       </view>
 
       <view class="edit-field">
-        <text class="edit-field__label">档案名称</text>
+        <text class="edit-field__label">这天发生了什么</text>
         <input
           class="edit-field__input"
           value="{{form.title}}"
           maxlength="20"
-          placeholder="记录此刻的重要意义..."
+          placeholder="写下这一天值得记住的事..."
           bindinput="updateTitle"
         />
       </view>
 
       <view class="edit-field">
-        <text class="edit-field__label">发生日期</text>
+        <text class="edit-field__label">哪一天</text>
         <picker mode="date" value="{{form.date}}" bindchange="updateDate">
           <view class="edit-field__picker {{form.date ? '' : 'edit-field__picker--placeholder'}}">
             <view class="edit-field__picker-main">
               <image class="edit-field__picker-icon" src="{{icons.calendar}}" mode="aspectFit" />
-              <text class="edit-field__picker-text">{{form.date || '请选择日期'}}</text>
+              <text class="edit-field__picker-text">{{form.date || '选个日期吧'}}</text>
             </view>
           </view>
         </picker>
@@ -116,7 +116,7 @@
 
       <view class="edit-switch {{pressStates.anniversary ? 'edit-switch--pressed' : ''}}" bind:tap="toggleAnniversary">
         <view class="edit-switch__copy">
-          <text class="edit-switch__title">周年提醒模式</text>
+          <text class="edit-switch__title">每年提醒我一次</text>
           <text class="edit-switch__subtitle">Anniversary Mode</text>
         </view>
         <view class="edit-switch__track {{form.isAnniversary ? 'edit-switch__track--active' : ''}}">
@@ -125,7 +125,7 @@
       </view>
 
       <view class="edit-field edit-field--last">
-        <text class="edit-field__label">存入档案本</text>
+        <text class="edit-field__label">放到哪个本子</text>
         <view class="edit-notebooks">
           <block wx:for="{{drawerNotebooks}}" wx:key="id">
             <view
@@ -155,7 +155,7 @@
         </view>
 
         <view class="edit-actions__primary {{pressStates.saveButton ? 'edit-actions__primary--pressed' : ''}}" bind:tap="saveEntry">
-          <text class="edit-actions__primary-text">{{editingId ? '保存修改' : '确认录入'}}</text>
+          <text class="edit-actions__primary-text">{{editingId ? '保存修改' : '确认添加'}}</text>
         </view>
       </view>
     </view>

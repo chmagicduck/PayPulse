@@ -108,7 +108,7 @@ Page({
     if (Number.isNaN(cardIndex)) return
     pulseState(this, timers, 'report-history-card', 'pressStates.historyIndex', cardIndex, -1)
     wx.showToast({
-      title: '请前往首页领潮中心修改今日摸鱼时长',
+      title: '请前往“今日概览”修改今日摸鱼时长',
       icon: 'none',
     })
   },

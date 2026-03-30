@@ -33,7 +33,7 @@
       <view class="income-card__body">
         <view class="income-card__header">
           <view class="income-card__label-row">
-            <text class="income-card__label">今日累计避风收益</text>
+            <text class="income-card__label">今日带薪摸鱼收益</text>
             <view class="income-card__eye" bind:tap="toggleAmount">
               <image class="icon-sm" src="{{showAmount ? iconEye : iconEyeOff}}" mode="aspectFit" />
             </view>
@@ -44,7 +44,7 @@
           <view class="income-card__amount-wrap">
             <text class="income-card__value">{{showAmount ? vm.income.value : '***'}}</text>
             <view class="income-card__meta">
-              <text class="income-card__badge-tag">即时航速 {{showAmount ? vm.income.rate : '***'}}/s</text>
+              <text class="income-card__badge-tag">当前搞钱速度 {{showAmount ? vm.income.rate : '***'}}/s</text>
             </view>
           </view>
 
@@ -52,10 +52,10 @@
             <view
               class="income-card__toggle {{isMoYu ? 'income-card__toggle--active' : ''}}"
               bind:tap="toggleMoYu"
-              data-blocked-message="当前状态不需要避风"
+              data-blocked-message="下班时间就别摸鱼了，好好生活"
             >
               <image class="income-card__toggle-icon" src="{{isMoYu ? (iconAnimations.moyu ? iconPairs.coffeeBlue.animatedSrc : iconPairs.coffeeBlue.staticSrc) : (iconAnimations.moyu ? iconPairs.coffeeWhite.animatedSrc : iconPairs.coffeeWhite.staticSrc)}}" mode="aspectFit" />
-              <text class="income-card__toggle-text">{{isMoYu ? '避风中' : '开启避风'}}</text>
+              <text class="income-card__toggle-text">{{isMoYu ? '摸鱼中' : '开始摸鱼'}}</text>
             </view>
             <view class="income-card__stay">
               <text class="income-card__stay-text">手动校准: {{vm.timer.rightValue}}</text>
@@ -69,32 +69,32 @@
         <view class="income-card__progress-panel">
           <view class="income-card__progress-head">
             <view class="income-card__progress-copy">
-              <text class="income-card__progress-title">避风占比</text>
+              <text class="income-card__progress-title">摸鱼占比</text>
               <view class="income-card__progress-metrics">
                 <text class="income-card__progress-value">{{vm.income.idlePercent}}%</text>
-                <text class="income-card__progress-meta">/ 今日航程 {{vm.income.workPercent}}%</text>
+                <text class="income-card__progress-meta">/ 今日打工进度 {{vm.income.workPercent}}%</text>
               </view>
             </view>
 
             <view class="income-card__countdown">
               <view class="income-card__countdown-label">
                 <image class="icon-xs" src="{{iconLogOut}}" mode="aspectFit" />
-                <text>返航倒计时</text>
+                <text>下班倒计时</text>
               </view>
               <block wx:if="{{vm.homeStatus.key === 'working'}}">
                 <text class="income-card__countdown-value">{{vm.timer.leftValue}}</text>
               </block>
               <block wx:elif="{{vm.homeStatus.key === 'pre-work'}}">
-                <text class="income-card__countdown-value">待启航</text>
+                <text class="income-card__countdown-value">还没上班</text>
               </block>
               <block wx:elif="{{vm.homeStatus.key === 'lunch-break'}}">
-                <text class="income-card__countdown-value">补给中</text>
+                <text class="income-card__countdown-value">干饭中</text>
               </block>
               <block wx:elif="{{vm.homeStatus.key === 'off-duty'}}">
-                <text class="income-card__countdown-value">已返港</text>
+                <text class="income-card__countdown-value">已下班</text>
               </block>
               <block wx:else>
-                <text class="income-card__countdown-value">补能中</text>
+                <text class="income-card__countdown-value">休息中</text>
               </block>
             </view>
           </view>
@@ -106,11 +106,11 @@
 
           <view class="income-card__footer">
             <view class="income-card__stat income-card__stat--left">
-              <text class="income-card__footer-label">今日补给</text>
+              <text class="income-card__footer-label">今日工资</text>
               <text class="income-card__stat-value">{{showAmount ? vm.income.moyuIncome : '***'}}</text>
             </view>
             <view class="income-card__stat">
-              <text class="income-card__footer-label">月度补给</text>
+              <text class="income-card__footer-label">本月工资</text>
               <text class="income-card__stat-value">{{showAmount ? vm.income.monthlyIncome : '***'}}</text>
             </view>
           </view>
@@ -120,9 +120,9 @@
 
     <view class="section">
       <pp-section-header
-        title="日常巡航任务"
+        title="日常摸鱼任务"
         barTone="blue"
-        manageText="查看动力舱"
+        manageText="去领积分"
         manageTone="blue"
         chevronSrc="{{iconChevronRightBlue}}"
         bind:manage="openLabPage"
@@ -134,16 +134,16 @@
               <image class="task-card__icon-image" src="{{iconRadar}}" mode="aspectFit" />
             </view>
             <view class="task-card__text">
-              <text class="task-card__title">航道清理・动力补给</text>
-              <text class="task-card__desc">保障航行通畅，完成动力补给作业</text>
+              <text class="task-card__title">带薪喝水・活动筋骨</text>
+              <text class="task-card__desc">离开工位，放松一下，顺便赚点摸鱼积分</text>
             </view>
           </view>
           <view class="task-card__summary">
             <view class="task-card__reward">
               <image class="task-card__reward-icon" src="{{iconZapAmber}}" mode="aspectFit" />
-              <text class="task-card__reward-text">待获得{{vm.taskPreview.rewardValue}}动能</text>
+              <text class="task-card__reward-text">待领取 {{vm.taskPreview.rewardValue}} 摸鱼值</text>
             </view>
-            <text class="task-card__progress-text">今日任务完成度 {{vm.taskPreview.completed}}/{{vm.taskPreview.total}}</text>
+            <text class="task-card__progress-text">今日完成度 {{vm.taskPreview.completed}}/{{vm.taskPreview.total}}</text>
           </view>
         </view>
       </view>
@@ -151,7 +151,7 @@
 
     <view class="section">
       <pp-section-header
-        title="常规波动"
+        title="日常盼头"
         barTone="indigo"
         manageText="查看日历"
         manageTone="blue"
@@ -166,14 +166,14 @@
               <view class="tide-card__icon tide-card__icon--blue">
                 <image class="icon-md" src="{{iconAnimations.tideWallet ? iconPairs.walletWhite.animatedSrc : iconPairs.walletWhite.staticSrc}}" mode="aspectFit" />
               </view>
-              <text class="tide-card__badge tide-card__badge--blue">发薪 (PAY)</text>
+              <text class="tide-card__badge tide-card__badge--blue">发薪日</text>
             </view>
             <view class="tide-card__content">
               <view class="tide-card__number">
                 <text class="tide-card__leading">距</text>
                 <text class="tide-card__value">{{vm.regularTides[0].days}}天</text>
               </view>
-              <text class="tide-card__desc">下一次<text class="tide-card__desc-strong tide-card__desc-strong--blue">资金补给</text>正在靠近。</text>
+              <text class="tide-card__desc">稳住，距离下一次<text class="tide-card__desc-strong tide-card__desc-strong--blue">发工资</text>越来越近了。</text>
             </view>
           </view>
         </view>
@@ -185,14 +185,14 @@
               <view class="tide-card__icon tide-card__icon--emerald">
                 <image class="icon-md" src="{{iconAnimations.tideWeekend ? iconPairs.calendarDaysWhite.animatedSrc : iconPairs.calendarDaysWhite.staticSrc}}" mode="aspectFit" />
               </view>
-              <text class="tide-card__badge tide-card__badge--emerald">休息 (WKD)</text>
+              <text class="tide-card__badge tide-card__badge--emerald">放假</text>
             </view>
             <view class="tide-card__content">
               <view class="tide-card__number">
                 <text class="tide-card__leading">距</text>
                 <text class="tide-card__value">{{vm.regularTides[1].days}}天</text>
               </view>
-              <text class="tide-card__desc">距离下一次<text class="tide-card__desc-strong tide-card__desc-strong--emerald">靠岸补能</text>已经不远了。</text>
+              <text class="tide-card__desc">马上就能迎来<text class="tide-card__desc-strong tide-card__desc-strong--emerald">休息日</text>，再坚持一下。</text>
             </view>
           </view>
         </view>
@@ -201,9 +201,9 @@
 
     <view class="section">
       <pp-section-header
-        title="岁月坐标"
+        title="纪念日"
         barTone="blue"
-        manageText="新增坐标"
+        manageText="新增纪念日"
         manageTone="blue"
         chevronSrc="{{iconChevronRightBlue}}"
         bind:manage="openTimeAxisPage"
@@ -223,7 +223,7 @@
                   <text class="date-item__badge-text">
                     <block wx:if="{{vm.importantDates[0].notebookId === 'commemorative'}}">纪念本</block>
                     <block wx:elif="{{vm.importantDates[0].notebookId === 'travel'}}">旅行本</block>
-                    <block wx:elif="{{vm.importantDates[0].notebookId === 'career'}}">职场本</block>
+                    <block wx:elif="{{vm.importantDates[0].notebookId === 'career'}}">打工本</block>
                     <block wx:else>人生本</block>
                   </text>
                 </view>
@@ -249,7 +249,7 @@
                   <text class="date-item__badge-text">
                     <block wx:if="{{vm.importantDates[1].notebookId === 'commemorative'}}">纪念本</block>
                     <block wx:elif="{{vm.importantDates[1].notebookId === 'travel'}}">旅行本</block>
-                    <block wx:elif="{{vm.importantDates[1].notebookId === 'career'}}">职场本</block>
+                    <block wx:elif="{{vm.importantDates[1].notebookId === 'career'}}">打工本</block>
                     <block wx:else>人生本</block>
                   </text>
                 </view>
@@ -275,7 +275,7 @@
                   <text class="date-item__badge-text">
                     <block wx:if="{{vm.importantDates[2].notebookId === 'commemorative'}}">纪念本</block>
                     <block wx:elif="{{vm.importantDates[2].notebookId === 'travel'}}">旅行本</block>
-                    <block wx:elif="{{vm.importantDates[2].notebookId === 'career'}}">职场本</block>
+                    <block wx:elif="{{vm.importantDates[2].notebookId === 'career'}}">打工本</block>
                     <block wx:else>人生本</block>
                   </text>
                 </view>
@@ -289,13 +289,13 @@
         </view>
       </view>
       <view wx:else class="date-empty" bind:tap="openTimeAxisPage">
-        <text class="date-empty__text">还没有坐标卡片，点击新增一张。</text>
+        <text class="date-empty__text">这里空空如也，点击加个纪念日吧。</text>
       </view>
     </view>
 
     <view class="section section--last">
       <pp-section-header
-        title="人生航程看板"
+        title="人生进度条"
         barTone="dark"
         tagText="Voyage Ledger"
       />
@@ -307,13 +307,13 @@
             <view class="journey-card__icon journey-card__icon--indigo">
               <image class="icon-md" src="{{iconAnimations.journeyLife ? iconPairs.babyWhite.animatedSrc : iconPairs.babyWhite.staticSrc}}" mode="aspectFit" />
             </view>
-            <text class="journey-card__eyebrow journey-card__eyebrow--indigo">生命航程 (LIFE)</text>
+            <text class="journey-card__eyebrow journey-card__eyebrow--indigo">人生电量 (LIFE)</text>
           </view>
           <view class="journey-card__number">
-            <text class="journey-card__status">已过</text>
+            <text class="journey-card__status">已度过</text>
             <template is="journey-value" data="{{ item: journeyDisplayItems[0], valueClass: 'journey-card__value journey-card__value--slate' }}" />
           </view>
-          <text class="journey-card__desc">这是你从<text class="journey-card__desc-strong">出生启航</text>至今走过的日数。</text>
+          <text class="journey-card__desc">这是你从<text class="journey-card__desc-strong">出生降临</text>至今在这个世界的体验时长。</text>
         </view>
 
         <view class="journey-card journey-card--white {{pressStates.journeyCareer ? 'journey-card--pressed' : ''}}" bind:tap="triggerJourneyCareerAnimation">
@@ -322,13 +322,13 @@
             <view class="journey-card__icon journey-card__icon--blue">
               <image class="icon-md" src="{{iconAnimations.journeyCareer ? iconPairs.briefcaseWhite.animatedSrc : iconPairs.briefcaseWhite.staticSrc}}" mode="aspectFit" />
             </view>
-            <text class="journey-card__eyebrow journey-card__eyebrow--blue">职场航程 (CAREER)</text>
+            <text class="journey-card__eyebrow journey-card__eyebrow--blue">打工时长 (CAREER)</text>
           </view>
           <view class="journey-card__number">
-            <text class="journey-card__status">已过</text>
+            <text class="journey-card__status">已出卖</text>
             <template is="journey-value" data="{{ item: journeyDisplayItems[1], valueClass: 'journey-card__value journey-card__value--slate' }}" />
           </view>
-          <text class="journey-card__desc">自从步入<text class="journey-card__desc-strong journey-card__desc-strong--blue">社会海域</text>以后，你已投入的岁月。</text>
+          <text class="journey-card__desc">自从步入<text class="journey-card__desc-strong journey-card__desc-strong--blue">职场江湖</text>以后，你被消耗的岁月。</text>
         </view>
 
         <view class="journey-card journey-card--emerald {{pressStates.journeyRetire ? 'journey-card--pressed' : ''}}" bind:tap="triggerJourneyRetireAnimation">
@@ -340,10 +340,10 @@
             <text class="journey-card__eyebrow journey-card__eyebrow--emerald">退休倒计时 (RETIRE)</text>
           </view>
           <view class="journey-card__number">
-            <text class="journey-card__status journey-card__status--emerald">还剩</text>
+            <text class="journey-card__status journey-card__status--emerald">还要熬</text>
             <template is="journey-value" data="{{ item: journeyDisplayItems[2], valueClass: 'journey-card__value journey-card__value--emerald' }}" />
           </view>
-          <text class="journey-card__desc journey-card__desc--emerald">距离你可以<text class="journey-card__desc-strong journey-card__desc-strong--emerald">正式卸甲</text>，还有这些既定航程。</text>
+          <text class="journey-card__desc journey-card__desc--emerald">距离你可以<text class="journey-card__desc-strong journey-card__desc-strong--emerald">光荣退休</text>，还有这么久的班要上。</text>
           <view class="journey-card__progress">
             <view class="journey-card__progress-fill" style="width: {{journeyDisplayItems[2].progress ? journeyDisplayItems[2].progress : 0}}%"></view>
           </view>
@@ -355,15 +355,15 @@
             <view class="journey-card__icon journey-card__icon--rose">
               <image class="icon-md" src="{{iconAnimations.journeyFinal ? iconPairs.skullWhite.animatedSrc : iconPairs.skullWhite.staticSrc}}" mode="aspectFit" />
             </view>
-            <text class="journey-card__eyebrow journey-card__eyebrow--rose">终点倒计时 (FINAL)</text>
+            <text class="journey-card__eyebrow journey-card__eyebrow--rose">人终有一老 (FINAL)</text>
           </view>
           <view class="journey-card__number">
             <text class="journey-card__status journey-card__status--rose">还剩</text>
             <template is="journey-value" data="{{ item: journeyDisplayItems[3], valueClass: 'journey-card__value journey-card__value--rose' }}" />
           </view>
-          <text class="journey-card__quote">"警告：航线即将耗尽，此数据不可逆转。"</text>
+          <text class="journey-card__quote">"生命宝贵，不要全浪费在给别人打工上。"</text>
           <view class="journey-card__note">
-            <text class="journey-card__note-text">* 基于预计 85 岁自然终点计算。每一秒都属于不可再生的生命样本。</text>
+            <text class="journey-card__note-text">* 假设你能活到 85 岁。每一秒都很宝贵，多摸会儿鱼吧。</text>
           </view>
         </view>
       </view>
@@ -375,7 +375,7 @@
       <view class="modal-sheet__header">
         <view class="modal-sheet__titles">
           <text class="modal-sheet__title">修正摸鱼时长</text>
-          <text class="modal-sheet__subtitle">手动校准今日摸鱼港停留的时间</text>
+          <text class="modal-sheet__subtitle">手动调整今天的摸鱼时间</text>
         </view>
         <view class="modal-sheet__close {{pressStates.modalClose ? 'modal-sheet__close--pressed' : ''}}" bind:tap="closeEditModal">
           <image class="icon-lg" src="{{iconX}}" mode="aspectFit" />
