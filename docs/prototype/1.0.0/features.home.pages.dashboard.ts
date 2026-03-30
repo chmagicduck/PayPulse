@@ -614,8 +614,8 @@ const App = () => {
       <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-xl border-t border-slate-100 px-6 py-4 pb-10 z-20 shadow-lg">
         <div className="flex justify-between items-center px-2">
           <NavItem icon={<LayoutGrid size={22} />} label="领潮中心" active />
-          <NavItem icon={<BarChart3 size={22} />} label="洋流战报" />
-          <NavItem icon={<FlaskConical size={22} />} label="动力室" />
+          <NavItem icon={<BarChart3 size={22} />} label="航行报告" />
+          <NavItem icon={<FlaskConical size={22} />} label="动力舱" />
           <NavItem icon={<User size={22} />} label="个人基地" />
         </div>
       </nav>

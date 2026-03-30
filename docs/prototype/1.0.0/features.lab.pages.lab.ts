@@ -162,7 +162,7 @@ const App = () => {
             <div className="p-1.5 rounded-lg bg-blue-600 shadow-lg shadow-blue-200">
                <FlaskConical size={18} className="text-white" />
             </div>
-            <h1 className="text-xl font-extrabold tracking-tight text-slate-900 italic">动力室</h1>
+            <h1 className="text-xl font-extrabold tracking-tight text-slate-900 italic">动力舱</h1>
           </div>
         </div>
       </header>
@@ -366,8 +366,8 @@ const App = () => {
       <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-xl border-t border-slate-100 px-6 py-4 pb-8 z-20">
         <div className="flex justify-between items-center px-2">
           <NavItem icon={<LayoutGrid size={20} />} label="领潮中心" />
-          <NavItem icon={<BarChart3 size={20} />} label="洋流战报" />
-          <NavItem icon={<FlaskConical size={20} />} label="动力室" active={true} />
+          <NavItem icon={<BarChart3 size={20} />} label="航行报告" />
+          <NavItem icon={<FlaskConical size={20} />} label="动力舱" active={true} />
           <NavItem icon={<User size={20} />} label="个人基地" />
         </div>
       </nav>

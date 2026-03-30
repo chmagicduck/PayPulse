@@ -32,13 +32,13 @@
       },
       {
         "pagePath": "features/report/report",
-        "text": "洋流战报",
+        "text": "航行报告",
         "iconPath": "assets/images/tabbar/tab-chart.png",
         "selectedIconPath": "assets/images/tabbar/tab-chart-active.png"
       },
       {
         "pagePath": "features/lab/lab",
-        "text": "动力室",
+        "text": "动力舱",
         "iconPath": "assets/images/tabbar/tab-lab.png",
         "selectedIconPath": "assets/images/tabbar/tab-lab-active.png"
       },

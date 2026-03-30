@@ -106,7 +106,7 @@ const App = () => {
             <div className="p-1.5 rounded-lg bg-indigo-600 shadow-lg shadow-indigo-100">
               <BarChart3 size={18} className="text-white" />
             </div>
-            <h1 className="text-xl font-extrabold tracking-tight text-slate-900">洋流战报</h1>
+            <h1 className="text-xl font-extrabold tracking-tight text-slate-900">航行报告</h1>
           </div>
           <button className="p-2 bg-slate-50 rounded-full text-slate-400 hover:text-indigo-600 transition-colors">
              <Filter size={16} />
@@ -425,8 +425,8 @@ const App = () => {
       <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-xl border-t border-slate-100 px-6 py-4 pb-10 z-20 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.1)]">
         <div className="flex justify-between items-center px-2">
           <NavItem icon={<LayoutGrid size={22} />} label="领潮中心" />
-          <NavItem icon={<BarChart3 size={22} />} label="洋流战报" active />
-          <NavItem icon={<FlaskConical size={22} />} label="动力室" />
+          <NavItem icon={<BarChart3 size={22} />} label="航行报告" active />
+          <NavItem icon={<FlaskConical size={22} />} label="动力舱" />
           <NavItem icon={<User size={22} />} label="个人基地" />
         </div>
       </nav>

@@ -1,6 +1,6 @@
 export const labStaticViewModel = {
   header: {
-    title: '动力室',
+    title: '动力舱',
   },
   rankPanel: {
     eyebrow: '动能舱',

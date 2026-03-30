@@ -11,7 +11,7 @@ export const tabbarItems = [
   {
     key: 'report',
     pagePath: 'features/report/report',
-    text: '洋流战报',
+    text: '航行报告',
     iconSvg: '/assets/images/tabbar/svg/tab-chart.svg',
     activeIconSvg: '/assets/images/tabbar/svg/tab-chart-active.svg',
     iconPng: '/assets/images/tabbar/tab-chart.png',

@@ -62,7 +62,7 @@
 
 ### `features/report/`
 
-- `report.ts`：洋流战报页面逻辑，处理 tab 切换、范围切换、图表交互与弹层开关。
+- `report.ts`：航行报告页面逻辑，处理 tab 切换、范围切换、图表交互与弹层开关。
 - `report.wxml`：报表页结构。
 - `report.less`：报表页样式，包含趋势卡、比例条、历史卡、sheet 等视觉实现。
 - `report.json`：报表页配置，注册 `pp-section-header`。

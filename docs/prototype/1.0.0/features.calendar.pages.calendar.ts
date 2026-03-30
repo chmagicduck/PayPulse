@@ -190,7 +190,7 @@ const App = () => {
             <p className="text-[10px] text-slate-500 mt-3 leading-relaxed font-medium">
               {calendarData[monthStr]?.[selectedDate]?.status === 4 ? '叮！检测到账户有大额能量补充，建议今日适当提高摸鱼质量以示庆祝。' :
                calendarData[monthStr]?.[selectedDate]?.status === 1 ? '检测到当前处于法定摸鱼港区域，所有的航行任务已自动挂起。' :
-               '当前海域风平浪静，适合稳定航行。记得保持动力室正常运转，等待下一个宝藏日。'}
+               '当前海域风平浪静，适合稳定航行。记得保持动力舱正常运转，等待下一个宝藏日。'}
             </p>
           </div>
         </section>
@@ -212,8 +212,8 @@ const App = () => {
       <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-xl border-t border-slate-100 px-6 py-4 pb-10 z-20 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.1)]">
         <div className="flex justify-between items-center px-2">
           <NavItem icon={<LayoutGrid size={22} />} label="领潮中心" />
-          <NavItem icon={<BarChart3 size={22} />} label="洋流战报" />
-          <NavItem icon={<FlaskConical size={22} />} label="动力室" />
+          <NavItem icon={<BarChart3 size={22} />} label="航行报告" />
+          <NavItem icon={<FlaskConical size={22} />} label="动力舱" />
           <NavItem icon={<User size={22} />} label="个人基地" active />
         </div>
       </nav>

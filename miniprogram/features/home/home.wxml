@@ -90,7 +90,7 @@
       <pp-section-header
         title="日常巡航任务"
         barTone="blue"
-        manageText="查看动力室"
+        manageText="查看动力舱"
         manageTone="blue"
         chevronSrc="{{iconChevronRightBlue}}"
         bind:manage="openLabPage"
