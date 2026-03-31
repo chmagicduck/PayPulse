@@ -4,11 +4,11 @@ import {
   type IconImagePair,
   type IconName,
   type SvgAnimationPreset,
-} from '../../lib/icons'
-import type { TimeAxisEntry } from '../../lib/domain/types'
-import { timeAxisModel } from './model'
+} from '../../../lib/icons'
+import type { TimeAxisEntry } from '../../../lib/domain/types'
+import { timeAxisViewModel } from '../model/index'
 
-type NotebookItem = (typeof timeAxisModel.notebooks)[number]
+type NotebookItem = (typeof timeAxisViewModel.notebooks)[number]
 type StaticEntry = Pick<
   TimeAxisEntry,
   'id' | 'title' | 'date' | 'notebookId' | 'isAnniversary' | 'sourceType' | 'systemType' | 'locked'
@@ -68,7 +68,7 @@ function getIconAnimation(name: IconName): SvgAnimationPreset {
 export function getDefaultNotebookId(selectedNotebookId: string) {
   return selectedNotebookId && selectedNotebookId !== 'all'
     ? selectedNotebookId
-    : timeAxisModel.draft.notebookId
+    : timeAxisViewModel.draft.notebookId
 }
 
 function buildCountdown(date: string, isAnniversary: boolean) {
@@ -99,7 +99,7 @@ function buildCountdown(date: string, isAnniversary: boolean) {
 }
 
 export function buildTimeAxisNotebooks() {
-  return timeAxisModel.notebooks.map(item => ({
+  return timeAxisViewModel.notebooks.map(item => ({
     ...item,
     iconPair: animatedIconPair(item.iconId as IconName, {
       color: getToneColor(item.tone),

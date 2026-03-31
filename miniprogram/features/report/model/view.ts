@@ -1,4 +1,4 @@
-export const reportModel = {
+export const reportViewModel = {
   trend: {
     riseText: '+12.5%',
     bars: [

@@ -2,11 +2,11 @@ import { storageKeys } from '../../../lib/constants/storage'
 import { formatDateTimeIso, now, toDateKey, toWeekKey } from '../../../lib/domain/date'
 import type { AchievementState, LabProgress, LabTaskDailyLedgerEntry, LabTaskState } from '../../../lib/domain/types'
 import { safeGetStorage, safeSetStorage } from '../../../lib/wx/storage'
-import { labStaticViewModel } from '../model'
+import { labDashboardModel } from './view'
 
 function buildDefaultTasks(): LabTaskState[] {
   const stamp = formatDateTimeIso(now())
-  return labStaticViewModel.tasks.map(task => ({
+  return labDashboardModel.tasks.map(task => ({
     taskId: task.id,
     count: 0,
     limit: task.limit,
@@ -16,7 +16,7 @@ function buildDefaultTasks(): LabTaskState[] {
 }
 
 function buildDefaultAchievements(): AchievementState[] {
-  return labStaticViewModel.achievements.map(item => ({
+  return labDashboardModel.achievements.map(item => ({
     achievementId: item.id,
     progress: 0,
     target: item.target,

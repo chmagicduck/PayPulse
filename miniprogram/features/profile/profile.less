@@ -353,11 +353,32 @@
     }
   }
 
+  &__action-button {
+    padding: 0;
+    line-height: 1;
+
+    &::after {
+      border: 0;
+    }
+  }
+
   &__action-text {
     font-size: @fs-lg;
     font-weight: 800;
     line-height: 1;
     color: currentColor;
+  }
+
+  &__tips {
+    margin: -8rpx 0 24rpx;
+    padding: 0 4rpx;
+  }
+
+  &__tips-text {
+    font-size: @fs-sm;
+    font-weight: 700;
+    line-height: 1.4;
+    color: @text-muted;
   }
 
   &__preset-block {

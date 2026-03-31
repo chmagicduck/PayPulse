@@ -2,23 +2,16 @@ import { clearTimerBag, createTimerBag, handlePageBack, openModal, pulseState } 
 import { ensureBootstrapReady } from '../../store/bootstrap'
 import { saveTimeAxisEntry, deleteTimeAxisEntry } from './model/actions'
 import { readTimeAxisEntries } from './model/storage'
-import { timeAxisModel } from './model'
-import { buildTimeAxisIcons, buildTimeAxisNotebooks, decorateEntries, getDefaultNotebookId } from './time-axis-settings.helper'
+import { timeAxisViewModel, type TimeAxisEntryForm } from './model/index'
+import { buildTimeAxisIcons, buildTimeAxisNotebooks, decorateEntries, getDefaultNotebookId } from './helper/presentation'
 
 const timers = createTimerBag()
 
-type FormState = {
-  title: string
-  date: string
-  notebookId: string
-  isAnniversary: boolean
-}
-
 Page({
   data: {
-    vm: timeAxisModel,
+    vm: timeAxisViewModel,
     statusBarHeight: 0,
-    selectedNotebookId: timeAxisModel.notebooks[0].id as string,
+    selectedNotebookId: timeAxisViewModel.notebooks[0].id as string,
     notebooks: [] as ReturnType<typeof buildTimeAxisNotebooks>,
     drawerNotebooks: [] as ReturnType<typeof buildTimeAxisNotebooks>,
     entries: [] as ReturnType<typeof decorateEntries>,
@@ -27,8 +20,8 @@ Page({
     editModalVisible: false,
     editingId: '',
     form: {
-      ...timeAxisModel.draft,
-    } as FormState,
+      ...timeAxisViewModel.draft,
+    } as TimeAxisEntryForm,
     icons: buildTimeAxisIcons(),
     pressStates: {
       notebookId: '',
@@ -96,7 +89,7 @@ Page({
   openCreateModal() {
     pulseState(this, timers, 'add-card-press', 'pressStates.addCard', true, false, 260)
     this.openEditState({
-      ...timeAxisModel.draft,
+      ...timeAxisViewModel.draft,
       notebookId: getDefaultNotebookId(this.data.selectedNotebookId),
     })
   },
@@ -126,7 +119,7 @@ Page({
     )
   },
 
-  openEditState(form: FormState, editingId: string = '') {
+  openEditState(form: TimeAxisEntryForm, editingId: string = '') {
     openModal(
       this,
       timers,
@@ -151,7 +144,7 @@ Page({
         editModalVisible: false,
         editingId: '',
         form: {
-          ...timeAxisModel.draft,
+          ...timeAxisViewModel.draft,
           notebookId: getDefaultNotebookId(this.data.selectedNotebookId),
         },
       })

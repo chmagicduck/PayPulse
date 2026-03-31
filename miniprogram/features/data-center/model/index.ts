@@ -1,0 +1,1 @@
+export { dataCenterViewModel } from './view'

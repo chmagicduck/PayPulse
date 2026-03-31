@@ -14,7 +14,7 @@ import { createDefaultLabProgress, readLabProgress, writeLabProgress } from '../
 import { readProfileSettings, writeProfileSettings } from '../features/profile-settings/model/storage'
 import { readProfileAvatar, writeProfileAvatar } from '../features/profile/model/storage'
 import { ensureDefaultTimeAxisEntries, readTimeAxisEntries } from '../features/time-axis/model/storage'
-import { profileHomeModel } from '../features/profile/model'
+import { profileDashboardModel } from '../features/profile/model/index'
 
 const SETTINGS_ROUTE = '/features/profile-settings/profile-settings'
 const HOME_ROUTE = '/features/home/home'
@@ -64,7 +64,7 @@ export function ensureBootstrapReady() {
 
 export function initializeAppData(settings: ProfileSettings) {
   writeProfileSettings(settings)
-  writeProfileAvatar(profileHomeModel.avatarPresets[0]?.src || '')
+  writeProfileAvatar(profileDashboardModel.avatarPresets[0]?.src || '')
   ensureDefaultTimeAxisEntries(settings)
   ensureCurrentMonthRecords(settings)
   writeLabProgress(createDefaultLabProgress())

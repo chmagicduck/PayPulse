@@ -1,15 +1,15 @@
 import { formatDateTimeIso, now, toDateKey, toWeekKey } from '../../../lib/domain/date'
 import { getLabRankIndexByPoints } from '../../../lib/domain/lab-progress'
 import type { LabProgress } from '../../../lib/domain/types'
-import { labStaticViewModel } from '../model'
+import { labDashboardModel } from './view'
 import { createDefaultLabProgress, readLabProgress, writeLabProgress } from './storage'
 
 function findTaskReward(taskId: string) {
-  return labStaticViewModel.tasks.find(item => item.id === taskId)?.reward || 0
+  return labDashboardModel.tasks.find(item => item.id === taskId)?.reward || 0
 }
 
 function findTaskLimit(taskId: string) {
-  return labStaticViewModel.tasks.find(item => item.id === taskId)?.limit || 0
+  return labDashboardModel.tasks.find(item => item.id === taskId)?.limit || 0
 }
 
 function getCurrentWeekDates() {
@@ -188,7 +188,7 @@ export function adjustTaskCount(taskId: string, delta: number) {
 export function updateSelectedRankIndex(rankIndex: number) {
   const progress = readCurrentLabProgress()
   const unlockedRankIndex = getLabRankIndexByPoints(progress.totalPoints)
-  const safeIndex = Math.max(0, Math.min(rankIndex, unlockedRankIndex, labStaticViewModel.ranks.length - 1))
+  const safeIndex = Math.max(0, Math.min(rankIndex, unlockedRankIndex, labDashboardModel.ranks.length - 1))
   const next = {
     ...progress,
     selectedRankIndex: safeIndex,

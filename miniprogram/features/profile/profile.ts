@@ -1,8 +1,9 @@
 import { clearTimerBag, createTimerBag, openModal, pulseState, replayState } from '../../lib/wx/page'
 import { ensureBootstrapReady } from '../../store/bootstrap'
-import { buildProfilePageState } from './home.helper'
-import { profileHomeModel } from './model'
-import { buildProfileSummaryState } from './model/state'
+import { createProfileIconAnimations, createProfilePressStates } from './helper/page'
+import { chooseAlbumAvatarDraft, isProfileAvatarActionCancelled, isProfileAvatarTooLargeError, resolveWechatAvatarDraft } from './model/actions'
+import { buildProfilePageState } from './model/index'
+import { buildProfileRuntimeState } from './model/state'
 import { writeProfileAvatar } from './model/storage'
 
 const timers = createTimerBag()
@@ -10,25 +11,12 @@ const pageState = buildProfilePageState()
 
 Page({
   data: {
-    vm: profileHomeModel,
     statusBarHeight: 0,
     showAvatarModal: false,
     avatarModalVisible: false,
     ...pageState,
-    iconAnimations: {
-      header: false,
-      avatarBadge: false,
-      cardKey: '',
-    },
-    pressStates: {
-      avatar: false,
-      cardKey: '',
-      avatarOptionIndex: -1,
-      wechatAvatar: false,
-      uploadAvatar: false,
-      modalConfirm: false,
-      modalClose: false,
-    },
+    iconAnimations: createProfileIconAnimations(),
+    pressStates: createProfilePressStates(),
   },
 
   onLoad() {
@@ -48,15 +36,7 @@ Page({
   },
 
   reloadRuntimeState() {
-    const summary = buildProfileSummaryState()
-    this.setData({
-      vm: Object.assign({}, this.data.vm, {
-        user: summary.user,
-      }),
-      currentAvatar: summary.currentAvatar,
-      draftAvatar: summary.currentAvatar,
-      currentRank: summary.currentRank,
-    })
+    this.setData(buildProfileRuntimeState())
   },
 
   triggerHeaderAnimation() {
@@ -109,24 +89,59 @@ Page({
     this.setData({ draftAvatar: String(src) })
   },
 
-  useWechatAvatar() {
+  pressWechatAvatarAction() {
     pulseState(this, timers, 'avatar-wechat', 'pressStates.wechatAvatar', true, false)
-    const nextAvatar = String(this.data.vm.avatarPresets[0]?.src || this.data.draftAvatar)
-    this.setData({ draftAvatar: nextAvatar })
-    wx.showToast({
-      title: '已切换为微信头像',
-      icon: 'none',
-    })
   },
 
-  useUploadedAvatar() {
+  async useWechatAvatar(e: WechatMiniprogram.CustomEvent<{ avatarUrl?: string }>) {
+    const avatarUrl = String(e.detail?.avatarUrl || '')
+    if (!avatarUrl) {
+      return
+    }
+
+    try {
+      const nextAvatar = await resolveWechatAvatarDraft(avatarUrl)
+      if (!nextAvatar) {
+        return
+      }
+
+      this.setData({ draftAvatar: nextAvatar })
+      wx.showToast({
+        title: '已切换为微信头像',
+        icon: 'none',
+      })
+    } catch (_error) {
+      wx.showToast({
+        title: '微信头像读取失败',
+        icon: 'none',
+      })
+    }
+  },
+
+  async useUploadedAvatar() {
     pulseState(this, timers, 'avatar-upload', 'pressStates.uploadAvatar', true, false)
-    const nextAvatar = String(this.data.vm.avatarPresets[1]?.src || this.data.draftAvatar)
-    this.setData({ draftAvatar: nextAvatar })
-    wx.showToast({
-      title: '头像上传成功',
-      icon: 'none',
-    })
+
+    try {
+      const nextAvatar = await chooseAlbumAvatarDraft()
+      if (!nextAvatar) {
+        return
+      }
+
+      this.setData({ draftAvatar: nextAvatar })
+      wx.showToast({
+        title: '头像上传成功',
+        icon: 'none',
+      })
+    } catch (error) {
+      if (isProfileAvatarActionCancelled(error)) {
+        return
+      }
+
+      wx.showToast({
+        title: isProfileAvatarTooLargeError(error) ? '头像不能超过 2MB' : '头像上传失败',
+        icon: 'none',
+      })
+    }
   },
 
   confirmAvatar() {

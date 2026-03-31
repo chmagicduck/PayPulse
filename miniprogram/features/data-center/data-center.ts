@@ -1,19 +1,19 @@
 import { clearTimerBag, createTimerBag, handlePageBack, openModal, pulseState } from '../../lib/wx/page'
 import { ensureBootstrapReady } from '../../store/bootstrap'
-import { buildDataCenterIcons } from './data-center.helper'
-import { dataCenterModel } from './model'
+import { buildDataCenterIcons } from './helper/icons'
+import { dataCenterViewModel } from './model/index'
 import { clearAllBusinessData, exportAllData, measureStorageUsage } from './model/actions'
 
 const timers = createTimerBag()
 
 Page({
   data: {
-    vm: dataCenterModel,
+    vm: dataCenterViewModel,
     statusBarHeight: 0,
-    storageUsed: Number(dataCenterModel.storage.used),
-    storageCapacity: Number(dataCenterModel.storage.capacity),
-    storageUsedText: dataCenterModel.storage.used.toFixed(1),
-    storagePercentText: `${((dataCenterModel.storage.used / dataCenterModel.storage.capacity) * 100).toFixed(1)}%`,
+    storageUsed: Number(dataCenterViewModel.storage.used),
+    storageCapacity: Number(dataCenterViewModel.storage.capacity),
+    storageUsedText: dataCenterViewModel.storage.used.toFixed(1),
+    storagePercentText: `${((dataCenterViewModel.storage.used / dataCenterViewModel.storage.capacity) * 100).toFixed(1)}%`,
     exportStatus: 'idle',
     showResetModal: false,
     resetModalVisible: false,

@@ -1,9 +1,6 @@
-import { communityStaticViewModel } from './model'
-import { buildCommunityPageState } from './join.helper'
 import { handlePageBack } from '../../lib/wx/page'
 import { ensureBootstrapReady } from '../../store/bootstrap'
-
-const pageState = buildCommunityPageState()
+import { buildCommunityRuntimeState } from './model/index'
 
 const COMMUNITY_ERROR_MESSAGES: Record<number, string> = {
   [-3002]: '网络开小差了，获取配置失败，稍后再试吧',
@@ -18,20 +15,14 @@ const COMMUNITY_ERROR_MESSAGES: Record<number, string> = {
 
 Page({
   data: {
-    vm: communityStaticViewModel,
     statusBarHeight: 0,
-    joinUnavailable: false,
     joinHint: '',
-    ...pageState,
+    ...buildCommunityRuntimeState(),
   },
 
   onLoad() {
     const { statusBarHeight } = wx.getSystemInfoSync()
-    this.setData({
-      statusBarHeight: statusBarHeight || 0,
-      joinUnavailable: !wx.canIUse('openBusinessView'),
-      joinHint: !wx.canIUse('openBusinessView') ? '你这微信版本太老了，没法直接进，先复制链接吧。' : '',
-    })
+    this.setData({ statusBarHeight: statusBarHeight || 0 })
   },
 
   onShow() {
@@ -40,24 +31,6 @@ Page({
 
   handleBack() {
     handlePageBack('/features/profile/profile')
-  },
-
-  handleJoinFallback() {
-    wx.setClipboardData({
-      data: this.data.vm.groupUrl,
-      success: () => {
-        wx.showToast({
-          title: '群链接复制好啦，去微信打开吧',
-          icon: 'none',
-        })
-      },
-      fail: () => {
-        wx.showToast({
-          title: '暂时拉不起来，过会儿再试吧',
-          icon: 'none',
-        })
-      },
-    })
   },
 
   onStartMessage() {

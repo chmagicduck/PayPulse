@@ -1,14 +1,14 @@
-import { labStaticViewModel } from '../../features/lab/model'
+import { labDashboardModel } from '../../features/lab/model/index'
 
 export function getLabRankIndexByPoints(totalPoints: number) {
-  const nextIndex = labStaticViewModel.ranks.findIndex(rank => totalPoints < rank.exp)
+  const nextIndex = labDashboardModel.ranks.findIndex(rank => totalPoints < rank.exp)
   if (nextIndex <= 0) {
-    return nextIndex === -1 ? labStaticViewModel.ranks.length - 1 : 0
+    return nextIndex === -1 ? labDashboardModel.ranks.length - 1 : 0
   }
 
   return nextIndex - 1
 }
 
 export function getLabCurrentRank(totalPoints: number) {
-  return labStaticViewModel.ranks[getLabRankIndexByPoints(totalPoints)] || labStaticViewModel.ranks[0]
+  return labDashboardModel.ranks[getLabRankIndexByPoints(totalPoints)] || labDashboardModel.ranks[0]
 }

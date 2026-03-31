@@ -1,0 +1,1 @@
+export { reportViewModel } from './view'

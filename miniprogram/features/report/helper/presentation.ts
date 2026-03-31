@@ -1,5 +1,5 @@
-import { animatedIconPair, icon, type IconImagePair, type IconName } from '../../lib/icons'
-import { reportModel } from './model'
+import { animatedIconPair, icon, type IconImagePair, type IconName } from '../../../lib/icons'
+import { reportViewModel } from '../model/index'
 
 type AnnualTone = 'indigo' | 'amber' | 'blue' | 'rose'
 
@@ -57,7 +57,7 @@ export function buildRatioRing(moyuPercent: number): string {
   return svgToDataUri(svg)
 }
 
-export function buildAnnualCards(cards: readonly AnnualCard[] = reportModel.annualCards) {
+export function buildAnnualCards(cards: readonly AnnualCard[] = reportViewModel.annualCards) {
   return cards.map(item =>
     Object.assign({}, item, {
       iconSrc: icon(item.iconName as IconName, getAnnualToneColor(item.tone as AnnualTone), 18),
@@ -70,7 +70,7 @@ export function formatHistoryDate(date: string) {
   return `${Number(month)}月${Number(day)}日`
 }
 
-export function buildHistoryItems(items: readonly HistoryItem[] = reportModel.historyItems) {
+export function buildHistoryItems(items: readonly HistoryItem[] = reportViewModel.historyItems) {
   return items.map(item =>
     Object.assign({}, item, {
       displayDate: formatHistoryDate(item.date),

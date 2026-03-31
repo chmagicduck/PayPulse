@@ -5,9 +5,7 @@
         <image class="icon-lg" src="{{icons.arrowLeft}}" mode="aspectFit" />
       </view>
       <text class="community-nav__title">{{vm.title}}</text>
-      <view class="community-nav__button">
-        <image class="icon-lg" src="{{icons.share2}}" mode="aspectFit" />
-      </view>
+      <view class="community-nav__spacer"></view>
     </view>
   </view>
 
@@ -20,18 +18,6 @@
       <text class="hero-card__title">{{vm.headline}}</text>
       <text class="hero-card__highlight">{{vm.highlight}}</text>
       <text class="hero-card__desc">{{vm.description}}</text>
-
-      <view class="hero-stats">
-        <block wx:for="{{vm.stats}}" wx:key="label">
-          <view class="hero-stats__item">
-            <view class="hero-stats__meta">
-              <image class="icon-xs" src="{{index === 0 ? icons.users : index === 1 ? icons.messageSquare : icons.globe}}" mode="aspectFit" />
-              <text class="hero-stats__label">{{item.label}}</text>
-            </view>
-            <text class="hero-stats__value">{{item.value}}</text>
-          </view>
-        </block>
-      </view>
     </view>
 
     <view class="join-card">
@@ -41,22 +27,18 @@
         <text class="join-card__subtitle">官方摸鱼交流群</text>
       </view>
 
-      <view wx:if="{{!joinUnavailable}}" class="join-card__button">
+      <view class="join-card__button">
         <cell
           class="join-card__cell"
           url="{{vm.groupUrl}}"
           bind:startmessage="onStartMessage"
           bind:completemessage="onCompleteMessage"
-          contactText="加入组织一起摸鱼"
+          contactText="点我加入薪潮摸鱼社"
           contactTextBlod="{{true}}"
         />
       </view>
-      <view wx:else class="join-card__button" bind:tap="handleJoinFallback">
-        <text class="join-card__button-text">复制进群链接</text>
-        <image class="icon-sm" src="{{icons.chevronRight}}" mode="aspectFit" />
-      </view>
 
-      <text class="join-card__note">{{joinHint || '点按钮会直接拉起企微加群，如果失败了会给你其他办法。'}}</text>
+      <text class="join-card__note">{{joinHint || '点击上方按钮会直接拉起官方企微进群流程。'}}</text>
     </view>
 
     <pp-section-header title="群友专属福利" barTone="blue" />

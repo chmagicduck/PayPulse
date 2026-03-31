@@ -1,4 +1,4 @@
-export const aboutStaticViewModel = {
+export const aboutViewModel = {
   appName: '薪潮涌动',
   slogan: '老板给的钱，我都用来摸鱼了',
   currentVersion: '1.0.0',

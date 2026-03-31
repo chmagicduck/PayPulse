@@ -1,0 +1,1 @@
+export { calendarViewModel } from './view'

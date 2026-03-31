@@ -1,8 +1,8 @@
 import { storageKeys } from '../../../lib/constants/storage'
 import { safeGetStorage, safeSetStorage } from '../../../lib/wx/storage'
-import { profileHomeModel } from '../model'
+import { getDefaultProfileAvatar } from './view'
 
-const fallbackAvatar = profileHomeModel.avatarPresets[0]?.src || ''
+const fallbackAvatar = getDefaultProfileAvatar()
 
 export function readProfileAvatar() {
   return safeGetStorage<string>(storageKeys.profileAvatar, fallbackAvatar)

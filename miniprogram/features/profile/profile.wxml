@@ -124,14 +124,26 @@
       </view>
 
       <view class="avatar-sheet__action-row">
-        <view class="avatar-sheet__action avatar-sheet__action--emerald {{pressStates.wechatAvatar ? 'avatar-sheet__action--pressed' : ''}}" bind:tap="useWechatAvatar">
+        <button
+          class="avatar-sheet__action avatar-sheet__action-button avatar-sheet__action--emerald {{pressStates.wechatAvatar ? 'avatar-sheet__action--pressed' : ''}}"
+          open-type="chooseAvatar"
+          bind:tap="pressWechatAvatarAction"
+          bind:chooseavatar="useWechatAvatar"
+        >
           <image class="icon-md" src="{{icons.messageSquare}}" mode="aspectFit" />
           <text class="avatar-sheet__action-text">使用微信头像</text>
-        </view>
-        <view class="avatar-sheet__action avatar-sheet__action--blue {{pressStates.uploadAvatar ? 'avatar-sheet__action--pressed' : ''}}" bind:tap="useUploadedAvatar">
+        </button>
+        <button
+          class="avatar-sheet__action avatar-sheet__action-button avatar-sheet__action--blue {{pressStates.uploadAvatar ? 'avatar-sheet__action--pressed' : ''}}"
+          bind:tap="useUploadedAvatar"
+        >
           <image class="icon-md" src="{{icons.cameraBlue}}" mode="aspectFit" />
           <text class="avatar-sheet__action-text">相册上传</text>
-        </view>
+        </button>
+      </view>
+
+      <view class="avatar-sheet__tips">
+        <text class="avatar-sheet__tips-text">相册上传头像需不超过 2MB</text>
       </view>
 
       <view class="avatar-sheet__preset-block">

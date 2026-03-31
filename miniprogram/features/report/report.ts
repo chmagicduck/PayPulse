@@ -1,8 +1,8 @@
 import { clearTimerBag, createTimerBag, pulseState, replayState } from '../../lib/wx/page'
 import { ensureBootstrapReady } from '../../store/bootstrap'
-import { buildAnnualCards, buildHistoryItems, buildRatioRing, buildReportIcons } from './ocean-report.helper'
-import { reportModel } from './model'
+import { buildAnnualCards, buildHistoryItems, buildRatioRing, buildReportIcons } from './helper/presentation'
 import { buildReportRuntimeState } from './model/state'
+import { reportViewModel } from './model/index'
 
 type TrendTabKey = 'income' | 'duration'
 type RangeKey = 'day' | 'week' | 'month' | 'year'
@@ -14,14 +14,14 @@ const DEFAULT_RANGE_KEY: RangeKey = 'week'
 
 Page({
   data: {
-    vm: reportModel as any,
+    vm: reportViewModel as any,
     statusBarHeight: 0,
     activeTab: DEFAULT_TAB_KEY as TrendTabKey,
     timeRange: DEFAULT_RANGE_KEY as RangeKey,
-    currentRatio: Object.assign({}, reportModel.ratio.stats[DEFAULT_RANGE_KEY]) as RatioItem,
-    ratioRingSrc: buildRatioRing(reportModel.ratio.stats[DEFAULT_RANGE_KEY].moyu),
-    annualCards: buildAnnualCards() as any[],
-    historyItems: buildHistoryItems() as any[],
+    currentRatio: Object.assign({}, reportViewModel.ratio.stats[DEFAULT_RANGE_KEY]) as RatioItem,
+    ratioRingSrc: buildRatioRing(reportViewModel.ratio.stats[DEFAULT_RANGE_KEY].moyu),
+    annualCards: buildAnnualCards(reportViewModel.annualCards as any) as any[],
+    historyItems: buildHistoryItems(reportViewModel.historyItems as any) as any[],
     icons: buildReportIcons(),
     iconAnimations: {
       chart: false,

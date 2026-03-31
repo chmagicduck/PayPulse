@@ -1,11 +1,11 @@
-import { aboutStaticViewModel } from './model'
-import { buildAboutIcons } from './about.helper'
+import { buildAboutIcons } from './helper/icons'
 import { handlePageBack } from '../../lib/wx/page'
 import { ensureBootstrapReady } from '../../store/bootstrap'
+import { aboutViewModel } from './model/index'
 
 Page({
   data: {
-    vm: aboutStaticViewModel,
+    vm: aboutViewModel,
     statusBarHeight: 0,
     activeTab: 'changelog',
     icons: buildAboutIcons(),

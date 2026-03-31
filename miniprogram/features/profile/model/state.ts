@@ -1,46 +1,31 @@
-import { animatedIconPair } from '../../../lib/icons'
 import { getLabCurrentRank } from '../../../lib/domain/lab-progress'
-import { profileHomeModel } from '../model'
 import { getCheckInDays } from '../../../lib/domain/daily-records'
 import { readProfileSettings } from '../../profile-settings/model/storage'
 import { readCurrentLabProgress } from '../../lab/model/actions'
 import { readProfileAvatar } from './storage'
+import { buildProfileCurrentRank, buildProfilePageState, getDefaultProfileAvatar, profileDashboardModel } from './view'
 
-export function buildProfileSummaryState() {
+export function buildProfileRuntimeState() {
   const settings = readProfileSettings()
-  const currentAvatar = readProfileAvatar() || String(profileHomeModel.avatarPresets[0]?.src || '')
+  const currentAvatar = readProfileAvatar() || getDefaultProfileAvatar()
   const labProgress = readCurrentLabProgress()
   const runtimeRank = getLabCurrentRank(labProgress.totalPoints)
   const currentRank = runtimeRank
-      ? {
-          level: runtimeRank.level,
-          name: runtimeRank.name,
-          tone: runtimeRank.tone,
-          iconPair: animatedIconPair(runtimeRank.iconName as any, {
-            color: runtimeRank.cardIconColor,
-            size: 12,
-            animation: 'float',
-            durationMs: 2200,
-          }),
-      }
-    : {
-        level: profileHomeModel.user.rank.level,
-        name: profileHomeModel.user.rank.name,
-        tone: profileHomeModel.user.rank.tone,
-        iconPair: animatedIconPair(profileHomeModel.user.rank.iconName, {
-          color: profileHomeModel.user.rank.iconColor,
-          size: 12,
-          animation: 'float',
-          durationMs: 2200,
-        }),
-      }
+    ? buildProfileCurrentRank({
+        level: runtimeRank.level,
+        name: runtimeRank.name,
+        tone: runtimeRank.tone,
+        iconName: runtimeRank.iconName,
+        iconColor: runtimeRank.cardIconColor,
+      })
+    : buildProfileCurrentRank(profileDashboardModel.user.rank)
 
-  return {
+  return buildProfilePageState({
     user: {
-      name: settings.nickname,
+      name: settings.nickname || profileDashboardModel.user.name,
       checkInDays: getCheckInDays(),
     },
     currentAvatar,
     currentRank,
-  }
+  })
 }

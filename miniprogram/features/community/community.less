@@ -29,6 +29,11 @@
     justify-content: center;
   }
 
+  &__spacer {
+    width: 72rpx;
+    min-width: 72rpx;
+  }
+
   &__title {
     font-size: @fs-4xl;
     color: @text-primary;
@@ -94,39 +99,6 @@
     color: @text-muted;
     font-weight: 700;
     line-height: 1.7;
-    margin-bottom: 24rpx;
-  }
-}
-
-.hero-stats {
-  display: flex;
-  gap: 14rpx;
-
-  &__item {
-    flex: 1;
-    padding: 22rpx 20rpx;
-    border-radius: 28rpx;
-    background: @slate50;
-    border: 1rpx solid @slate100;
-  }
-
-  &__meta {
-    display: flex;
-    align-items: center;
-    gap: 8rpx;
-    margin-bottom: 6rpx;
-  }
-
-  &__label {
-    font-size: @fs-xs;
-    color: @text-muted;
-    font-weight: 800;
-  }
-
-  &__value {
-    font-size: @fs-xl;
-    color: @text-heading;
-    font-weight: 900;
   }
 }
 
@@ -165,22 +137,13 @@
   }
 
   &__button {
-    height: 92rpx;
-    border-radius: 28rpx;
-    background: @blue600;
+    padding: 8rpx 16rpx;
+    border-radius: 20rpx;
+    background: rgba(255, 255, 255, 0.95);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12rpx;
-    box-shadow: 0 14rpx 28rpx rgba(37, 99, 235, 0.28);
     margin-bottom: 18rpx;
-  }
-
-  &__button-text {
-    font-size: @fs-xl;
-    color: @text-inverse;
-    font-weight: 900;
-    letter-spacing: 0.06em;
   }
 
   &__note {
@@ -191,6 +154,11 @@
     font-weight: 700;
     line-height: 1.6;
   }
+}
+
+.join-card__cell {
+  display: block;
+  width: 100%;
 }
 
 .benefit-list {
@@ -237,28 +205,6 @@
     .type-text-secondary();
     font-size: @fs-lg;
     line-height: 1.7;
-  }
-}
-
-.fake-tabbar {
-  position: fixed;
-  left: 32rpx;
-  right: 32rpx;
-  bottom: calc(24rpx + env(safe-area-inset-bottom));
-  height: 88rpx;
-  border-radius: 28rpx;
-  background: rgba(255, 255, 255, 0.92);
-  border: 1rpx solid @slate100;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  color: @text-muted;
-  font-size: @fs-md;
-  font-weight: 800;
-  box-shadow: @shadow-card;
-
-  &__item--active {
-    color: @text-brand;
   }
 }
 

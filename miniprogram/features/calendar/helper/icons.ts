@@ -1,4 +1,4 @@
-import { icon } from '../../lib/icons'
+import { icon } from '../../../lib/icons'
 
 export function buildCalendarIcons() {
   return {

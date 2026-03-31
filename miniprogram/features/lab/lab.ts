@@ -2,11 +2,8 @@ import { clearTimerBag, createTimerBag, replayState } from '../../lib/wx/page'
 import type { LabProgress } from '../../lib/domain/types'
 import { buildDailyMoyuTaskNotice } from '../../lib/domain/lab-tasks'
 import { ensureBootstrapReady } from '../../store/bootstrap'
-import {
-  createLabIconAnimations,
-  createLabPressStates,
-  type TaskRuntimeItem,
-} from './lab.helper'
+import { createLabIconAnimations, createLabPressStates } from './helper/page'
+import type { LabTaskRuntimeItem } from './model/index'
 import { adjustTaskCount, updateSelectedRankIndex } from './model/actions'
 import { buildLabRuntimeState } from './model/state'
 
@@ -138,7 +135,7 @@ Page({
     const taskId = String(detail?.id || '')
     if (!taskId || Number.isNaN(step) || step === 0) return
 
-    const tasks = this.data.tasks as TaskRuntimeItem[]
+    const tasks = this.data.tasks as LabTaskRuntimeItem[]
     const currentTask = tasks.find(task => task.id === taskId)
     if (!currentTask) return
 

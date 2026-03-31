@@ -1,4 +1,4 @@
-import { animatedIconPair, icon, type IconImagePair } from '../../lib/icons'
+import { animatedIconPair, icon, type IconImagePair } from '../../../lib/icons'
 
 export function buildDataCenterIcons() {
   return {

@@ -204,7 +204,7 @@
                 <text class="tide-card__leading">剩</text>
                 <text class="tide-card__value">{{vm.regularTides[1].days}}天</text>
               </view>
-              <text class="tide-card__desc">马上就能迎来<text class="tide-card__desc-strong tide-card__desc-strong--emerald">休息日</text></text>
+              <text class="tide-card__desc">马上就能迎来<text class="tide-card__desc-strong tide-card__desc-strong--emerald">休息日</text>了。</text>
             </view>
           </view>
         </view>
@@ -319,7 +319,7 @@
             <view class="journey-card__icon journey-card__icon--indigo">
               <image class="icon-md" src="{{iconAnimations.journeyLife ? iconPairs.babyWhite.animatedSrc : iconPairs.babyWhite.staticSrc}}" mode="aspectFit" />
             </view>
-            <text class="journey-card__eyebrow journey-card__eyebrow--indigo">人生电量 (LIFE)</text>
+            <text class="journey-card__eyebrow journey-card__eyebrow--indigo">人生进程</text>
           </view>
           <view class="journey-card__number">
             <text class="journey-card__status">已度过</text>
@@ -334,7 +334,7 @@
             <view class="journey-card__icon journey-card__icon--blue">
               <image class="icon-md" src="{{iconAnimations.journeyCareer ? iconPairs.briefcaseWhite.animatedSrc : iconPairs.briefcaseWhite.staticSrc}}" mode="aspectFit" />
             </view>
-            <text class="journey-card__eyebrow journey-card__eyebrow--blue">打工时长 (CAREER)</text>
+            <text class="journey-card__eyebrow journey-card__eyebrow--blue">打工时长</text>
           </view>
           <view class="journey-card__number">
             <text class="journey-card__status">已出卖</text>
@@ -349,7 +349,7 @@
             <view class="journey-card__icon journey-card__icon--emerald">
               <image class="icon-md" src="{{iconAnimations.journeyRetire ? iconPairs.flagWhite.animatedSrc : iconPairs.flagWhite.staticSrc}}" mode="aspectFit" />
             </view>
-            <text class="journey-card__eyebrow journey-card__eyebrow--emerald">退休倒计时 (RETIRE)</text>
+            <text class="journey-card__eyebrow journey-card__eyebrow--emerald">退休倒计时</text>
           </view>
           <view class="journey-card__number">
             <text class="journey-card__status journey-card__status--emerald">还要熬</text>
@@ -367,7 +367,7 @@
             <view class="journey-card__icon journey-card__icon--rose">
               <image class="icon-md" src="{{iconAnimations.journeyFinal ? iconPairs.skullWhite.animatedSrc : iconPairs.skullWhite.staticSrc}}" mode="aspectFit" />
             </view>
-            <text class="journey-card__eyebrow journey-card__eyebrow--rose">人终有一老 (FINAL)</text>
+            <text class="journey-card__eyebrow journey-card__eyebrow--rose">人终有一老</text>
           </view>
           <view class="journey-card__number">
             <text class="journey-card__status journey-card__status--rose">还剩</text>

@@ -1,8 +1,8 @@
 import { handlePageBack } from '../../lib/wx/page'
 import { now } from '../../lib/domain/date'
 import { ensureBootstrapReady } from '../../store/bootstrap'
-import { buildCalendarIcons } from './calendar.helper'
-import { calendarStaticViewModel } from './model'
+import { buildCalendarIcons } from './helper/icons'
+import { calendarViewModel } from './model/index'
 import { buildCalendarMonthState } from './model/state'
 
 const today = now()
@@ -11,8 +11,8 @@ const initialMonthState = buildCalendarMonthState(today.getFullYear(), today.get
 Page({
   data: {
     vm: {
-      title: calendarStaticViewModel.title,
-      weekLabels: calendarStaticViewModel.weekLabels,
+      title: calendarViewModel.title,
+      weekLabels: calendarViewModel.weekLabels,
     },
     statusBarHeight: 0,
     displayYear: today.getFullYear(),
