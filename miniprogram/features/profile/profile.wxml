@@ -1,14 +1,12 @@
 <view class="page-view profile-page">
-  <view class="profile-nav" style="padding-top: {{statusBarHeight}}px;">
-    <view class="profile-nav__content">
-      <view class="profile-nav__brand">
-        <view class="profile-nav__logo" bind:tap="triggerHeaderAnimation">
-          <image class="profile-nav__logo-icon" src="{{iconAnimations.header ? icons.headerPair.animatedSrc : icons.headerPair.staticSrc}}" mode="aspectFit" />
-        </view>
-        <text class="profile-nav__title">我的基地</text>
-      </view>
-    </view>
-  </view>
+  <pp-brand-header
+    paddingTop="{{statusBarHeight}}"
+    title="我的基地"
+    logoSrc="{{iconAnimations.header ? icons.headerPair.animatedSrc : icons.headerPair.staticSrc}}"
+    logoBg="#2563eb"
+    logoShadow="0 8rpx 24rpx rgba(37, 99, 235, 0.3)"
+    bind:logotap="triggerHeaderAnimation"
+  />
 
   <view class="profile-main">
     <view class="profile-hero">

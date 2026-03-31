@@ -166,6 +166,7 @@
   border-radius: @radius-card;
   padding: 24rpx;
   display: flex;
+  align-items: flex-start;
   gap: 18rpx;
 
   &__icon {
@@ -185,21 +186,18 @@
   &__copy {
     min-width: 0;
     flex: 1;
+    padding-top: 2rpx;
   }
 
   &__title {
     display: block;
-    .type-card-title();
-    color: @text-primary;
-    font-weight: 800;
+    .type-feature-card-title();
     margin-bottom: 8rpx;
   }
 
   &__desc {
     display: block;
-    .type-text-secondary();
-    font-size: @fs-lg;
-    line-height: 1.7;
+    .type-feature-card-subtitle();
   }
 }
 

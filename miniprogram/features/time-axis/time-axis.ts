@@ -1,4 +1,5 @@
 import { clearTimerBag, createTimerBag, handlePageBack, openModal, pulseState } from '../../lib/wx/page'
+import { buildAppShareMessage, buildAppTimelineShare, showAppShareMenu } from '../../lib/wx/share'
 import { ensureBootstrapReady } from '../../store/bootstrap'
 import { saveTimeAxisEntry, deleteTimeAxisEntry } from './model/actions'
 import { readTimeAxisEntries } from './model/storage'
@@ -43,12 +44,14 @@ Page({
       notebooks,
       drawerNotebooks: notebooks.filter(item => item.id !== 'all'),
     })
+    showAppShareMenu()
   },
 
   onShow() {
     if (!ensureBootstrapReady()) {
       return
     }
+    showAppShareMenu()
     this.reloadEntries()
   },
 
@@ -205,5 +208,13 @@ Page({
     deleteTimeAxisEntry(this.data.editingId)
     this.closeEditModal()
     this.reloadEntries()
+  },
+
+  onShareAppMessage() {
+    return buildAppShareMessage()
+  },
+
+  onShareTimeline() {
+    return buildAppTimelineShare()
   },
 })

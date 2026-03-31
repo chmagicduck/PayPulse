@@ -28,10 +28,17 @@
   &__main,
   &__ticker-main {
     display: flex;
-    align-items: center;
     gap: 16rpx;
     min-width: 0;
     flex: 1;
+  }
+
+  &__main {
+    align-items: flex-start;
+  }
+
+  &__ticker-main {
+    align-items: center;
   }
 
   &__icon-shell {
@@ -69,22 +76,19 @@
     flex: 1;
   }
 
+  &__copy {
+    padding-top: 2rpx;
+  }
+
   &__title {
     display: block;
-    font-size: @fs-2xl;
-    line-height: 1.25;
-    font-weight: 800;
-    color: @text-heading;
-    letter-spacing: -0.04em;
+    .type-feature-card-title();
   }
 
   &__desc {
     display: block;
-    margin-top: 4rpx;
-    font-size: @fs-base;
-    line-height: 1.35;
-    font-weight: 500;
-    color: @text-muted;
+    margin-top: 6rpx;
+    .type-feature-card-subtitle(@fs-lg, @text-tertiary, 700, 1.6);
   }
 
   &__badge {

@@ -1,0 +1,26 @@
+<view
+  class="pp-metric-card pp-metric-card--{{variant}} pp-metric-card--tone-{{tone}} {{pressed ? 'pp-metric-card--pressed' : ''}}"
+  bind:tap="handleTap"
+>
+  <image wx:if="{{ghostSrc}}" class="pp-metric-card__ghost pp-metric-card__ghost--{{tone}}" src="{{ghostSrc}}" mode="aspectFit" />
+
+  <view class="pp-metric-card__body">
+    <view class="pp-metric-card__head">
+      <view class="pp-metric-card__icon pp-metric-card__icon--{{tone}}">
+        <image class="pp-metric-card__icon-image" src="{{iconSrc}}" mode="aspectFit" />
+      </view>
+      <text class="pp-metric-card__badge pp-metric-card__badge--{{tone}}">{{badgeText}}</text>
+    </view>
+
+    <view class="pp-metric-card__content">
+      <view class="pp-metric-card__number">
+        <text wx:if="{{valuePrefix}}" class="pp-metric-card__leading">{{valuePrefix}}</text>
+        <text class="pp-metric-card__value pp-metric-card__value--{{tone}}">{{valueText}}</text>
+      </view>
+
+      <view class="pp-metric-card__desc">
+        <text class="pp-metric-card__desc-text">{{descPrefix}}</text><text wx:if="{{descStrong}}" class="pp-metric-card__desc-strong pp-metric-card__desc-strong--{{descStrongTone}}">{{descStrong}}</text><text class="pp-metric-card__desc-text">{{descSuffix}}</text>
+      </view>
+    </view>
+  </view>
+</view>

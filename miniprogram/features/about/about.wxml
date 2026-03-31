@@ -67,11 +67,15 @@
     <view class="concept-list" wx:else>
       <block wx:for="{{vm.concepts}}" wx:key="title">
         <view class="concept-card">
-          <view class="concept-card__icon">
-            <image class="icon-sm" src="{{index === 0 ? icons.compass : index === 1 ? icons.cpu : icons.heart}}" mode="aspectFit" />
+          <view class="concept-card__head">
+            <view class="concept-card__icon">
+              <image class="icon-sm" src="{{index === 0 ? icons.compass : index === 1 ? icons.cpu : icons.heart}}" mode="aspectFit" />
+            </view>
+            <view class="concept-card__copy">
+              <text class="concept-card__title">{{item.title}}</text>
+              <text class="concept-card__desc">{{item.desc}}</text>
+            </view>
           </view>
-          <text class="concept-card__title">{{item.title}}</text>
-          <text class="concept-card__desc">{{item.desc}}</text>
         </view>
       </block>
     </view>

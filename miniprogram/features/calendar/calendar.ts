@@ -1,4 +1,5 @@
 import { handlePageBack } from '../../lib/wx/page'
+import { buildAppShareMessage, buildAppTimelineShare, showAppShareMenu } from '../../lib/wx/share'
 import { now } from '../../lib/domain/date'
 import { ensureBootstrapReady } from '../../store/bootstrap'
 import { buildCalendarIcons } from './helper/icons'
@@ -24,12 +25,14 @@ Page({
   onLoad() {
     const { statusBarHeight } = wx.getSystemInfoSync()
     this.setData({ statusBarHeight: statusBarHeight || 0 })
+    showAppShareMenu()
   },
 
   onShow() {
     if (!ensureBootstrapReady()) {
       return
     }
+    showAppShareMenu()
     this.refreshMonthState()
   },
 
@@ -67,5 +70,13 @@ Page({
     const day = String(e.currentTarget.dataset.day || '')
     if (!day) return
     this.setData(buildCalendarMonthState(this.data.displayYear, this.data.displayMonthIndex, day))
+  },
+
+  onShareAppMessage() {
+    return buildAppShareMessage()
+  },
+
+  onShareTimeline() {
+    return buildAppTimelineShare()
   },
 })

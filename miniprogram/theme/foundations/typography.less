@@ -107,3 +107,31 @@
 .type-text-secondary {
   .type-text-secondary();
 }
+
+.type-feature-card-title() {
+  font-size: @fs-2xl;
+  font-weight: 800;
+  line-height: 1.24;
+  letter-spacing: -0.04em;
+  color: @text-heading;
+}
+
+.type-feature-card-title {
+  .type-feature-card-title();
+}
+
+.type-feature-card-subtitle(
+  @size: @fs-lg;
+  @color: @text-tertiary;
+  @weight: 700;
+  @line-height: 1.6
+) {
+  font-size: @size;
+  font-weight: @weight;
+  line-height: @line-height;
+  color: @color;
+}
+
+.type-feature-card-subtitle {
+  .type-feature-card-subtitle();
+}

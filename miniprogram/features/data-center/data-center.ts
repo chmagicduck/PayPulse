@@ -1,4 +1,5 @@
 import { clearTimerBag, createTimerBag, handlePageBack, openModal, pulseState } from '../../lib/wx/page'
+import { buildAppShareMessage, buildAppTimelineShare, showAppShareMenu } from '../../lib/wx/share'
 import { ensureBootstrapReady } from '../../store/bootstrap'
 import { buildDataCenterIcons } from './helper/icons'
 import { dataCenterViewModel } from './model/index'
@@ -27,12 +28,14 @@ Page({
   onLoad() {
     const { statusBarHeight } = wx.getSystemInfoSync()
     this.setData({ statusBarHeight: statusBarHeight || 0 })
+    showAppShareMenu()
   },
 
   onShow() {
     if (!ensureBootstrapReady()) {
       return
     }
+    showAppShareMenu()
     this.refreshStorageUsage()
   },
 
@@ -118,5 +121,13 @@ Page({
       timers['reset-modal'] = null
       wx.reLaunch({ url: '/features/onboarding/onboarding' })
     }, 280)
+  },
+
+  onShareAppMessage() {
+    return buildAppShareMessage()
+  },
+
+  onShareTimeline() {
+    return buildAppTimelineShare()
   },
 })

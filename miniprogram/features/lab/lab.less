@@ -730,6 +730,7 @@
     position: relative;
     z-index: 1;
     display: flex;
+    align-items: flex-start;
     gap: 20rpx;
   }
 
@@ -749,6 +750,7 @@
   &__copy {
     min-width: 0;
     flex: 1;
+    padding-top: 2rpx;
   }
 
   &__title-row {
@@ -766,20 +768,13 @@
 
   &__title {
     display: block;
-    font-size: @fs-2xl;
-    line-height: 1.25;
-    font-weight: 800;
-    color: @text-heading;
-    letter-spacing: -0.04em;
+    .type-feature-card-title();
   }
 
   &__desc {
     display: block;
     margin-top: 6rpx;
-    font-size: @fs-md;
-    font-weight: 500;
-    color: @text-muted;
-    line-height: 1.3;
+    .type-feature-card-subtitle();
   }
 
   &__reward {

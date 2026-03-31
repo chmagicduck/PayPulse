@@ -1,5 +1,6 @@
 import { buildAboutIcons } from './helper/icons'
 import { handlePageBack } from '../../lib/wx/page'
+import { buildAppShareMessage, buildAppTimelineShare, showAppShareMenu } from '../../lib/wx/share'
 import { ensureBootstrapReady } from '../../store/bootstrap'
 import { aboutViewModel } from './model/index'
 
@@ -14,9 +15,11 @@ Page({
   onLoad() {
     const { statusBarHeight } = wx.getSystemInfoSync()
     this.setData({ statusBarHeight: statusBarHeight || 0 })
+    showAppShareMenu()
   },
 
   onShow() {
+    showAppShareMenu()
     ensureBootstrapReady()
   },
 
@@ -28,5 +31,13 @@ Page({
     const value = String(e.currentTarget.dataset.value || '')
     if (!value) return
     this.setData({ activeTab: value })
+  },
+
+  onShareAppMessage() {
+    return buildAppShareMessage()
+  },
+
+  onShareTimeline() {
+    return buildAppTimelineShare()
   },
 })

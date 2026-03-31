@@ -1,18 +1,15 @@
 <view class="page-view report-page">
-  <view class="report-nav" style="padding-top: {{statusBarHeight}}px;">
-    <view class="report-nav__content">
-      <view class="report-nav__brand">
-        <view class="report-nav__logo">
-          <image class="report-nav__logo-icon" src="{{iconAnimations.chart ? icons.chartPair.animatedSrc : icons.chartPair.staticSrc}}" mode="aspectFit" />
-        </view>
-        <text class="report-nav__title">数据报告</text>
-      </view>
-
-      <view class="report-nav__filter {{pressStates.filter ? 'report-nav__filter--pressed' : ''}}" bind:tap="pressFilter">
-        <image class="icon-sm" src="{{icons.filter}}" mode="aspectFit" />
-      </view>
-    </view>
-  </view>
+  <pp-brand-header
+    paddingTop="{{statusBarHeight}}"
+    title="数据报告"
+    logoSrc="{{iconAnimations.chart ? icons.chartPair.animatedSrc : icons.chartPair.staticSrc}}"
+    logoBg="#4f46e5"
+    logoShadow="0 8rpx 24rpx rgba(79, 70, 229, 0.24)"
+    actionIconSrc="{{icons.filter}}"
+    actionPressed="{{pressStates.filter}}"
+    bind:logotap="playChartAnimation"
+    bind:actiontap="pressFilter"
+  />
 
   <view class="report-main">
     <view class="report-section">
@@ -22,27 +19,22 @@
 
       <view class="annual-grid">
         <block wx:for="{{annualCards}}" wx:key="key">
-          <view class="annual-tide-card annual-tide-card--{{item.tone}} {{pressStates.annualIndex === index ? 'annual-tide-card--pressed' : ''}}" data-index="{{index}}" bind:tap="pressAnnualCard">
-            <image class="annual-tide-card__ghost annual-tide-card__ghost--{{item.tone}}" src="{{item.ghostIconSrc}}" mode="aspectFit" />
-
-            <view class="annual-tide-card__info {{activeAnnualInfoKey === item.key ? 'annual-tide-card__info--active' : ''}}" data-key="{{item.key}}" catch:tap="openAnnualInfo">
-              <image class="annual-tide-card__info-icon" src="{{icons.info}}" mode="aspectFit" />
-            </view>
-
-            <view class="annual-tide-card__body">
-              <view class="annual-tide-card__head">
-                <view class="annual-tide-card__icon annual-tide-card__icon--{{item.tone}}">
-                  <image class="icon-sm" src="{{item.iconSrc}}" mode="aspectFit" />
-                </view>
-                <text class="annual-tide-card__badge annual-tide-card__badge--{{item.tone}}">{{item.badgeText}}</text>
-              </view>
-
-              <view class="annual-tide-card__content">
-                <text class="annual-tide-card__title">{{item.title}}</text>
-                <text class="annual-tide-card__value annual-tide-card__value--{{item.tone}}">{{item.value}}</text>
-                <text class="annual-tide-card__desc">{{item.desc}}</text>
-              </view>
-            </view>
+          <view class="annual-grid__item">
+            <pp-metric-card
+              class="annual-grid__card"
+              cardKey="{{item.key}}"
+              variant="compact"
+              tone="{{item.tone}}"
+              iconSrc="{{item.iconSrc}}"
+              ghostSrc="{{item.ghostIconSrc}}"
+              badgeText="{{item.badgeText}}"
+              valuePrefix="{{item.valuePrefix}}"
+              valueText="{{item.value}}"
+              descPrefix="{{item.desc}}"
+              pressed="{{pressStates.annualIndex === index}}"
+              data-index="{{index}}"
+              bind:cardtap="openAnnualInfo"
+            />
           </view>
         </block>
       </view>

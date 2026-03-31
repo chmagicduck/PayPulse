@@ -1,4 +1,5 @@
 import { icon } from '../../lib/icons'
+import { buildAppShareMessage, buildAppTimelineShare, showAppShareMenu } from '../../lib/wx/share'
 import { isBootstrapReady, readBootstrapState } from '../../store/bootstrap'
 
 const HOME_ROUTE = '/features/home/home'
@@ -6,7 +7,7 @@ const PROFILE_SETTINGS_ROUTE = '/features/profile-settings/profile-settings'
 
 function buildGuideIcons() {
   return {
-    anchor: icon('anchor', '#ffffff', 44),
+    anchor: icon('waves', '#ffffff', 44),
     user: icon('user', '#2563eb', 18),
     wallet: icon('wallet', '#059669', 18),
     waves: icon('waves', '#6366f1', 18),
@@ -28,9 +29,11 @@ Page({
   onLoad() {
     const { statusBarHeight } = wx.getSystemInfoSync()
     this.setData({ statusBarHeight: statusBarHeight || 0 })
+    showAppShareMenu()
   },
 
   onShow() {
+    showAppShareMenu()
     if (isBootstrapReady()) {
       wx.switchTab({ url: HOME_ROUTE })
       return
@@ -53,5 +56,13 @@ Page({
 
   startSetup() {
     wx.navigateTo({ url: PROFILE_SETTINGS_ROUTE })
+  },
+
+  onShareAppMessage() {
+    return buildAppShareMessage()
+  },
+
+  onShareTimeline() {
+    return buildAppTimelineShare()
   },
 })

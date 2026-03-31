@@ -1,4 +1,5 @@
 import { clearTimerBag, createTimerBag, pulseState } from '../../lib/wx/page'
+import { buildAppShareMessage, buildAppTimelineShare, showAppShareMenu } from '../../lib/wx/share'
 import { isBootstrapReady, finishInitialSetup } from '../../store/bootstrap'
 import { applyGenderDefaults, buildDailyWorkDuration, buildProfileAgeLimits, patchProfileSettingsForm, syncProfileSettingsForm, updateRetirementAgeValue } from './helper/form'
 import { buildSettingsIcons } from './helper/icons'
@@ -36,9 +37,11 @@ Page({
   onLoad() {
     const { statusBarHeight } = wx.getSystemInfoSync()
     this.setData({ statusBarHeight: statusBarHeight || 0 })
+    showAppShareMenu()
   },
 
   onShow() {
+    showAppShareMenu()
     const bootstrapReady = isBootstrapReady()
     const form = bootstrapReady
       ? toProfileSettingsForm(readProfileSettings())
@@ -152,5 +155,13 @@ Page({
         finishInitialSetup()
       }, 180)
     }
+  },
+
+  onShareAppMessage() {
+    return buildAppShareMessage()
+  },
+
+  onShareTimeline() {
+    return buildAppTimelineShare()
   },
 })

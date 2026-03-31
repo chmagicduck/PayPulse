@@ -407,141 +407,15 @@
 .tide-grid {
   display: flex;
   gap: 24rpx;
-}
 
-.tide-card {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
-  .card-shell-chrome(32rpx, 32rpx);
-  .card-press-scale();
-
-  &--blue {
-    background: @white;
-    border-color: @slate100;
+  &__item {
+    flex: 1;
+    min-width: 0;
   }
 
-  &--emerald {
-    background: @white;
-    border-color: @slate100;
-  }
-
-  &__body {
-    position: relative;
-    z-index: 1;
-  }
-
-  &__ghost {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 96rpx;
-    height: 96rpx;
-    min-width: 96rpx;
-    padding: 16rpx;
-
-    &--blue {
-      opacity: 0.03;
-    }
-
-    &--emerald {
-      opacity: 0.03;
-    }
-  }
-
-  &__head {
-    display: flex;
-    align-items: center;
-    margin-bottom: 24rpx;
-  }
-
-  &__icon {
-    width: 36rpx;
-    height: 36rpx;
-    min-width: 36rpx;
-    padding: 12rpx;
-    border-radius: 16rpx;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &--blue {
-      background-color: @blue600;
-      box-shadow: 0 16rpx 30rpx rgba(37, 99, 235, 0.18);
-    }
-
-    &--emerald {
-      background-color: @emerald500;
-      box-shadow: 0 16rpx 30rpx rgba(16, 185, 129, 0.18);
-    }
-  }
-
-  &__badge {
-    margin-left: 12rpx;
-    font-size: @fs-md;
-    font-weight: 900;
-    letter-spacing: 0.1em;
-    line-height: 1.2;
-    text-transform: uppercase;
-
-    &--blue {
-      color: @text-brand-soft;
-    }
-
-    &--emerald {
-      color: @text-success;
-    }
-  }
-
-  &__content {
-    position: relative;
-    z-index: 1;
-  }
-
-  &__number {
-    display: flex;
-    align-items: baseline;
-    gap: 10rpx;
-    margin-bottom: 10rpx;
-  }
-
-  &__leading {
-    font-size: @fs-2xl;
-    font-weight: 900;
-    color: @text-muted;
-    line-height: 1.2;
-  }
-
-  &__value {
-    font-size: @fs-display-sm;
-    font-weight: 900;
-    letter-spacing: -0.05em;
-    color: @text-primary;
-    line-height: 1;
-    font-variant-numeric: tabular-nums;
-  }
-
-  &__desc {
+  &__card {
     display: block;
-    position: relative;
-    z-index: 1;
-    font-size: @fs-md;
-    line-height: 1.45;
-    color: @text-tertiary;
-    font-weight: 500;
-  }
-
-  &__desc-strong {
-    color: @text-primary;
-    font-weight: 900;
-
-    &--blue {
-      color: @text-brand;
-    }
-
-    &--emerald {
-      color: @text-success;
-    }
+    height: 100%;
   }
 }
 
@@ -576,7 +450,7 @@
 
   &__main {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 18rpx;
     min-width: 0;
     flex: 1;
@@ -625,16 +499,13 @@
   &__copy {
     min-width: 0;
     flex: 1;
+    padding-top: 2rpx;
   }
 
   &__title {
     display: block;
-    margin-bottom: 10rpx;
-    font-size: @fs-2xl;
-    font-weight: 800;
-    color: @text-heading;
-    line-height: 1.18;
-    letter-spacing: -0.03em;
+    margin-bottom: 8rpx;
+    .type-feature-card-title();
   }
 
   &__meta {
@@ -645,10 +516,7 @@
   }
 
   &__date {
-    font-size: @fs-md;
-    font-weight: 800;
-    line-height: 1;
-    color: @text-muted;
+    .type-feature-card-subtitle(@fs-base, @text-muted, 700, 1.4);
   }
 
   &__badge {
@@ -707,6 +575,10 @@
   display: flex;
   flex-direction: column;
   gap: 24rpx;
+
+  &__card {
+    display: block;
+  }
 }
 
 .journey-card {
@@ -787,7 +659,7 @@
   }
 
   &__eyebrow {
-    font-size: @fs-base;
+    font-size: @fs-2xl;
     font-weight: 900;
     letter-spacing: 0.1em;
     text-transform: uppercase;

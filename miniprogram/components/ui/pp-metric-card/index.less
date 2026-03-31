@@ -1,0 +1,281 @@
+@import '../../../theme/entries/core.less';
+
+.pp-metric-card {
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  min-height: 100%;
+  background: @white;
+  .card-shell-chrome(32rpx, 32rpx);
+  .card-press-scale();
+
+  &--wide {
+    .card-shell-chrome(@radius-card, @card-pad-md);
+  }
+
+  &__body {
+    position: relative;
+    z-index: 1;
+    min-height: 100%;
+  }
+
+  &__ghost {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 96rpx;
+    height: 96rpx;
+    min-width: 96rpx;
+    padding: 16rpx;
+
+    &--indigo,
+    &--amber,
+    &--blue,
+    &--emerald {
+      opacity: 0.03;
+    }
+
+    &--rose {
+      opacity: 0.05;
+    }
+  }
+
+  &--wide &__ghost {
+    top: 24rpx;
+    right: 24rpx;
+    width: 120rpx;
+    height: 120rpx;
+    min-width: 120rpx;
+    padding: 0;
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+    margin-bottom: 24rpx;
+  }
+
+  &--wide &__head {
+    gap: 20rpx;
+  }
+
+  &__icon {
+    width: 60rpx;
+    height: 60rpx;
+    min-width: 60rpx;
+    border-radius: 16rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &--indigo {
+      background-color: @indigo500;
+      box-shadow: 0 16rpx 30rpx rgba(79, 70, 229, 0.18);
+    }
+
+    &--amber {
+      background-color: @amber500;
+      box-shadow: 0 16rpx 30rpx rgba(245, 158, 11, 0.18);
+    }
+
+    &--blue {
+      background-color: @blue600;
+      box-shadow: 0 16rpx 30rpx rgba(37, 99, 235, 0.18);
+    }
+
+    &--emerald {
+      background-color: @emerald500;
+      box-shadow: 0 16rpx 30rpx rgba(16, 185, 129, 0.18);
+    }
+
+    &--rose {
+      background-color: @rose600;
+      box-shadow: 0 16rpx 30rpx rgba(225, 29, 72, 0.16);
+    }
+  }
+
+  &--wide &__icon {
+    width: 52rpx;
+    height: 52rpx;
+    min-width: 52rpx;
+  }
+
+  &__icon-image {
+    width: 28rpx;
+    height: 28rpx;
+    min-width: 28rpx;
+  }
+
+  &__badge {
+    font-size: @fs-md;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    line-height: 1.2;
+    text-transform: uppercase;
+
+    &--indigo {
+      color: @text-info;
+    }
+
+    &--amber {
+      color: @text-warning;
+    }
+
+    &--blue {
+      color: @text-brand-soft;
+    }
+
+    &--emerald {
+      color: @text-success;
+    }
+
+    &--rose {
+      color: @text-danger;
+    }
+  }
+
+  &--wide &__badge {
+    font-size: @fs-2xl;
+  }
+
+  &__content {
+    position: relative;
+    z-index: 1;
+    min-width: 0;
+  }
+
+  &__number {
+    display: flex;
+    align-items: baseline;
+    gap: 10rpx;
+    margin-bottom: 10rpx;
+    flex-wrap: nowrap;
+    min-width: 0;
+    white-space: nowrap;
+  }
+
+  &__leading {
+    font-size: @fs-2xl;
+    font-weight: 900;
+    color: @text-muted;
+    line-height: 1.2;
+    flex-shrink: 0;
+  }
+
+  &__value {
+    font-size: @fs-display-sm;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    min-width: 0;
+
+    &--indigo {
+      color: @text-info;
+    }
+
+    &--amber {
+      color: @text-warning;
+    }
+
+    &--blue {
+      color: @text-brand;
+    }
+
+    &--emerald {
+      color: @text-success;
+    }
+
+    &--rose {
+      color: @text-danger;
+    }
+  }
+
+  &--compact &__head {
+    margin-bottom: 18rpx;
+  }
+
+  &--compact &__icon {
+    width: 52rpx;
+    height: 52rpx;
+    min-width: 52rpx;
+  }
+
+  &--compact &__icon-image {
+    width: 24rpx;
+    height: 24rpx;
+    min-width: 24rpx;
+  }
+
+  &--compact &__badge {
+    font-size: @fs-2xl;
+    letter-spacing: 0.06em;
+  }
+
+  &--compact &__number {
+    gap: 6rpx;
+    margin-bottom: 12rpx;
+  }
+
+  &--compact &__leading {
+    font-size: @fs-xl;
+    line-height: 1;
+  }
+
+  &--compact &__value {
+    font-size: @fs-6xl;
+    letter-spacing: -0.04em;
+    line-height: 1.06;
+  }
+
+  &--wide &__value {
+    font-size: @fs-display-sm;
+  }
+
+  &__desc {
+    display: block;
+    font-size: @fs-md;
+    line-height: 1.45;
+    color: @text-tertiary;
+    font-weight: 500;
+    word-break: break-word;
+  }
+
+  &--compact &__desc {
+    font-size: @fs-base;
+    line-height: 1.5;
+  }
+
+  &__desc-text {
+    color: @text-tertiary;
+  }
+
+  &__desc-strong {
+    font-weight: 900;
+
+    &--primary {
+      color: @text-primary;
+    }
+
+    &--indigo {
+      color: @text-info;
+    }
+
+    &--amber {
+      color: @text-warning;
+    }
+
+    &--blue {
+      color: @text-brand;
+    }
+
+    &--emerald {
+      color: @text-success;
+    }
+
+    &--rose {
+      color: @text-danger;
+    }
+  }
+}

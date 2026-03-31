@@ -1,4 +1,5 @@
 import { clearTimerBag, closeModal, createTimerBag, openModal, pulseState, replayState } from '../../lib/wx/page'
+import { buildAppShareMessage, buildAppTimelineShare, showAppShareMenu } from '../../lib/wx/share'
 import { ensureBootstrapReady } from '../../store/bootstrap'
 import { buildAnnualCards, buildHistoryItems, buildRatioRing, buildReportIcons } from './helper/presentation'
 import { buildReportRuntimeState } from './model/state'
@@ -59,12 +60,14 @@ Page({
   onLoad() {
     const { statusBarHeight } = wx.getSystemInfoSync()
     this.setData({ statusBarHeight: statusBarHeight || 0 })
+    showAppShareMenu()
   },
 
   onShow() {
     if (!ensureBootstrapReady()) {
       return
     }
+    showAppShareMenu()
     this.reloadRuntimeState()
   },
 
@@ -108,16 +111,17 @@ Page({
     pulseState(this, timers, 'report-chart-bar', 'pressStates.chartBarIndex', Number(e.currentTarget.dataset.index), -1, 500)
   },
 
-  pressAnnualCard(e: WechatMiniprogram.TouchEvent) {
-    pulseState(this, timers, 'report-annual-card', 'pressStates.annualIndex', Number(e.currentTarget.dataset.index), -1)
-  },
-
-  openAnnualInfo(e: WechatMiniprogram.TouchEvent) {
-    const key = String(e.currentTarget.dataset.key || '')
+  openAnnualInfo(e: WechatMiniprogram.CustomEvent<{ key?: string }>) {
+    const key = String(e.detail?.key || e.currentTarget.dataset.key || '')
+    const index = Number(e.currentTarget.dataset.index)
     if (!key) return
 
     const activeAnnualInfo = this.data.vm.annualInfoMap?.[key] || null
     if (!activeAnnualInfo) return
+
+    if (!Number.isNaN(index)) {
+      pulseState(this, timers, 'report-annual-card', 'pressStates.annualIndex', index, -1)
+    }
 
     openModal(
       this,
@@ -183,4 +187,12 @@ Page({
   },
 
   stopModalTap() {},
+
+  onShareAppMessage() {
+    return buildAppShareMessage()
+  },
+
+  onShareTimeline() {
+    return buildAppTimelineShare()
+  },
 })

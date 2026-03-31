@@ -38,7 +38,7 @@
 
   &__main {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 24rpx;
     min-width: 0;
     flex: 1;
@@ -90,25 +90,23 @@
   &__copy {
     min-width: 0;
     flex: 1;
+    padding-top: 2rpx;
   }
 
   &__title-row {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 12rpx;
     margin-bottom: 8rpx;
   }
 
   &__title {
-    .type-card-title();
+    .type-feature-card-title();
   }
 
   &__desc {
     display: block;
-    .type-text-secondary();
-    font-size: 20rpx;
-    font-weight: 500;
-    line-height: 1.35;
+    .type-feature-card-subtitle();
   }
 
   &__badge {

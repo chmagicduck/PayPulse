@@ -14,18 +14,14 @@
 </template>
 
 <view class="page-view home-page">
-  <view class="nav-bar" style="padding-top: {{statusBarHeight}}px;">
-    <view class="nav-bar__content">
-      <view class="nav-bar__main">
-        <view class="nav-bar__left">
-          <view class="nav-bar__logo" bind:tap="triggerLogoAnimation">
-            <image class="nav-bar__logo-icon" src="{{iconAnimations.logo ? iconPairs.wavesWhite.animatedSrc : iconPairs.wavesWhite.staticSrc}}" mode="aspectFit" />
-          </view>
-          <text class="nav-bar__title">薪潮涌动</text>
-        </view>
-      </view>
-    </view>
-  </view>
+  <pp-brand-header
+    paddingTop="{{statusBarHeight}}"
+    title="薪潮涌动"
+    logoSrc="{{iconAnimations.logo ? iconPairs.wavesWhite.animatedSrc : iconPairs.wavesWhite.staticSrc}}"
+    logoBg="#2563eb"
+    logoShadow="0 8rpx 24rpx rgba(37, 99, 235, 0.3)"
+    bind:logotap="triggerLogoAnimation"
+  />
 
   <view class="home-main">
     <view class="income-card">
@@ -171,43 +167,27 @@
         bind:manage="openCalendarPage"
       />
       <view class="tide-grid">
-        <view class="tide-card tide-card--blue {{pressStates.tideWallet ? 'tide-card--pressed' : ''}}" bind:tap="triggerWalletTideAnimation">
-          <image class="tide-card__ghost tide-card__ghost--blue" src="{{iconAnimations.tideWallet ? iconPairs.walletBlue.animatedSrc : iconPairs.walletBlue.staticSrc}}" mode="aspectFit" />
-          <view class="tide-card__body">
-            <view class="tide-card__head">
-              <view class="tide-card__icon tide-card__icon--blue">
-                <image class="icon-md" src="{{iconAnimations.tideWallet ? iconPairs.walletWhite.animatedSrc : iconPairs.walletWhite.staticSrc}}" mode="aspectFit" />
-              </view>
-              <text class="tide-card__badge tide-card__badge--blue">发薪日</text>
-            </view>
-            <view class="tide-card__content">
-              <view class="tide-card__number">
-                <text class="tide-card__leading">剩</text>
-                <text class="tide-card__value">{{vm.regularTides[0].days}}天</text>
-              </view>
-              <text class="tide-card__desc">距离下次<text class="tide-card__desc-strong tide-card__desc-strong--blue">发工资</text>越来越近了。</text>
-            </view>
+        <block wx:for="{{tideCards}}" wx:key="key">
+          <view class="tide-grid__item">
+            <pp-metric-card
+              class="tide-grid__card"
+              cardKey="{{item.key}}"
+              variant="{{item.variant}}"
+              tone="{{item.tone}}"
+              iconSrc="{{item.key === 'salary' ? (iconAnimations.tideWallet ? item.animatedIconSrc : item.iconSrc) : (iconAnimations.tideWeekend ? item.animatedIconSrc : item.iconSrc)}}"
+              ghostSrc="{{item.key === 'salary' ? (iconAnimations.tideWallet ? item.animatedGhostSrc : item.ghostSrc) : (iconAnimations.tideWeekend ? item.animatedGhostSrc : item.ghostSrc)}}"
+              badgeText="{{item.badgeText}}"
+              valuePrefix="{{item.valuePrefix}}"
+              valueText="{{item.valueText}}"
+              descPrefix="{{item.descPrefix}}"
+              descStrong="{{item.descStrong}}"
+              descSuffix="{{item.descSuffix}}"
+              descStrongTone="{{item.descStrongTone}}"
+              pressed="{{item.key === 'salary' ? pressStates.tideWallet : pressStates.tideWeekend}}"
+              bind:cardtap="handleTideCardTap"
+            />
           </view>
-        </view>
-
-        <view class="tide-card tide-card--emerald {{pressStates.tideWeekend ? 'tide-card--pressed' : ''}}" bind:tap="triggerWeekendTideAnimation">
-          <image class="tide-card__ghost tide-card__ghost--emerald" src="{{iconAnimations.tideWeekend ? iconPairs.calendarDaysEmerald.animatedSrc : iconPairs.calendarDaysEmerald.staticSrc}}" mode="aspectFit" />
-          <view class="tide-card__body">
-            <view class="tide-card__head">
-              <view class="tide-card__icon tide-card__icon--emerald">
-                <image class="icon-md" src="{{iconAnimations.tideWeekend ? iconPairs.calendarDaysWhite.animatedSrc : iconPairs.calendarDaysWhite.staticSrc}}" mode="aspectFit" />
-              </view>
-              <text class="tide-card__badge tide-card__badge--emerald">放假</text>
-            </view>
-            <view class="tide-card__content">
-              <view class="tide-card__number">
-                <text class="tide-card__leading">剩</text>
-                <text class="tide-card__value">{{vm.regularTides[1].days}}天</text>
-              </view>
-              <text class="tide-card__desc">马上就能迎来<text class="tide-card__desc-strong tide-card__desc-strong--emerald">休息日</text>了。</text>
-            </view>
-          </view>
-        </view>
+        </block>
       </view>
     </view>
 
@@ -313,35 +293,25 @@
       />
 
       <view class="journey-list">
-        <view class="journey-card journey-card--white {{pressStates.journeyLife ? 'journey-card--pressed' : ''}}" bind:tap="triggerJourneyLifeAnimation">
-          <image class="journey-card__ghost journey-card__ghost--indigo" src="{{iconAnimations.journeyLife ? iconPairs.babyIndigo.animatedSrc : iconPairs.babyIndigo.staticSrc}}" mode="aspectFit" />
-          <view class="journey-card__head">
-            <view class="journey-card__icon journey-card__icon--indigo">
-              <image class="icon-md" src="{{iconAnimations.journeyLife ? iconPairs.babyWhite.animatedSrc : iconPairs.babyWhite.staticSrc}}" mode="aspectFit" />
-            </view>
-            <text class="journey-card__eyebrow journey-card__eyebrow--indigo">人生进程</text>
-          </view>
-          <view class="journey-card__number">
-            <text class="journey-card__status">已度过</text>
-            <template is="journey-value" data="{{ item: journeyDisplayItems[0], valueClass: 'journey-card__value journey-card__value--slate' }}" />
-          </view>
-          <text class="journey-card__desc">这是你从<text class="journey-card__desc-strong">出生降临</text>至今在这个世界的体验时长。</text>
-        </view>
-
-        <view class="journey-card journey-card--white {{pressStates.journeyCareer ? 'journey-card--pressed' : ''}}" bind:tap="triggerJourneyCareerAnimation">
-          <image class="journey-card__ghost journey-card__ghost--blue" src="{{iconAnimations.journeyCareer ? iconPairs.briefcaseBlue.animatedSrc : iconPairs.briefcaseBlue.staticSrc}}" mode="aspectFit" />
-          <view class="journey-card__head">
-            <view class="journey-card__icon journey-card__icon--blue">
-              <image class="icon-md" src="{{iconAnimations.journeyCareer ? iconPairs.briefcaseWhite.animatedSrc : iconPairs.briefcaseWhite.staticSrc}}" mode="aspectFit" />
-            </view>
-            <text class="journey-card__eyebrow journey-card__eyebrow--blue">打工时长</text>
-          </view>
-          <view class="journey-card__number">
-            <text class="journey-card__status">已出卖</text>
-            <template is="journey-value" data="{{ item: journeyDisplayItems[1], valueClass: 'journey-card__value journey-card__value--slate' }}" />
-          </view>
-          <text class="journey-card__desc">自从步入<text class="journey-card__desc-strong journey-card__desc-strong--blue">职场江湖</text>以后，你被消耗的岁月。</text>
-        </view>
+        <block wx:for="{{journeySummaryCards}}" wx:key="key">
+          <pp-metric-card
+            class="journey-list__card"
+            cardKey="{{item.key}}"
+            variant="{{item.variant}}"
+            tone="{{item.tone}}"
+            iconSrc="{{item.key === 'life' ? (iconAnimations.journeyLife ? item.animatedIconSrc : item.iconSrc) : (iconAnimations.journeyCareer ? item.animatedIconSrc : item.iconSrc)}}"
+            ghostSrc="{{item.key === 'life' ? (iconAnimations.journeyLife ? item.animatedGhostSrc : item.ghostSrc) : (iconAnimations.journeyCareer ? item.animatedGhostSrc : item.ghostSrc)}}"
+            badgeText="{{item.badgeText}}"
+            valuePrefix="{{item.valuePrefix}}"
+            valueText="{{item.valueText}}"
+            descPrefix="{{item.descPrefix}}"
+            descStrong="{{item.descStrong}}"
+            descSuffix="{{item.descSuffix}}"
+            descStrongTone="{{item.descStrongTone}}"
+            pressed="{{item.key === 'life' ? pressStates.journeyLife : pressStates.journeyCareer}}"
+            bind:cardtap="handleJourneySummaryCardTap"
+          />
+        </block>
 
         <view class="journey-card journey-card--emerald {{pressStates.journeyRetire ? 'journey-card--pressed' : ''}}" bind:tap="triggerJourneyRetireAnimation">
           <image class="journey-card__ghost journey-card__ghost--emerald" src="{{iconAnimations.journeyRetire ? iconPairs.flagEmerald.animatedSrc : iconPairs.flagEmerald.staticSrc}}" mode="aspectFit" />

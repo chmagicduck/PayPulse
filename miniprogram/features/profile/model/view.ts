@@ -36,7 +36,7 @@ export const profileDashboardModel: ProfileViewModel = {
   consoleItems: [
     {
       title: '我的职场档案',
-      desc: '更新生日、工资、发薪日和作息，所有统计都会跟着刷新。',
+      desc: '管理生日薪资和作息',
       tone: 'blue',
       iconName: 'user',
       iconColor: '#3b82f6',
@@ -44,7 +44,7 @@ export const profileDashboardModel: ProfileViewModel = {
     },
     {
       title: '纪念日设置',
-      desc: '把重要日子放上时间轴，给打工生活留一点仪式感。',
+      desc: '把重要日子都记下来',
       tone: 'emerald',
       iconName: 'map-pin',
       iconColor: '#10b981',
@@ -52,7 +52,7 @@ export const profileDashboardModel: ProfileViewModel = {
     },
     {
       title: '查看打工日历',
-      desc: '休息日、调休日和发薪提醒，都能在这里一眼看清。',
+      desc: '休假补班发薪一眼看清',
       tone: 'indigo',
       iconName: 'calendar',
       iconColor: '#4f46e5',
@@ -62,7 +62,7 @@ export const profileDashboardModel: ProfileViewModel = {
   aboutItems: [
     {
       title: '加入组织',
-      desc: '进群和同路人一起交流摸鱼心得，抢先看新功能。',
+      desc: '和群友交流摸鱼心得',
       tone: 'indigo',
       iconName: 'users',
       iconColor: '#6366f1',
@@ -70,7 +70,7 @@ export const profileDashboardModel: ProfileViewModel = {
     },
     {
       title: '关于薪潮涌动',
-      desc: '查看版本更新、产品理念和这款小程序的来路。',
+      desc: '看看版本理念和来路',
       tone: 'slate',
       iconName: 'info',
       iconColor: '#64748b',
@@ -80,7 +80,7 @@ export const profileDashboardModel: ProfileViewModel = {
   storageItems: [
     {
       title: '数据同步中心',
-      desc: '导出备份、查看占用、清空本地数据，都在这里。',
+      desc: '备份导出清空都在这',
       tone: 'amber',
       iconName: 'database',
       iconColor: '#f59e0b',
@@ -105,10 +105,23 @@ function getProfileIconAnimation(name: IconName): SvgAnimationPreset {
   }
 }
 
+function truncateProfileCardDesc(text: string, maxLength: number = 20) {
+  const chars = Array.from(String(text || ''))
+  if (chars.length <= maxLength) {
+    return text
+  }
+
+  if (maxLength <= 1) {
+    return '…'
+  }
+
+  return `${chars.slice(0, maxLength - 1).join('')}…`
+}
+
 function buildProfileMenuItems(group: string, items: ProfileMenuItem[], size: number = 18, durationMs: number = 2200): ProfileMenuRuntimeItem[] {
   return items.map((item, index) => ({
     ...item,
-    desc: item.desc || '',
+    desc: truncateProfileCardDesc(item.desc || ''),
     cardKey: `${group}-${index}`,
     navMethod: item.navMethod || 'navigateTo',
     badge: item.badge || '',

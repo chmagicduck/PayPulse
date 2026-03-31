@@ -51,16 +51,23 @@
     background: radial-gradient(circle, rgba(37, 99, 235, 0.16) 0%, rgba(37, 99, 235, 0) 72%);
   }
 
+  &__brand-row {
+    display: flex;
+    align-items: center;
+    gap: 22rpx;
+    margin-bottom: 24rpx;
+  }
+
   &__brand {
     width: 116rpx;
     height: 116rpx;
-    border-radius: 36rpx;
-    background: linear-gradient(135deg, @slate900 0%, #1e3a8a 100%);
+    border-radius: 28rpx;
+    background: @blue600;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 24rpx 60rpx rgba(37, 99, 235, 0.18);
-    margin-bottom: 24rpx;
+    box-shadow: 0 16rpx 40rpx rgba(37, 99, 235, 0.24);
+    flex-shrink: 0;
   }
 
   &__brand-icon {
@@ -69,12 +76,14 @@
   }
 
   &__eyebrow {
-    display: block;
-    font-size: @fs-sm;
+    display: flex;
+    align-items: center;
+    min-height: 116rpx;
+    font-size: 56rpx;
+    line-height: 1.06;
     color: @text-brand;
     font-weight: 900;
-    letter-spacing: 0.18em;
-    margin-bottom: 14rpx;
+    letter-spacing: -0.04em;
   }
 
   &__title {
@@ -115,14 +124,21 @@
   border-radius: @radius-card;
   padding: 28rpx;
 
+  &__head {
+    display: flex;
+    align-items: flex-start;
+    gap: 18rpx;
+  }
+
   &__icon {
     width: 72rpx;
     height: 72rpx;
+    min-width: 72rpx;
     border-radius: 24rpx;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 18rpx;
+    flex-shrink: 0;
 
     &--blue {
       background: @blue50;
@@ -137,20 +153,21 @@
     }
   }
 
+  &__copy {
+    min-width: 0;
+    flex: 1;
+    padding-top: 2rpx;
+  }
+
   &__title {
     display: block;
-    font-size: @fs-2xl;
-    color: @text-heading;
-    font-weight: 900;
+    .type-feature-card-title();
     margin-bottom: 8rpx;
   }
 
   &__desc {
     display: block;
-    font-size: @fs-lg;
-    color: @text-secondary;
-    font-weight: 700;
-    line-height: 1.7;
+    .type-feature-card-subtitle(@fs-lg, @text-secondary);
   }
 }
 

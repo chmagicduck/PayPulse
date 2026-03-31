@@ -241,6 +241,11 @@
     margin-bottom: 12rpx;
   }
 
+  &__head > view {
+    min-width: 0;
+    flex: 1;
+  }
+
   &__eyebrow {
     display: block;
     .type-eyebrow();
@@ -249,19 +254,12 @@
 
   &__title {
     display: block;
-    .type-card-title();
-    font-size: @fs-4xl;
-    color: @text-primary;
-    font-weight: 900;
+    .type-feature-card-title();
   }
 
   &__desc {
     display: block;
-    .type-text-secondary();
-    font-size: @fs-lg;
-    color: @text-tertiary;
-    font-weight: 700;
-    line-height: 1.7;
+    .type-feature-card-subtitle();
   }
 }
 

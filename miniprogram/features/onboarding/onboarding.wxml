@@ -7,10 +7,12 @@
 
   <view class="onboarding-main">
     <view class="hero-card">
-      <view class="hero-card__brand">
-        <image class="hero-card__brand-icon" src="{{icons.anchor}}" mode="aspectFit" />
+      <view class="hero-card__brand-row">
+        <view class="hero-card__brand">
+          <image class="hero-card__brand-icon" src="{{icons.anchor}}" mode="aspectFit" />
+        </view>
+        <text class="hero-card__eyebrow">{{isResetFlow ? '重新启航' : '首次见面'}}</text>
       </view>
-      <text class="hero-card__eyebrow">{{isResetFlow ? '重新启航' : '首次见面'}}</text>
       <text class="hero-card__title">{{heroTitle}}</text>
       <text class="hero-card__desc">{{heroDesc}}</text>
       <text class="hero-card__subcopy">{{subcopy}}</text>
@@ -18,27 +20,39 @@
 
     <view class="intro-grid">
       <view class="intro-card">
-        <view class="intro-card__icon intro-card__icon--blue">
-          <image class="icon-sm" src="{{icons.user}}" mode="aspectFit" />
+        <view class="intro-card__head">
+          <view class="intro-card__icon intro-card__icon--blue">
+            <image class="icon-sm" src="{{icons.user}}" mode="aspectFit" />
+          </view>
+          <view class="intro-card__copy">
+            <text class="intro-card__title">建立专属档案</text>
+            <text class="intro-card__desc">输入生日、薪资、作息和发薪日，后续所有统计都会据此生成。</text>
+          </view>
         </view>
-        <text class="intro-card__title">建立专属档案</text>
-        <text class="intro-card__desc">输入生日、薪资、作息和发薪日，后续所有统计都会据此生成。</text>
       </view>
 
       <view class="intro-card">
-        <view class="intro-card__icon intro-card__icon--emerald">
-          <image class="icon-sm" src="{{icons.wallet}}" mode="aspectFit" />
+        <view class="intro-card__head">
+          <view class="intro-card__icon intro-card__icon--emerald">
+            <image class="icon-sm" src="{{icons.wallet}}" mode="aspectFit" />
+          </view>
+          <view class="intro-card__copy">
+            <text class="intro-card__title">实时换算摸鱼收益</text>
+            <text class="intro-card__desc">首页、报告和实验室会立刻按你的真实参数开始计算。</text>
+          </view>
         </view>
-        <text class="intro-card__title">实时换算摸鱼收益</text>
-        <text class="intro-card__desc">首页、报告和实验室会立刻按你的真实参数开始计算。</text>
       </view>
 
       <view class="intro-card">
-        <view class="intro-card__icon intro-card__icon--indigo">
-          <image class="icon-sm" src="{{icons.waves}}" mode="aspectFit" />
+        <view class="intro-card__head">
+          <view class="intro-card__icon intro-card__icon--indigo">
+            <image class="icon-sm" src="{{icons.waves}}" mode="aspectFit" />
+          </view>
+          <view class="intro-card__copy">
+            <text class="intro-card__title">所有数据只留在本机</text>
+            <text class="intro-card__desc">档案、记录、时间轴和进度都保存在当前设备，随时可导出、可清空。</text>
+          </view>
         </view>
-        <text class="intro-card__title">所有数据只留在本机</text>
-        <text class="intro-card__desc">档案、记录、时间轴和进度都保存在当前设备，随时可导出、可清空。</text>
       </view>
     </view>
   </view>

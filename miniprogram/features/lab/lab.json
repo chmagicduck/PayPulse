@@ -1,6 +1,7 @@
 {
   "navigationStyle": "custom",
   "usingComponents": {
+    "pp-brand-header": "../../components/ui/pp-brand-header/index",
     "pp-section-header": "../../components/ui/pp-section-header/index",
     "pp-task-card": "../../components/ui/pp-task-card/index"
   }

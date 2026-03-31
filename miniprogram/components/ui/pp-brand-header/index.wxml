@@ -1,0 +1,14 @@
+<view class="pp-brand-header" style="padding-top: {{paddingTop}}px;">
+  <view class="pp-brand-header__content">
+    <view class="pp-brand-header__brand">
+      <view class="pp-brand-header__logo" style="background: {{logoBg}}; box-shadow: {{logoShadow}};" bind:tap="handleLogoTap">
+        <image class="pp-brand-header__logo-icon" src="{{logoSrc}}" mode="aspectFit" />
+      </view>
+      <text class="pp-brand-header__title">{{title}}</text>
+    </view>
+
+    <view wx:if="{{actionIconSrc}}" class="pp-brand-header__action {{actionPressed ? 'pp-brand-header__action--pressed' : ''}}" bind:tap="handleActionTap">
+      <image class="pp-brand-header__action-icon" src="{{actionIconSrc}}" mode="aspectFit" />
+    </view>
+  </view>
+</view>

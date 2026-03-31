@@ -14,10 +14,10 @@ export const reportViewModel = {
     },
   },
   annualCards: [
-    { key: 'moyuIncome', title: '累计摸鱼收益', value: '¥12,480.50', tone: 'indigo', iconName: 'coins', badgeText: '摸鱼收益', desc: '所有摸鱼时长折算出的累计收益。' },
-    { key: 'moyuDays', title: '累计摸鱼天数', value: '248 天', tone: 'amber', iconName: 'calendar-days', badgeText: '摸鱼天数', desc: '只要当天摸过鱼，就记作 1 天。' },
-    { key: 'currentJobSalary', title: '当前工作累计工资', value: '¥38,420.00', tone: 'blue', iconName: 'wallet', badgeText: '当前工资', desc: '从当前工作入职起累计的应发工资。' },
-    { key: 'currentJobCompensation', title: '当前工作预计赔偿金', value: '¥27,000.00', tone: 'rose', iconName: 'briefcase', badgeText: '赔偿估算', desc: '按当前工龄套用 N+1 的估算值。' },
+    { key: 'moyuIncome', title: '累计摸鱼收益', value: '¥12,480.50', tone: 'indigo', iconName: 'coins', badgeText: '累计摸鱼收益', desc: '所有摸鱼时长折算出的累计收益。' },
+    { key: 'moyuDays', title: '累计摸鱼天数', value: '248 天', tone: 'amber', iconName: 'calendar-days', badgeText: '累计摸鱼天数', desc: '只要当天摸过鱼，就记作 1 天。' },
+    { key: 'currentJobSalary', title: '当前工作累计工资', value: '¥38,420.00', tone: 'blue', iconName: 'wallet', badgeText: '当前工作累计工资', desc: '从当前工作入职起累计的应发工资。' },
+    { key: 'currentJobCompensation', title: '当前工作预计赔偿金', value: '¥27,000.00', tone: 'rose', iconName: 'briefcase', badgeText: '当前工作预计赔偿金', desc: '按当前工龄套用 N+1 的估算值。' },
   ],
   annualInfoMap: {
     moyuIncome: {

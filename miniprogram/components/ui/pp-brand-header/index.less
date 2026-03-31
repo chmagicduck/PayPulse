@@ -1,0 +1,71 @@
+@import '../../../theme/entries/core.less';
+
+.pp-brand-header {
+  background: @white;
+  border-bottom: 1rpx solid @slate100;
+
+  &__content {
+    padding: 16rpx 32rpx 20rpx;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16rpx;
+  }
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+    min-width: 0;
+    flex: 1;
+  }
+
+  &__logo {
+    width: 56rpx;
+    height: 56rpx;
+    min-width: 56rpx;
+    border-radius: 14rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__logo-icon {
+    width: 32rpx;
+    height: 32rpx;
+    min-width: 32rpx;
+  }
+
+  &__title {
+    min-width: 0;
+    .type-section-title();
+    font-size: @fs-6xl;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: @text-primary;
+  }
+
+  &__action {
+    width: 56rpx;
+    height: 56rpx;
+    min-width: 56rpx;
+    border-radius: 18rpx;
+    background: @slate50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform @duration-fast ease, background-color @duration-fast ease;
+
+    &--pressed {
+      transform: scale(0.94);
+      background: @slate100;
+    }
+  }
+
+  &__action-icon {
+    width: 28rpx;
+    height: 28rpx;
+    min-width: 28rpx;
+  }
+}

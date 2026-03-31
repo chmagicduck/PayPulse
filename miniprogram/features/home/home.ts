@@ -4,11 +4,12 @@ import { buildDailyMoyuTaskNotice, type DailyMoyuTaskNoticeTone } from '../../li
 import { startMoyuSession, stopMoyuSession, syncMoyuSession } from '../../lib/domain/moyu-session'
 import { formatTimeFieldValue, sanitizeTimeFieldInput } from '../../lib/domain/time-fields'
 import { clearTimerBag, createTimerBag, openModal, replayState } from '../../lib/wx/page'
+import { buildAppShareMessage, buildAppTimelineShare, showAppShareMenu } from '../../lib/wx/share'
 import { ensureBootstrapReady } from '../../store/bootstrap'
 import { readProfileSettings } from '../profile-settings/model/storage'
 import { buildDashboardIcons } from './helper/icons'
 import { buildJourneyDisplayItems, INITIAL_JOURNEY_TIME_MODES, type JourneyTimeModes } from './helper/journey'
-import { buildHomeViewModel, createHomeIconAnimations, createHomePressStates, type HomeIconAnimationKey, type HomePressStateKey } from './helper/page'
+import { buildHomeMetricCards, buildHomeViewModel, createHomeIconAnimations, createHomePressStates, type HomeIconAnimationKey, type HomePressStateKey } from './helper/page'
 import { homeDashboardModel, type JourneyId } from './model/index'
 import { buildHomeDashboardRuntimeState } from './model/state'
 import { adjustTaskCount } from '../lab/model/actions'
@@ -20,6 +21,9 @@ const LIVE_CLOCK_TIMER_KEY = 'live-clock'
 const LIVE_CLOCK_INTERVAL = 1000
 const TASK_NOTICE_HIDE_DURATION = 1680
 const TASK_NOTICE_EXIT_DURATION = 220
+const HOME_ICONS = buildDashboardIcons()
+const INITIAL_JOURNEY_DISPLAY_ITEMS = buildJourneyDisplayItems(homeDashboardModel.lifeJourney, INITIAL_JOURNEY_TIME_MODES)
+const INITIAL_HOME_METRIC_CARDS = buildHomeMetricCards(homeDashboardModel, INITIAL_JOURNEY_DISPLAY_ITEMS, HOME_ICONS.iconPairs)
 
 Page({
   data: {
@@ -39,8 +43,10 @@ Page({
       active: false,
     },
     journeyTimeModes: INITIAL_JOURNEY_TIME_MODES,
-    journeyDisplayItems: buildJourneyDisplayItems(homeDashboardModel.lifeJourney, INITIAL_JOURNEY_TIME_MODES),
-    ...buildDashboardIcons(),
+    journeyDisplayItems: INITIAL_JOURNEY_DISPLAY_ITEMS,
+    tideCards: INITIAL_HOME_METRIC_CARDS.tideCards,
+    journeySummaryCards: INITIAL_HOME_METRIC_CARDS.journeyCards,
+    ...HOME_ICONS,
     iconAnimations: createHomeIconAnimations(),
     pressStates: createHomePressStates(),
   },
@@ -51,12 +57,14 @@ Page({
       statusBarHeight: statusBarHeight || 0,
       showAmount: readAmountVisibility(),
     })
+    showAppShareMenu()
   },
 
   onShow() {
     if (!ensureBootstrapReady()) {
       return
     }
+    showAppShareMenu()
     this.reloadRuntimeState()
     this.startLiveClock()
   },
@@ -77,11 +85,15 @@ Page({
   reloadRuntimeState() {
     const runtimeState = buildHomeDashboardRuntimeState()
     const vm = buildHomeViewModel(runtimeState)
+    const journeyDisplayItems = buildJourneyDisplayItems(vm.lifeJourney, this.data.journeyTimeModes as JourneyTimeModes)
+    const metricCards = buildHomeMetricCards(vm, journeyDisplayItems, HOME_ICONS.iconPairs)
 
     this.setData({
       vm,
       isMoYu: runtimeState.isMoYu,
-      journeyDisplayItems: buildJourneyDisplayItems(vm.lifeJourney, this.data.journeyTimeModes as JourneyTimeModes),
+      journeyDisplayItems,
+      tideCards: metricCards.tideCards,
+      journeySummaryCards: metricCards.journeyCards,
       showAmount: readAmountVisibility(),
     })
   },
@@ -174,13 +186,18 @@ Page({
     this.playIconAnimation('logo', 2800)
   },
 
-  triggerWalletTideAnimation() {
-    this.triggerCardFeedback('tideWallet', 'tideWallet', 2000)
-    this.openCalendarPage()
-  },
+  handleTideCardTap(e: WechatMiniprogram.CustomEvent<{ key?: string }>) {
+    const key = String(e.detail?.key || '')
+    if (!key) {
+      return
+    }
 
-  triggerWeekendTideAnimation() {
-    this.triggerCardFeedback('tideWeekend', 'tideWeekend', 2000)
+    if (key === 'salary') {
+      this.triggerCardFeedback('tideWallet', 'tideWallet', 2000)
+    } else if (key === 'weekend') {
+      this.triggerCardFeedback('tideWeekend', 'tideWeekend', 2000)
+    }
+
     this.openCalendarPage()
   },
 
@@ -199,14 +216,18 @@ Page({
     this.openTimeAxisPage()
   },
 
-  triggerJourneyLifeAnimation() {
-    this.toggleJourneyDisplayMode('life')
-    this.triggerCardFeedback('journeyLife', 'journeyLife', 2000)
-  },
+  handleJourneySummaryCardTap(e: WechatMiniprogram.CustomEvent<{ key?: string }>) {
+    const key = String(e.detail?.key || '') as JourneyId
+    if (key !== 'life' && key !== 'career') {
+      return
+    }
 
-  triggerJourneyCareerAnimation() {
-    this.toggleJourneyDisplayMode('career')
-    this.triggerCardFeedback('journeyCareer', 'journeyCareer', 2000)
+    this.toggleJourneyDisplayMode(key)
+    this.triggerCardFeedback(
+      key === 'life' ? 'journeyLife' : 'journeyCareer',
+      key === 'life' ? 'journeyLife' : 'journeyCareer',
+      2000,
+    )
   },
 
   triggerJourneyRetireAnimation() {
@@ -228,10 +249,13 @@ Page({
       retire: nextMode,
       final: nextMode,
     }
+    const journeyDisplayItems = buildJourneyDisplayItems(this.data.vm.lifeJourney, nextModes)
+    const metricCards = buildHomeMetricCards(this.data.vm, journeyDisplayItems, HOME_ICONS.iconPairs)
 
     this.setData({
       journeyTimeModes: nextModes,
-      journeyDisplayItems: buildJourneyDisplayItems(this.data.vm.lifeJourney, nextModes),
+      journeyDisplayItems,
+      journeySummaryCards: metricCards.journeyCards,
     })
   },
 
@@ -387,5 +411,13 @@ Page({
     setTimeout(() => {
       wx.navigateTo({ url: '/features/time-axis/time-axis' })
     }, 120)
+  },
+
+  onShareAppMessage() {
+    return buildAppShareMessage()
+  },
+
+  onShareTimeline() {
+    return buildAppTimelineShare()
   },
 })

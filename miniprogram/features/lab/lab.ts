@@ -1,6 +1,7 @@
 import { clearTimerBag, createTimerBag, replayState } from '../../lib/wx/page'
 import type { LabProgress } from '../../lib/domain/types'
 import { buildDailyMoyuTaskNotice } from '../../lib/domain/lab-tasks'
+import { buildAppShareMessage, buildAppTimelineShare, showAppShareMenu } from '../../lib/wx/share'
 import { ensureBootstrapReady } from '../../store/bootstrap'
 import { createLabIconAnimations, createLabPressStates } from './helper/page'
 import type { LabTaskRuntimeItem } from './model/index'
@@ -27,12 +28,14 @@ Page({
   onLoad() {
     const { statusBarHeight } = wx.getSystemInfoSync()
     this.setData({ statusBarHeight: statusBarHeight || 0 })
+    showAppShareMenu()
   },
 
   onShow() {
     if (!ensureBootstrapReady()) {
       return
     }
+    showAppShareMenu()
     this.reloadRuntimeState()
   },
 
@@ -150,5 +153,13 @@ Page({
     this.playTaskPress(actionKey)
     this.playTaskIcon(taskId)
     this.showTaskNotice(notice.text, notice.tone)
+  },
+
+  onShareAppMessage() {
+    return buildAppShareMessage()
+  },
+
+  onShareTimeline() {
+    return buildAppTimelineShare()
   },
 })

@@ -1,4 +1,5 @@
 import { handlePageBack } from '../../lib/wx/page'
+import { buildAppShareMessage, buildAppTimelineShare, showAppShareMenu } from '../../lib/wx/share'
 import { ensureBootstrapReady } from '../../store/bootstrap'
 import { buildCommunityRuntimeState } from './model/index'
 
@@ -23,9 +24,11 @@ Page({
   onLoad() {
     const { statusBarHeight } = wx.getSystemInfoSync()
     this.setData({ statusBarHeight: statusBarHeight || 0 })
+    showAppShareMenu()
   },
 
   onShow() {
+    showAppShareMenu()
     ensureBootstrapReady()
   },
 
@@ -54,5 +57,13 @@ Page({
       icon: 'none',
       duration: 2500,
     })
+  },
+
+  onShareAppMessage() {
+    return buildAppShareMessage()
+  },
+
+  onShareTimeline() {
+    return buildAppTimelineShare()
   },
 })

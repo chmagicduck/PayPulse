@@ -630,9 +630,12 @@ export function buildTodayDashboardState(
       rate: (computeSecondSalaryCents(settings, targetDateTime) / 100).toFixed(3),
       workPercent: todayRecord.scheduledWorkDurationSec > 0 ? 100 - idlePercent : 0,
       idlePercent,
-      moyuIncome: formatCurrency(derivedTodayRecord.voyageIncomeCents, 2),
+      moyuIncome: formatCurrency(
+        derivedTodayRecord.voyageIncomeCents + derivedTodayRecord.moyuIncomeCents,
+        2,
+      ),
       monthlyIncome: formatCurrency(
-        monthRecords.reduce((sum, item) => sum + item.voyageIncomeCents, 0),
+        monthRecords.reduce((sum, item) => sum + item.voyageIncomeCents + item.moyuIncomeCents, 0),
         2,
       ),
     },
@@ -786,7 +789,7 @@ export function buildReportViewState(settings: ProfileSettings, targetDateTime: 
         value: formatCurrency(totalMoyuIncomeCents, 2),
         tone: 'indigo',
         iconName: 'coins',
-        badgeText: '摸鱼收益',
+        badgeText: '累计摸鱼收益',
         desc: '所有摸鱼时长折算出的累计收益。',
       },
       {
@@ -795,7 +798,7 @@ export function buildReportViewState(settings: ProfileSettings, targetDateTime: 
         value: `${totalMoyuDays} 天`,
         tone: 'amber',
         iconName: 'calendar-days',
-        badgeText: '摸鱼天数',
+        badgeText: '累计摸鱼天数',
         desc: '只要当天摸过鱼，就记作 1 天。',
       },
       {
@@ -804,7 +807,7 @@ export function buildReportViewState(settings: ProfileSettings, targetDateTime: 
         value: formatCurrency(currentJobStats.accruedSalaryCents, 2),
         tone: 'blue',
         iconName: 'wallet',
-        badgeText: '当前工资',
+        badgeText: '当前收入估算',
         desc: '从当前工作入职起累计的应发工资。',
       },
       {
@@ -813,7 +816,7 @@ export function buildReportViewState(settings: ProfileSettings, targetDateTime: 
         value: formatCurrency(currentJobStats.compensationCents, 2),
         tone: 'rose',
         iconName: 'briefcase',
-        badgeText: '赔偿估算',
+        badgeText: '当前赔偿估算',
         desc: '按当前工龄套用 N+1 的估算值。',
       },
     ],

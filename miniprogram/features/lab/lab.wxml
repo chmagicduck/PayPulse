@@ -1,14 +1,12 @@
 <view class="page-view lab-page">
-  <view class="lab-nav" style="padding-top: {{statusBarHeight}}px;">
-    <view class="lab-nav__content">
-      <view class="lab-nav__brand">
-        <view class="lab-nav__logo" bind:tap="triggerHeaderAnimation">
-          <image class="lab-nav__logo-icon" src="{{iconAnimations.header ? icons.labPair.animatedSrc : icons.labPair.staticSrc}}" mode="aspectFit" />
-        </view>
-        <text class="lab-nav__title">{{copy.header.title}}</text>
-      </view>
-    </view>
-  </view>
+  <pp-brand-header
+    paddingTop="{{statusBarHeight}}"
+    title="{{copy.header.title}}"
+    logoSrc="{{iconAnimations.header ? icons.labPair.animatedSrc : icons.labPair.staticSrc}}"
+    logoBg="#2563eb"
+    logoShadow="0 8rpx 24rpx rgba(37, 99, 235, 0.3)"
+    bind:logotap="triggerHeaderAnimation"
+  />
 
   <view class="lab-main" wx:if="{{currentRank}}">
     <view class="rank-card rank-card--theme-{{currentRank.theme}} rank-card--level-{{currentRank.level}}">
