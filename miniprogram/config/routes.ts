@@ -1,5 +1,11 @@
 export const routes = [
   {
+    featureId: 'onboarding',
+    pageId: 'onboarding',
+    route: 'features/onboarding/onboarding',
+    kind: 'page',
+  },
+  {
     featureId: 'home',
     pageId: 'home',
     route: 'features/home/home',

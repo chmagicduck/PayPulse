@@ -133,12 +133,21 @@ export interface CalendarYearConfig {
   supportOfficialHoliday: boolean
 }
 
+export interface ManagedStorageExportItem {
+  key: string
+  label: string
+  exists: boolean
+  legacy: boolean
+  value: unknown
+}
+
 export interface DataExportPackage {
   schemaVersion: '1.0.0'
   exportedAt: string
   bootstrap: AppBootstrapState
   settings: ProfileSettings | null
   avatar: string | null
+  avatarBackup: string | null
   dailyRecords: DailyVoyageRecord[]
   timeAxisEntries: TimeAxisEntry[]
   labProgress: LabProgress | null
@@ -146,4 +155,5 @@ export interface DataExportPackage {
   preferences: {
     amountVisible: boolean
   }
+  managedStorage: ManagedStorageExportItem[]
 }

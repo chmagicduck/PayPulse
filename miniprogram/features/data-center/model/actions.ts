@@ -1,13 +1,8 @@
-import { safeGetStorageInfo } from '../../../lib/wx/storage'
 import { buildExportPackage, resetAppData } from '../../../store/bootstrap'
+import { measureManagedStorage } from '../../../store/storage-registry'
 
 export function measureStorageUsage() {
-  const info = safeGetStorageInfo()
-  return {
-    usedMb: info.currentSize / 1024,
-    capacityMb: info.limitSize / 1024,
-    keyCount: info.keys.length,
-  }
+  return measureManagedStorage()
 }
 
 export function exportAllData() {

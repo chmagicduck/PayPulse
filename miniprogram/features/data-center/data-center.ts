@@ -116,7 +116,7 @@ Page({
         resetModalVisible: false,
       })
       timers['reset-modal'] = null
-      wx.reLaunch({ url: '/features/profile-settings/profile-settings' })
+      wx.reLaunch({ url: '/features/onboarding/onboarding' })
     }, 280)
   },
 })

@@ -1,10 +1,11 @@
 import { clearTimerBag, createTimerBag, openModal, pulseState, replayState } from '../../lib/wx/page'
+import { buildAppShareMessage, buildAppTimelineShare, showAppShareMenu } from '../../lib/wx/share'
 import { ensureBootstrapReady } from '../../store/bootstrap'
 import { createProfileIconAnimations, createProfilePressStates } from './helper/page'
 import { chooseAlbumAvatarDraft, isProfileAvatarActionCancelled, isProfileAvatarTooLargeError, resolveWechatAvatarDraft } from './model/actions'
 import { buildProfilePageState } from './model/index'
 import { buildProfileRuntimeState } from './model/state'
-import { writeProfileAvatar } from './model/storage'
+import { persistProfileAvatar } from './model/storage'
 
 const timers = createTimerBag()
 const pageState = buildProfilePageState()
@@ -22,12 +23,14 @@ Page({
   onLoad() {
     const { statusBarHeight } = wx.getSystemInfoSync()
     this.setData({ statusBarHeight: statusBarHeight || 0 })
+    showAppShareMenu()
   },
 
   onShow() {
     if (!ensureBootstrapReady()) {
       return
     }
+    showAppShareMenu()
     this.reloadRuntimeState()
   },
 
@@ -36,7 +39,13 @@ Page({
   },
 
   reloadRuntimeState() {
-    this.setData(buildProfileRuntimeState())
+    const runtimeState = buildProfileRuntimeState()
+    this.setData({
+      'vm.user.name': runtimeState.user.name,
+      'vm.user.checkInDays': runtimeState.user.checkInDays,
+      currentAvatar: runtimeState.currentAvatar,
+      currentRank: runtimeState.currentRank,
+    })
   },
 
   triggerHeaderAnimation() {
@@ -80,6 +89,10 @@ Page({
   },
 
   stopModalTap() {},
+
+  pressShareAction() {
+    pulseState(this, timers, 'share-press', 'pressStates.share', true, false)
+  },
 
   selectAvatar(e: WechatMiniprogram.TouchEvent) {
     const { src, index } = e.currentTarget.dataset
@@ -144,10 +157,22 @@ Page({
     }
   },
 
-  confirmAvatar() {
+  async confirmAvatar() {
     pulseState(this, timers, 'avatar-modal-confirm', 'pressStates.modalConfirm', true, false)
-    writeProfileAvatar(String(this.data.draftAvatar))
-    this.hideAvatarModal(true)
+
+    try {
+      const nextAvatar = await persistProfileAvatar(String(this.data.draftAvatar))
+      this.setData({
+        currentAvatar: nextAvatar,
+        draftAvatar: nextAvatar,
+      })
+      this.hideAvatarModal(true)
+    } catch (_error) {
+      wx.showToast({
+        title: '头像保存失败',
+        icon: 'none',
+      })
+    }
   },
 
   pressMenuCard(e: WechatMiniprogram.TouchEvent) {
@@ -171,5 +196,13 @@ Page({
 
       wx.navigateTo({ url })
     }, 110)
+  },
+
+  onShareAppMessage() {
+    return buildAppShareMessage()
+  },
+
+  onShareTimeline() {
+    return buildAppTimelineShare()
   },
 })

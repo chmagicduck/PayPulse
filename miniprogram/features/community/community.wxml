@@ -21,24 +21,13 @@
     </view>
 
     <view class="join-card">
-      <view class="join-card__head">
-        <image class="join-card__anchor" src="{{icons.anchorPair.staticSrc}}" mode="aspectFit" />
-        <text class="join-card__title">打工人摸鱼基地</text>
-        <text class="join-card__subtitle">官方摸鱼交流群</text>
-      </view>
-
-      <view class="join-card__button">
-        <cell
-          class="join-card__cell"
-          url="{{vm.groupUrl}}"
-          bind:startmessage="onStartMessage"
-          bind:completemessage="onCompleteMessage"
-          contactText="点我加入薪潮摸鱼社"
-          contactTextBlod="{{true}}"
-        />
-      </view>
-
-      <text class="join-card__note">{{joinHint || '点击上方按钮会直接拉起官方企微进群流程。'}}</text>
+      <material-cell
+        url="{{vm.groupUrl}}"
+        bind:startmessage="onStartMessage"
+        bind:completemessage="onCompleteMessage"
+        contactText="加入薪潮摸鱼社"
+        contactTextBlod="{{true}}"
+      />
     </view>
 
     <pp-section-header title="群友专属福利" barTone="blue" />

@@ -66,6 +66,14 @@
   align-items: center;
   gap: 24rpx;
 
+  &__main {
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 16rpx;
+  }
+
   &__copy {
     min-width: 0;
     flex: 1;
@@ -112,6 +120,43 @@
     font-weight: 900;
     line-height: 1;
     color: @text-brand-soft;
+    white-space: nowrap;
+  }
+}
+
+.profile-share {
+  width: 64rpx;
+  min-width: 64rpx;
+  max-width: 64rpx;
+  height: 64rpx;
+  padding: 0;
+  margin-left: auto;
+  border-radius: 22rpx;
+  border: 1rpx solid @blue100;
+  background: @blue50;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 6rpx;
+  box-shadow: 0 10rpx 24rpx rgba(37, 99, 235, 0.08);
+  transition: transform @duration-fast ease, box-shadow @duration-normal ease, background-color @duration-normal ease;
+  flex-shrink: 0;
+
+  &::after {
+    border: 0;
+  }
+
+  &--pressed {
+    transform: scale(0.95);
+    box-shadow: 0 12rpx 24rpx rgba(37, 99, 235, 0.12);
+  }
+
+  &__text {
+    font-size: @fs-xs;
+    color: @text-brand;
+    font-weight: 900;
+    line-height: 1;
     white-space: nowrap;
   }
 }

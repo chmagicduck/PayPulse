@@ -13,52 +13,8 @@ function chooseMediaFromAlbum(): Promise<WechatMiniprogram.ChooseMediaSuccessCal
   })
 }
 
-function readFileBase64(filePath: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    wx.getFileSystemManager().readFile({
-      filePath,
-      encoding: 'base64',
-      success: result => {
-        if (typeof result.data === 'string') {
-          resolve(result.data)
-          return
-        }
-
-        reject(new Error('PROFILE_AVATAR_READ_FAILED'))
-      },
-      fail: reject,
-    })
-  })
-}
-
-function buildAvatarMimeType(filePath: string) {
-  const extension = String(filePath.split('.').pop() || '').toLowerCase()
-
-  switch (extension) {
-    case 'jpg':
-    case 'jpeg':
-      return 'image/jpeg'
-    case 'webp':
-      return 'image/webp'
-    case 'gif':
-      return 'image/gif'
-    case 'png':
-    default:
-      return 'image/png'
-  }
-}
-
-function buildAvatarDataUrl(filePath: string, base64: string) {
-  return `data:${buildAvatarMimeType(filePath)};base64,${base64}`
-}
-
 function isUserCancelled(error: unknown) {
   return String((error as { errMsg?: string })?.errMsg || error || '').toLowerCase().includes('cancel')
-}
-
-async function buildAvatarDraft(filePath: string) {
-  const base64 = await readFileBase64(filePath)
-  return buildAvatarDataUrl(filePath, base64)
 }
 
 export function isProfileAvatarTooLargeError(error: unknown) {
@@ -74,7 +30,7 @@ export async function resolveWechatAvatarDraft(avatarUrl: string) {
     return null
   }
 
-  return buildAvatarDraft(avatarUrl)
+  return avatarUrl
 }
 
 export async function chooseAlbumAvatarDraft() {
@@ -90,5 +46,5 @@ export async function chooseAlbumAvatarDraft() {
     throw new Error('PROFILE_AVATAR_TOO_LARGE')
   }
 
-  return buildAvatarDraft(file.tempFilePath)
+  return file.tempFilePath
 }

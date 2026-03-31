@@ -3,7 +3,7 @@ import { getCheckInDays } from '../../../lib/domain/daily-records'
 import { readProfileSettings } from '../../profile-settings/model/storage'
 import { readCurrentLabProgress } from '../../lab/model/actions'
 import { readProfileAvatar } from './storage'
-import { buildProfileCurrentRank, buildProfilePageState, getDefaultProfileAvatar, profileDashboardModel } from './view'
+import { buildProfileCurrentRank, getDefaultProfileAvatar, profileDashboardModel } from './view'
 
 export function buildProfileRuntimeState() {
   const settings = readProfileSettings()
@@ -20,12 +20,12 @@ export function buildProfileRuntimeState() {
       })
     : buildProfileCurrentRank(profileDashboardModel.user.rank)
 
-  return buildProfilePageState({
+  return {
     user: {
       name: settings.nickname || profileDashboardModel.user.name,
       checkInDays: getCheckInDays(),
     },
     currentAvatar,
     currentRank,
-  })
+  }
 }

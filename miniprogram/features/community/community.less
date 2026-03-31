@@ -105,9 +105,9 @@
 .join-card {
   border-radius: @radius-card;
   padding: 36rpx 32rpx;
-  background: @slate900;
-  border-color: @slate900;
-  color: @text-inverse;
+  background: @white;
+  border-color: @slate100;
+  color: @text-heading;
   margin-bottom: 36rpx;
 
   &__head {
@@ -136,16 +136,6 @@
     .type-eyebrow();
   }
 
-  &__button {
-    padding: 8rpx 16rpx;
-    border-radius: 20rpx;
-    background: rgba(255, 255, 255, 0.95);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 18rpx;
-  }
-
   &__note {
     display: block;
     text-align: center;
@@ -159,6 +149,11 @@
 .join-card__cell {
   display: block;
   width: 100%;
+  margin-bottom: 18rpx;
+  border-radius: 28rpx;
+  overflow: hidden;
+  border: 1rpx solid @slate100;
+  box-shadow: @shadow-sm;
 }
 
 .benefit-list {

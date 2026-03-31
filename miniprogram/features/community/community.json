@@ -2,6 +2,6 @@
   "navigationStyle": "custom",
   "usingComponents": {
     "pp-section-header": "../../components/ui/pp-section-header/index",
-    "cell": "plugin://materialPlugin/cell"
+    "material-cell": "plugin://materialPlugin/cell"
   }
 }

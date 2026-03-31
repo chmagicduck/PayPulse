@@ -78,6 +78,7 @@ export type ProfilePageState = {
     camera: string
     cameraBlue: string
     messageSquare: string
+    share2: string
     x: string
   }
 }

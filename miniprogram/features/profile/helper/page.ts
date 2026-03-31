@@ -9,6 +9,7 @@ export function createProfileIconAnimations() {
 export function createProfilePressStates() {
   return {
     avatar: false,
+    share: false,
     cardKey: '',
     avatarOptionIndex: -1,
     wechatAvatar: false,

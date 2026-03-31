@@ -1,0 +1,52 @@
+<view class="page-view onboarding-page">
+  <view class="onboarding-nav" style="padding-top: {{statusBarHeight}}px;">
+    <view class="onboarding-nav__content">
+      <text class="onboarding-nav__title">薪潮涌动</text>
+    </view>
+  </view>
+
+  <view class="onboarding-main">
+    <view class="hero-card">
+      <view class="hero-card__brand">
+        <image class="hero-card__brand-icon" src="{{icons.anchor}}" mode="aspectFit" />
+      </view>
+      <text class="hero-card__eyebrow">{{isResetFlow ? '重新启航' : '首次见面'}}</text>
+      <text class="hero-card__title">{{heroTitle}}</text>
+      <text class="hero-card__desc">{{heroDesc}}</text>
+      <text class="hero-card__subcopy">{{subcopy}}</text>
+    </view>
+
+    <view class="intro-grid">
+      <view class="intro-card">
+        <view class="intro-card__icon intro-card__icon--blue">
+          <image class="icon-sm" src="{{icons.user}}" mode="aspectFit" />
+        </view>
+        <text class="intro-card__title">建立专属档案</text>
+        <text class="intro-card__desc">输入生日、薪资、作息和发薪日，后续所有统计都会据此生成。</text>
+      </view>
+
+      <view class="intro-card">
+        <view class="intro-card__icon intro-card__icon--emerald">
+          <image class="icon-sm" src="{{icons.wallet}}" mode="aspectFit" />
+        </view>
+        <text class="intro-card__title">实时换算摸鱼收益</text>
+        <text class="intro-card__desc">首页、报告和实验室会立刻按你的真实参数开始计算。</text>
+      </view>
+
+      <view class="intro-card">
+        <view class="intro-card__icon intro-card__icon--indigo">
+          <image class="icon-sm" src="{{icons.waves}}" mode="aspectFit" />
+        </view>
+        <text class="intro-card__title">所有数据只留在本机</text>
+        <text class="intro-card__desc">档案、记录、时间轴和进度都保存在当前设备，随时可导出、可清空。</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="onboarding-footer">
+    <view class="onboarding-footer__button" bind:tap="startSetup">
+      <text class="onboarding-footer__button-text">{{ctaText}}</text>
+      <image class="onboarding-footer__button-icon" src="{{icons.arrowRight}}" mode="aspectFit" />
+    </view>
+  </view>
+</view>

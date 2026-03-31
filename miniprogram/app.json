@@ -4,6 +4,7 @@
     "features/report/report",
     "features/lab/lab",
     "features/profile/profile",
+    "features/onboarding/onboarding",
     "features/profile-settings/profile-settings",
     "features/time-axis/time-axis",
     "features/calendar/calendar",
@@ -67,8 +68,5 @@
   },
   "componentFramework": "glass-easel",
   "sitemapLocation": "sitemap.json",
-  "lazyCodeLoading": "requiredComponents",
-  "experimentalFeatures": {
-    "svg": true
-  }
+  "lazyCodeLoading": "requiredComponents"
 }

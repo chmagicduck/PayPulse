@@ -9,14 +9,15 @@ import { migrateAppData } from '../lib/domain/migrations'
 import { recoverStaleMoyuSession, clearMoyuSession, readMoyuSession } from '../lib/domain/moyu-session'
 import { formatDateTimeIso, now } from '../lib/domain/date'
 import type { AppBootstrapState, DataExportPackage, ProfileSettings } from '../lib/domain/types'
-import { safeGetStorage, safeRemoveStorage, safeSetStorage } from '../lib/wx/storage'
+import { safeGetStorage, safeSetStorage } from '../lib/wx/storage'
 import { createDefaultLabProgress, readLabProgress, writeLabProgress } from '../features/lab/model/storage'
 import { readProfileSettings, writeProfileSettings } from '../features/profile-settings/model/storage'
 import { readProfileAvatar, writeProfileAvatar } from '../features/profile/model/storage'
 import { ensureDefaultTimeAxisEntries, readTimeAxisEntries } from '../features/time-axis/model/storage'
 import { profileDashboardModel } from '../features/profile/model/index'
+import { clearManagedStorage, readAvatarBackupForExport, readManagedStorageExportItems } from './storage-registry'
 
-const SETTINGS_ROUTE = '/features/profile-settings/profile-settings'
+const ONBOARDING_ROUTE = '/features/onboarding/onboarding'
 const HOME_ROUTE = '/features/home/home'
 
 let hasPreparedCurrentLaunch = false
@@ -58,7 +59,7 @@ export function ensureBootstrapReady() {
     return true
   }
 
-  wx.reLaunch({ url: SETTINGS_ROUTE })
+  wx.reLaunch({ url: ONBOARDING_ROUTE })
   return false
 }
 
@@ -70,7 +71,6 @@ export function initializeAppData(settings: ProfileSettings) {
   writeLabProgress(createDefaultLabProgress())
   clearLegacyReportAdjustments()
   clearMoyuSession()
-  safeRemoveStorage(storageKeys.homeScaffold)
   const stamp = formatDateTimeIso(now())
   writeBootstrapState({
     schemaVersion: '1.0.0',
@@ -88,16 +88,7 @@ export function saveProfileSettingsAndRefresh(settings: ProfileSettings) {
 
 export function resetAppData() {
   const resetAt = formatDateTimeIso(now())
-  safeRemoveStorage(storageKeys.appBootstrapState)
-  safeRemoveStorage(storageKeys.homeScaffold)
-  safeRemoveStorage(storageKeys.profileSettings)
-  safeRemoveStorage(storageKeys.profileAvatar)
-  safeRemoveStorage(storageKeys.homeDailySession)
-  safeRemoveStorage(storageKeys.homeAmountVisibility)
-  safeRemoveStorage(storageKeys.labProgress)
-  safeRemoveStorage(storageKeys.timeAxisEntries)
-  safeRemoveStorage(storageKeys.reportHistoryAdjustments)
-  safeRemoveStorage(storageKeys.moyuSession)
+  clearManagedStorage()
   hasPreparedCurrentLaunch = false
 
   writeBootstrapState({
@@ -117,6 +108,7 @@ export function buildExportPackage(): DataExportPackage {
     bootstrap: readBootstrapState(),
     settings: isBootstrapReady() ? readProfileSettings() : null,
     avatar: readProfileAvatar(),
+    avatarBackup: readAvatarBackupForExport(),
     dailyRecords: Object.values(safeGetStorage(storageKeys.homeDailySession, {} as Record<string, never>)) as DataExportPackage['dailyRecords'],
     timeAxisEntries: readTimeAxisEntries(),
     labProgress: readLabProgress(),
@@ -124,6 +116,7 @@ export function buildExportPackage(): DataExportPackage {
     preferences: {
       amountVisible: readAmountVisibility(),
     },
+    managedStorage: readManagedStorageExportItems(),
   }
 }
 
