@@ -9,6 +9,7 @@ export const defaultProfileSettings: ProfileSettings = {
   gender: 'male',
   retirementProfile: 'male-60',
   careerStartDate: '',
+  currentJobStartDate: '',
   retirementAge: 60,
   retirementAgeEditedByUser: false,
   expectedLifespan: genderDefaults.male.expectedLifespan,
@@ -37,6 +38,7 @@ export function toProfileSettingsForm(settings: ProfileSettings): ProfileSetting
     gender: settings.gender,
     retirementProfile,
     careerStartDate: settings.careerStartDate,
+    currentJobStartDate: settings.currentJobStartDate,
     retirementAge: String(
       settings.retirementAgeEditedByUser
         ? settings.retirementAge

@@ -23,6 +23,7 @@ export interface ProfileSettings {
   gender: Gender
   retirementProfile: RetirementProfile
   careerStartDate: string
+  currentJobStartDate: string
   retirementAge: number
   retirementAgeEditedByUser: boolean
   expectedLifespan: number

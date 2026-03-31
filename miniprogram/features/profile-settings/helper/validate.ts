@@ -24,6 +24,14 @@ export function validateProfileSettings(form: ProfileSettingsForm): ProfileSetti
     return { ok: false, message: '童工犯法！入职时间不能早于生日' }
   }
 
+  if (!normalizedForm.currentJobStartDate || parseDateString(normalizedForm.currentJobStartDate) > startOfDay(now())) {
+    return { ok: false, message: '当前工作入职日期不能晚于今天' }
+  }
+
+  if (parseDateString(normalizedForm.currentJobStartDate) < parseDateString(normalizedForm.birthday)) {
+    return { ok: false, message: '当前工作入职日期不能早于生日' }
+  }
+
   const retirementAge = Number(normalizedForm.retirementAge)
   const expectedLifespan = Number(normalizedForm.expectedLifespan)
   const monthlySalary = Number(normalizedForm.monthlySalary)
@@ -84,6 +92,7 @@ export function validateProfileSettings(form: ProfileSettingsForm): ProfileSetti
     gender: normalizedForm.gender,
     retirementProfile: normalizedForm.retirementProfile,
     careerStartDate: normalizedForm.careerStartDate || today,
+    currentJobStartDate: normalizedForm.currentJobStartDate || today,
     retirementAge: Number(normalizedForm.retirementAge),
     retirementAgeEditedByUser: normalizedForm.retirementAgeEditedByUser,
     expectedLifespan,

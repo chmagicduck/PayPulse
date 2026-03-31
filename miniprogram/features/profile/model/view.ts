@@ -58,14 +58,14 @@ export const profileDashboardModel: ProfileViewModel = {
   ],
   aboutItems: [
     {
-      title: '打工人交流群',
+      title: '加入组织',
       tone: 'indigo',
       iconName: 'users',
       iconColor: '#6366f1',
       url: '/features/community/community',
     },
     {
-      title: '系统通知',
+      title: '关于薪潮涌动',
       tone: 'slate',
       iconName: 'info',
       iconColor: '#64748b',

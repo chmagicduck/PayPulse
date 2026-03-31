@@ -4,16 +4,20 @@ import { reportViewModel } from '../model/index'
 type AnnualTone = 'indigo' | 'amber' | 'blue' | 'rose'
 
 type HistoryItem = {
+  fullDate?: string
   date: string
   duration: string
   income: string
 }
 
 type AnnualCard = {
+  key: string
   title: string
   value: string
   tone: AnnualTone
   iconName: string
+  badgeText: string
+  desc: string
 }
 
 function strToArrayBuffer(str: string): ArrayBuffer {
@@ -60,7 +64,8 @@ export function buildRatioRing(moyuPercent: number): string {
 export function buildAnnualCards(cards: readonly AnnualCard[] = reportViewModel.annualCards) {
   return cards.map(item =>
     Object.assign({}, item, {
-      iconSrc: icon(item.iconName as IconName, getAnnualToneColor(item.tone as AnnualTone), 18),
+      iconSrc: icon(item.iconName as IconName, '#ffffff', 18),
+      ghostIconSrc: icon(item.iconName as IconName, getAnnualToneColor(item.tone as AnnualTone), 54),
     }),
   )
 }
@@ -73,6 +78,7 @@ export function formatHistoryDate(date: string) {
 export function buildHistoryItems(items: readonly HistoryItem[] = reportViewModel.historyItems) {
   return items.map(item =>
     Object.assign({}, item, {
+      fullDate: item.fullDate || item.date,
       displayDate: formatHistoryDate(item.date),
     }),
   )
@@ -86,6 +92,7 @@ export function buildReportIcons() {
       durationMs: 2400,
     }),
     filter: icon('filter', '#94a3b8', 16),
+    info: icon('info', '#64748b', 14),
     trendingUp: icon('trending-up', '#10b981', 12),
     clock: icon('clock', '#94a3b8', 10),
     chevronLeft: icon('chevron-left', '#cbd5e1', 14),
@@ -93,6 +100,7 @@ export function buildReportIcons() {
   } as {
     chartPair: IconImagePair
     filter: string
+    info: string
     trendingUp: string
     clock: string
     chevronLeft: string

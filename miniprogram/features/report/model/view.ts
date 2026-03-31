@@ -1,37 +1,12 @@
 export const reportViewModel = {
   trend: {
+    subtitle: '本月工作日摸鱼概览',
+    summaryLabel: '本月总计',
     riseText: '+12.5%',
     bars: [
-      { day: '1', incomeHeight: '32%', durationHeight: '26%', incomeText: '¥24', durationText: '1.2h' },
-      { day: '2', incomeHeight: '38%', durationHeight: '30%', incomeText: '¥29', durationText: '1.5h' },
-      { day: '3', incomeHeight: '46%', durationHeight: '34%', incomeText: '¥35', durationText: '1.7h' },
-      { day: '4', incomeHeight: '52%', durationHeight: '40%', incomeText: '¥41', durationText: '2.0h' },
-      { day: '5', incomeHeight: '44%', durationHeight: '36%', incomeText: '¥34', durationText: '1.8h' },
-      { day: '6', incomeHeight: '58%', durationHeight: '46%', incomeText: '¥48', durationText: '2.3h' },
-      { day: '7', incomeHeight: '64%', durationHeight: '50%', incomeText: '¥53', durationText: '2.6h' },
-      { day: '8', incomeHeight: '48%', durationHeight: '38%', incomeText: '¥39', durationText: '1.9h' },
-      { day: '9', incomeHeight: '42%', durationHeight: '34%', incomeText: '¥32', durationText: '1.7h' },
-      { day: '10', incomeHeight: '72%', durationHeight: '62%', incomeText: '¥61', durationText: '3.1h' },
-      { day: '11', incomeHeight: '68%', durationHeight: '58%', incomeText: '¥58', durationText: '2.9h' },
-      { day: '12', incomeHeight: '54%', durationHeight: '44%', incomeText: '¥45', durationText: '2.2h' },
-      { day: '13', incomeHeight: '47%', durationHeight: '40%', incomeText: '¥37', durationText: '2.0h' },
-      { day: '14', incomeHeight: '62%', durationHeight: '54%', incomeText: '¥52', durationText: '2.7h' },
-      { day: '15', incomeHeight: '48%', durationHeight: '38%', incomeText: '¥40', durationText: '1.9h' },
-      { day: '16', incomeHeight: '56%', durationHeight: '45%', incomeText: '¥46', durationText: '2.3h' },
-      { day: '17', incomeHeight: '60%', durationHeight: '51%', incomeText: '¥49', durationText: '2.5h' },
-      { day: '18', incomeHeight: '66%', durationHeight: '55%', incomeText: '¥55', durationText: '2.8h' },
-      { day: '19', incomeHeight: '50%', durationHeight: '42%', incomeText: '¥42', durationText: '2.1h' },
-      { day: '20', incomeHeight: '85%', durationHeight: '74%', incomeText: '¥72', durationText: '3.7h' },
-      { day: '21', incomeHeight: '74%', durationHeight: '64%', incomeText: '¥64', durationText: '3.2h' },
-      { day: '22', incomeHeight: '58%', durationHeight: '47%', incomeText: '¥47', durationText: '2.4h' },
-      { day: '23', incomeHeight: '52%', durationHeight: '43%', incomeText: '¥44', durationText: '2.1h' },
-      { day: '24', incomeHeight: '70%', durationHeight: '60%', incomeText: '¥59', durationText: '3.0h' },
-      { day: '25', incomeHeight: '67%', durationHeight: '58%', incomeText: '¥56', durationText: '2.9h' },
-      { day: '26', incomeHeight: '61%', durationHeight: '50%', incomeText: '¥50', durationText: '2.5h' },
-      { day: '27', incomeHeight: '57%', durationHeight: '46%', incomeText: '¥46', durationText: '2.3h' },
-      { day: '28', incomeHeight: '63%', durationHeight: '52%', incomeText: '¥51', durationText: '2.6h' },
-      { day: '29', incomeHeight: '69%', durationHeight: '59%', incomeText: '¥57', durationText: '3.0h' },
-      { day: '30', incomeHeight: '76%', durationHeight: '69%', incomeText: '¥65', durationText: '3.4h' },
+      { day: '1', incomeHeight: '32%', durationHeight: '26%', incomeText: '¥24', durationText: '1.2h', isIncomeEmpty: false, isDurationEmpty: false },
+      { day: '2', incomeHeight: '0%', durationHeight: '0%', incomeText: '¥0', durationText: '0.0h', isIncomeEmpty: true, isDurationEmpty: true },
+      { day: '3', incomeHeight: '46%', durationHeight: '34%', incomeText: '¥35', durationText: '1.7h', isIncomeEmpty: false, isDurationEmpty: false },
     ],
     summary: {
       incomeTotal: '¥1,824',
@@ -39,11 +14,45 @@ export const reportViewModel = {
     },
   },
   annualCards: [
-    { title: '年度带薪摸鱼', value: '¥12,480.50', tone: 'indigo', iconName: 'coins' },
-    { title: '成功摸鱼天数', value: '248 天', tone: 'amber', iconName: 'calendar-days' },
-    { title: '月均摸鱼收益', value: '¥1,040.00', tone: 'blue', iconName: 'trending-up' },
-    { title: '年度打工总收入', value: '98.5%', tone: 'rose', iconName: 'trophy' },
+    { key: 'moyuIncome', title: '累计摸鱼收益', value: '¥12,480.50', tone: 'indigo', iconName: 'coins', badgeText: '摸鱼收益', desc: '所有摸鱼时长折算出的累计收益。' },
+    { key: 'moyuDays', title: '累计摸鱼天数', value: '248 天', tone: 'amber', iconName: 'calendar-days', badgeText: '摸鱼天数', desc: '只要当天摸过鱼，就记作 1 天。' },
+    { key: 'currentJobSalary', title: '当前工作累计工资', value: '¥38,420.00', tone: 'blue', iconName: 'wallet', badgeText: '当前工资', desc: '从当前工作入职起累计的应发工资。' },
+    { key: 'currentJobCompensation', title: '当前工作预计赔偿金', value: '¥27,000.00', tone: 'rose', iconName: 'briefcase', badgeText: '赔偿估算', desc: '按当前工龄套用 N+1 的估算值。' },
   ],
+  annualInfoMap: {
+    moyuIncome: {
+      title: '累计摸鱼收益',
+      rule: '基于全部摸鱼记录，按每个工作日对应的秒薪累计计算。',
+      details: [
+        { label: '累计摸鱼收益', value: '¥12,480.50' },
+        { label: '累计摸鱼时长', value: '312小时18分' },
+      ],
+    },
+    moyuDays: {
+      title: '累计摸鱼天数',
+      rule: '只统计有摸鱼时长的日期，时长大于 0 才会记作 1 天。',
+      details: [
+        { label: '有效摸鱼天数', value: '248 天' },
+        { label: '累计摸鱼时长', value: '312小时18分' },
+      ],
+    },
+    currentJobSalary: {
+      title: '当前工作累计工资',
+      rule: '从当前工作入职日期起，工作日按应发工资累计，今天只累计到当前时刻。',
+      details: [
+        { label: '累计应计工时', value: '1480小时36分' },
+        { label: '当前工作开始', value: '2024-07-08' },
+      ],
+    },
+    currentJobCompensation: {
+      title: '当前工作预计赔偿金',
+      rule: '按当前工作工龄估算 N+1，满 6 个月按 1 个月，不满 6 个月按 0.5 个月。',
+      details: [
+        { label: '当前工作工龄', value: '1年8个月23天' },
+        { label: '赔偿口径', value: 'N+1（3个月）' },
+      ],
+    },
+  },
   ratio: {
     stats: {
       day: { work: 75, moyu: 25 },

@@ -6,6 +6,7 @@ export type ProfileSettingsForm = {
   gender: Gender
   retirementProfile: RetirementProfile
   careerStartDate: string
+  currentJobStartDate: string
   retirementAge: string
   retirementAgeEditedByUser: boolean
   expectedLifespan: string

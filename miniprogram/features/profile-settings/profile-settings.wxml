@@ -4,7 +4,7 @@
       <view class="settings-nav__back {{!bootstrapReady ? 'settings-nav__back--disabled' : ''}}" bind:tap="handleBack">
         <image class="icon-lg" src="{{icons.chevronLeft}}" mode="aspectFit" />
       </view>
-      <text class="settings-nav__title">我的职场档案</text>
+      <text class="settings-nav__title">职场档案</text>
       <view class="settings-nav__placeholder"></view>
     </view>
   </view>
@@ -63,14 +63,26 @@
     <view class="settings-section">
       <pp-section-header title="职场关键指标" barTone="blue" />
 
-      <view class="field">
-        <view class="field__label">
-          <image class="icon-xs" src="{{icons.briefcase}}" mode="aspectFit" />
-          <text>受苦纪念日 (首份工作)</text>
+      <view class="field-grid">
+        <view class="field">
+          <view class="field__label">
+            <image class="icon-xs" src="{{icons.briefcase}}" mode="aspectFit" />
+            <text>受苦纪念日 (首份工作)</text>
+          </view>
+          <picker mode="date" value="{{form.careerStartDate}}" data-field="careerStartDate" bindchange="updateField">
+            <view class="field__picker">{{form.careerStartDate}}</view>
+          </picker>
         </view>
-        <picker mode="date" value="{{form.careerStartDate}}" data-field="careerStartDate" bindchange="updateField">
-          <view class="field__picker">{{form.careerStartDate}}</view>
-        </picker>
+
+        <view class="field">
+          <view class="field__label">
+            <image class="icon-xs" src="{{icons.calendarDays}}" mode="aspectFit" />
+            <text>当前工作入职日期</text>
+          </view>
+          <picker mode="date" value="{{form.currentJobStartDate}}" data-field="currentJobStartDate" bindchange="updateField">
+            <view class="field__picker">{{form.currentJobStartDate}}</view>
+          </picker>
+        </view>
       </view>
 
       <view class="field-grid">

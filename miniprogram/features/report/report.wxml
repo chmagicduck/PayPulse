@@ -16,6 +16,39 @@
 
   <view class="report-main">
     <view class="report-section">
+      <view class="report-section-head">
+        <pp-section-header title="打工成就" barTone="amber" trimBottom="{{true}}" />
+      </view>
+
+      <view class="annual-grid">
+        <block wx:for="{{annualCards}}" wx:key="key">
+          <view class="annual-tide-card annual-tide-card--{{item.tone}} {{pressStates.annualIndex === index ? 'annual-tide-card--pressed' : ''}}" data-index="{{index}}" bind:tap="pressAnnualCard">
+            <image class="annual-tide-card__ghost annual-tide-card__ghost--{{item.tone}}" src="{{item.ghostIconSrc}}" mode="aspectFit" />
+
+            <view class="annual-tide-card__info {{activeAnnualInfoKey === item.key ? 'annual-tide-card__info--active' : ''}}" data-key="{{item.key}}" catch:tap="openAnnualInfo">
+              <image class="annual-tide-card__info-icon" src="{{icons.info}}" mode="aspectFit" />
+            </view>
+
+            <view class="annual-tide-card__body">
+              <view class="annual-tide-card__head">
+                <view class="annual-tide-card__icon annual-tide-card__icon--{{item.tone}}">
+                  <image class="icon-sm" src="{{item.iconSrc}}" mode="aspectFit" />
+                </view>
+                <text class="annual-tide-card__badge annual-tide-card__badge--{{item.tone}}">{{item.badgeText}}</text>
+              </view>
+
+              <view class="annual-tide-card__content">
+                <text class="annual-tide-card__title">{{item.title}}</text>
+                <text class="annual-tide-card__value annual-tide-card__value--{{item.tone}}">{{item.value}}</text>
+                <text class="annual-tide-card__desc">{{item.desc}}</text>
+              </view>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <view class="report-section">
       <view class="report-section-head report-section-head--toolbar">
         <pp-section-header
           title="搞钱趋势"
@@ -52,7 +85,10 @@
                 </view>
                 <view class="chart-bar__body">
                   <view class="chart-bar__track chart-bar__track--{{activeTab === 'income' ? 'indigo' : 'amber'}}"></view>
-                  <view class="chart-bar__fill chart-bar__fill--{{activeTab === 'income' ? 'indigo' : 'amber'}}" style="height: {{activeTab === 'income' ? item.incomeHeight : item.durationHeight}};"></view>
+                  <view
+                    class="chart-bar__fill chart-bar__fill--{{activeTab === 'income' ? 'indigo' : 'amber'}} {{activeTab === 'income' ? (item.isIncomeEmpty ? 'chart-bar__fill--empty' : '') : (item.isDurationEmpty ? 'chart-bar__fill--empty' : '')}}"
+                    style="height: {{activeTab === 'income' ? item.incomeHeight : item.durationHeight}};"
+                  ></view>
                 </view>
                 <text class="chart-bar__label">{{item.day}}</text>
               </view>
@@ -79,23 +115,7 @@
       </view>
     </view>
 
-    <view class="report-section">
-      <view class="report-section-head">
-        <pp-section-header title="年度打工成就" barTone="amber" trimBottom="{{true}}" />
-      </view>
 
-      <view class="annual-grid">
-        <block wx:for="{{annualCards}}" wx:key="title">
-          <view class="annual-card annual-card--{{item.tone}} {{pressStates.annualIndex === index ? 'annual-card--pressed' : ''}}" data-index="{{index}}" bind:tap="pressAnnualCard">
-            <view class="annual-card__icon annual-card__icon--{{item.tone}}">
-              <image class="icon-sm" src="{{item.iconSrc}}" mode="aspectFit" />
-            </view>
-            <text class="annual-card__title">{{item.title}}</text>
-            <text class="annual-card__value {{item.tone === 'rose' ? 'annual-card__value--rose' : ''}}">{{item.value}}</text>
-          </view>
-        </block>
-      </view>
-    </view>
 
     <view class="report-section">
       <view class="report-section-head report-section-head--toolbar">
@@ -152,37 +172,77 @@
 
     <view class="report-section report-section--last">
       <view class="report-section-head">
-        <pp-section-header title="近期摸鱼记录" barTone="slate" trimBottom="{{true}}" />
+        <pp-section-header title="摸鱼记录" barTone="slate" trimBottom="{{true}}" />
       </view>
 
-      <view class="history-list">
-        <block wx:for="{{historyItems}}" wx:key="date">
-          <view class="history-card {{pressStates.historyIndex === index ? 'history-card--pressed' : ''}}" data-index="{{index}}" bind:tap="pressHistoryCard">
-            <view class="history-card__main">
-              <view class="history-card__left">
-                <view class="history-card__date-pill">
-                  <text class="history-card__date">{{item.displayDate}}</text>
-                </view>
-                <view class="history-card__divider"></view>
-
-                <view class="history-card__copy">
-                  <view class="history-card__duration-row">
-                    <image class="history-card__clock" src="{{icons.clock}}" mode="aspectFit" />
-                    <text class="history-card__duration">{{item.duration}}</text>
-                  </view>
-                  <text class="history-card__hint">如需修改今日摸鱼时长，请去“今日概览”操作</text>
-                </view>
+      <view wx:if="{{visibleHistoryItems.length}}">
+        <view class="history-list">
+          <block wx:for="{{visibleHistoryItems}}" wx:key="fullDate">
+            <view class="history-row">
+              <view class="history-row__date-col">
+                <text class="history-row__date">{{item.displayDate}}</text>
               </view>
 
-              <view class="history-card__right">
-                <view class="history-card__income-copy">
-                  <text class="history-card__income">+{{item.income}}</text>
-                  <text class="history-card__income-label">收益</text>
+              <view class="history-row__metric">
+                <view class="history-row__metric-head">
+                  <image class="history-row__clock" src="{{icons.clock}}" mode="aspectFit" />
+                  <text class="history-row__metric-label">摸鱼时长</text>
                 </view>
+                <text class="history-row__metric-value">{{item.duration}}</text>
+              </view>
+
+              <view class="history-row__income-col">
+                <text class="history-row__income">+{{item.income}}</text>
+                <text class="history-row__income-label">收益</text>
               </view>
             </view>
+          </block>
+        </view>
+
+        <view class="history-pagination" wx:if="{{historyTotalPages > 1}}">
+          <view class="history-pagination__btn {{historyPage <= 1 ? 'history-pagination__btn--disabled' : ''}} {{pressStates.historyPrev ? 'history-pagination__btn--pressed' : ''}}" bind:tap="goPrevHistoryPage">
+            <text class="history-pagination__btn-text">上一页</text>
           </view>
-        </block>
+          <text class="history-pagination__status">第 {{historyPage}} / {{historyTotalPages}} 页</text>
+          <view class="history-pagination__btn {{historyPage >= historyTotalPages ? 'history-pagination__btn--disabled' : ''}} {{pressStates.historyNext ? 'history-pagination__btn--pressed' : ''}}" bind:tap="goNextHistoryPage">
+            <text class="history-pagination__btn-text">下一页</text>
+          </view>
+        </view>
+      </view>
+
+      <view wx:else class="history-empty">
+        <text class="history-empty__text">这个月还没有摸鱼记录，先去偷会儿闲吧。</text>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{showAnnualInfoModal}}" class="info-modal {{annualInfoModalVisible ? 'info-modal--visible' : ''}}" bind:tap="closeAnnualInfo">
+    <view class="info-sheet {{annualInfoModalVisible ? 'info-sheet--visible' : ''}}" catch:tap="stopModalTap">
+      <view class="info-sheet__header">
+        <view class="info-sheet__titles">
+          <text class="info-sheet__title">{{activeAnnualInfo.title}}</text>
+          <text class="info-sheet__subtitle">查看这个指标的计算口径与工时明细</text>
+        </view>
+        <view class="info-sheet__close {{pressStates.annualInfoClose ? 'info-sheet__close--pressed' : ''}}" bind:tap="closeAnnualInfo">
+          <image class="icon-lg" src="{{icons.x}}" mode="aspectFit" />
+        </view>
+      </view>
+
+      <view class="info-sheet__body" wx:if="{{activeAnnualInfo}}">
+        <view class="info-sheet__rule">
+          <text class="info-sheet__rule-label">计算规则</text>
+          <text class="info-sheet__rule-text">{{activeAnnualInfo.rule}}</text>
+        </view>
+
+        <view class="info-sheet__detail-block">
+          <text class="info-sheet__detail-title">{{activeAnnualInfoKey === 'currentJobCompensation' ? '计算工龄' : '计算工时'}}</text>
+          <block wx:for="{{activeAnnualInfo.details}}" wx:key="label">
+            <view class="info-sheet__detail-row">
+              <text class="info-sheet__detail-label">{{item.label}}</text>
+              <text class="info-sheet__detail-value">{{item.value}}</text>
+            </view>
+          </block>
+        </view>
       </view>
     </view>
   </view>

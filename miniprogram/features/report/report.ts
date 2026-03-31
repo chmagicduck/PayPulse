@@ -1,4 +1,4 @@
-import { clearTimerBag, createTimerBag, pulseState, replayState } from '../../lib/wx/page'
+import { clearTimerBag, closeModal, createTimerBag, openModal, pulseState, replayState } from '../../lib/wx/page'
 import { ensureBootstrapReady } from '../../store/bootstrap'
 import { buildAnnualCards, buildHistoryItems, buildRatioRing, buildReportIcons } from './helper/presentation'
 import { buildReportRuntimeState } from './model/state'
@@ -11,6 +11,19 @@ type RatioItem = { work: number; moyu: number }
 const timers = createTimerBag()
 const DEFAULT_TAB_KEY: TrendTabKey = 'income'
 const DEFAULT_RANGE_KEY: RangeKey = 'week'
+const HISTORY_PAGE_SIZE = 7
+
+function buildHistoryPageState(historyItems: any[], page: number = 1) {
+  const historyTotalPages = Math.max(1, Math.ceil(historyItems.length / HISTORY_PAGE_SIZE))
+  const safePage = Math.min(historyTotalPages, Math.max(1, page))
+  const startIndex = (safePage - 1) * HISTORY_PAGE_SIZE
+
+  return {
+    historyPage: safePage,
+    historyTotalPages,
+    visibleHistoryItems: historyItems.slice(startIndex, startIndex + HISTORY_PAGE_SIZE),
+  }
+}
 
 Page({
   data: {
@@ -22,6 +35,11 @@ Page({
     ratioRingSrc: buildRatioRing(reportViewModel.ratio.stats[DEFAULT_RANGE_KEY].moyu),
     annualCards: buildAnnualCards(reportViewModel.annualCards as any) as any[],
     historyItems: buildHistoryItems(reportViewModel.historyItems as any) as any[],
+    ...buildHistoryPageState(buildHistoryItems(reportViewModel.historyItems as any) as any[]),
+    showAnnualInfoModal: false,
+    annualInfoModalVisible: false,
+    activeAnnualInfoKey: '',
+    activeAnnualInfo: null as any,
     icons: buildReportIcons(),
     iconAnimations: {
       chart: false,
@@ -32,7 +50,9 @@ Page({
       rangeKey: '',
       chartBarIndex: -1,
       annualIndex: -1,
-      historyIndex: -1,
+      historyPrev: false,
+      historyNext: false,
+      annualInfoClose: false,
     },
   },
 
@@ -56,12 +76,14 @@ Page({
     const vm = buildReportRuntimeState()
     const range = this.data.timeRange as RangeKey
     const currentRatio = Object.assign({}, vm.ratio.stats[range]) as RatioItem
+    const historyItems = buildHistoryItems(vm.historyItems as any) as any[]
     this.setData({
       vm,
       currentRatio,
       ratioRingSrc: buildRatioRing(currentRatio.moyu),
       annualCards: buildAnnualCards(vm.annualCards as any) as any[],
-      historyItems: buildHistoryItems(vm.historyItems as any) as any[],
+      historyItems,
+      ...buildHistoryPageState(historyItems, 1),
     })
   },
 
@@ -90,6 +112,28 @@ Page({
     pulseState(this, timers, 'report-annual-card', 'pressStates.annualIndex', Number(e.currentTarget.dataset.index), -1)
   },
 
+  openAnnualInfo(e: WechatMiniprogram.TouchEvent) {
+    const key = String(e.currentTarget.dataset.key || '')
+    if (!key) return
+
+    const activeAnnualInfo = this.data.vm.annualInfoMap?.[key] || null
+    if (!activeAnnualInfo) return
+
+    openModal(
+      this,
+      timers,
+      'report-annual-info',
+      {
+        show: 'showAnnualInfoModal',
+        visible: 'annualInfoModalVisible',
+      },
+      {
+        activeAnnualInfoKey: key,
+        activeAnnualInfo,
+      },
+    )
+  },
+
   switchRange(e: WechatMiniprogram.TouchEvent) {
     const key = String(e.currentTarget.dataset.key || '') as RangeKey
     if (!key) return
@@ -103,13 +147,40 @@ Page({
     pulseState(this, timers, 'report-range', 'pressStates.rangeKey', key, '')
   },
 
-  pressHistoryCard(e: WechatMiniprogram.TouchEvent) {
-    const cardIndex = Number(e.currentTarget.dataset.index)
-    if (Number.isNaN(cardIndex)) return
-    pulseState(this, timers, 'report-history-card', 'pressStates.historyIndex', cardIndex, -1)
-    wx.showToast({
-      title: '请前往“今日概览”修改今日摸鱼时长',
-      icon: 'none',
-    })
+  goPrevHistoryPage() {
+    if (this.data.historyPage <= 1) {
+      return
+    }
+
+    pulseState(this, timers, 'report-history-prev', 'pressStates.historyPrev', true, false)
+    this.setData(buildHistoryPageState(this.data.historyItems, this.data.historyPage - 1))
   },
+
+  goNextHistoryPage() {
+    if (this.data.historyPage >= this.data.historyTotalPages) {
+      return
+    }
+
+    pulseState(this, timers, 'report-history-next', 'pressStates.historyNext', true, false)
+    this.setData(buildHistoryPageState(this.data.historyItems, this.data.historyPage + 1))
+  },
+
+  closeAnnualInfo() {
+    pulseState(this, timers, 'report-annual-info-close', 'pressStates.annualInfoClose', true, false)
+    closeModal(
+      this,
+      timers,
+      'report-annual-info',
+      {
+        show: 'showAnnualInfoModal',
+        visible: 'annualInfoModalVisible',
+      },
+      {
+        activeAnnualInfoKey: '',
+        activeAnnualInfo: null,
+      },
+    )
+  },
+
+  stopModalTap() {},
 })
